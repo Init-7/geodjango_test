@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -78,6 +79,14 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+    'gps': {
+        'ENGINE': 'django.contrib.gis.db.backend.postgis',
+        'NAME': 'gps',
+        'HOST': '104.196.13.123',
+        'USER': 'postgres',
+        'PASSWORD': '***',
+        'PORT': '5432',
     }
 }
 
