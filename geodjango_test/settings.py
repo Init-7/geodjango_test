@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
     'gps': {
-        'ENGINE': 'django.contrib.gis.db.backend.postgis',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'gps',
         'HOST': '104.196.13.123',
         'USER': 'postgres',
