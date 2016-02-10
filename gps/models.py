@@ -87,7 +87,7 @@ class Positions(models.Model):
 #    course = models.FloatField()
     address = models.CharField(max_length=512, blank=True, null=True)
     attributes = models.CharField(max_length=4096)
-    point = models.PointField(db_column='punto', srid=4326, default='SRID=4326;POINT(0.0 0.0)')
+    geom = models.PointField(db_column='punto', srid=4326, default='SRID=4326;POINT(0.0 0.0)')
 #    objects = models.GeoManager()
 
     class Meta:
