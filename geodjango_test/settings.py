@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'gps'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -76,9 +77,17 @@ WSGI_APPLICATION = 'geodjango_test.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    'default': {
+#        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
+#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#    },
+    'default':{
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'test',
+        'HOST': '104.196.13.123',
+        'USER': 'postgres',
+        'PASSWORD': '***',
+        'PORT': '5432',
     },
     'gps': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -128,3 +137,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+DATABASE_ROUTERS = ['gps.routers.GpsRouter']

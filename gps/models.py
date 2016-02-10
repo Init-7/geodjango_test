@@ -14,25 +14,25 @@ from __future__ import unicode_literals
 from django.contrib.gis.db import models
 
 
-class Databasechangelog(models.Model):
-    id = models.CharField(max_length=255)
-    author = models.CharField(max_length=255)
-    filename = models.CharField(max_length=255)
-    dateexecuted = models.DateTimeField()
-    orderexecuted = models.IntegerField()
-    exectype = models.CharField(max_length=10)
-    md5sum = models.CharField(max_length=35, blank=True, null=True)
-    description = models.CharField(max_length=255, blank=True, null=True)
-    comments = models.CharField(max_length=255, blank=True, null=True)
-    tag = models.CharField(max_length=255, blank=True, null=True)
-    liquibase = models.CharField(max_length=20, blank=True, null=True)
-    contexts = models.CharField(max_length=255, blank=True, null=True)
-    labels = models.CharField(max_length=255, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'databasechangelog'
-
+#class Databasechangelog(models.Model):
+#    id = models.CharField(max_length=255)
+#    author = models.CharField(max_length=255)
+#    filename = models.CharField(max_length=255)
+#    dateexecuted = models.DateTimeField()
+#    orderexecuted = models.IntegerField()
+#    exectype = models.CharField(max_length=10)
+#    md5sum = models.CharField(max_length=35, blank=True, null=True)
+#    description = models.CharField(max_length=255, blank=True, null=True)
+#    comments = models.CharField(max_length=255, blank=True, null=True)
+#    tag = models.CharField(max_length=255, blank=True, null=True)
+#    liquibase = models.CharField(max_length=20, blank=True, null=True)
+#    contexts = models.CharField(max_length=255, blank=True, null=True)
+#    labels = models.CharField(max_length=255, blank=True, null=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'databasechangelog'
+#
 
 class Databasechangeloglock(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -57,40 +57,76 @@ class Devices(models.Model):
         db_table = 'devices'
 
 
-class Layer(models.Model):
-    topology = models.ForeignKey('Topology', models.DO_NOTHING)
-    layer_id = models.IntegerField()
-    schema_name = models.CharField(max_length=-1)
-    table_name = models.CharField(max_length=-1)
-    feature_column = models.CharField(max_length=-1)
-    feature_type = models.IntegerField()
-    level = models.IntegerField()
-    child_id = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'layer'
-        unique_together = (('topology', 'layer_id'), ('schema_name', 'table_name', 'feature_column'),)
+#class Layer(models.Model):
+#    topology = models.ForeignKey('Topology', models.DO_NOTHING)
+#    layer_id = models.IntegerField()
+#    schema_name = models.CharField(max_length=-1)
+#    table_name = models.CharField(max_length=-1)
+#    feature_column = models.CharField(max_length=-1)
+#    feature_type = models.IntegerField()
+#    level = models.IntegerField()
+#    child_id = models.IntegerField(blank=True, null=True)
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'layer'
+#        unique_together = (('topology', 'layer_id'), ('schema_name', 'table_name', 'feature_column'),)
 
 
 class Positions(models.Model):
-    protocol = models.CharField(max_length=128, blank=True, null=True)
+#    protocol = models.CharField(max_length=128, blank=True, null=True)
     deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceId')  # Field name made lowercase.
-    servertime = models.DateTimeField(db_column='serverTime')  # Field name made lowercase.
+#    servertime = models.DateTimeField(db_column='serverTime')  # Field name made lowercase.
     devicetime = models.DateTimeField(db_column='deviceTime')  # Field name made lowercase.
-    fixtime = models.DateTimeField(db_column='fixTime')  # Field name made lowercase.
+#    fixtime = models.DateTimeField(db_column='fixTime')  # Field name made lowercase.
     valid = models.BooleanField()
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    altitude = models.FloatField()
-    speed = models.FloatField()
-    course = models.FloatField()
+    lat = models.FloatField()
+    lon = models.FloatField()
+#    altitude = models.FloatField()
+#    speed = models.FloatField()
+#    course = models.FloatField()
     address = models.CharField(max_length=512, blank=True, null=True)
     attributes = models.CharField(max_length=4096)
+    point = models.PointField(db_column='punto', srid=4326, default='SRID=4326;POINT(0.0 0.0)')
+#    objects = models.GeoManager()
 
     class Meta:
-        managed = False
-        db_table = 'positions'
+        managed = True
+        db_table = 'pos'
+
+    def __unicode__(self):
+        return u"%s %s %s %s" % (self.id, self.deviceid, self.lat, self.lon)
+
+
+
+#class Positions(models.Model):
+#    protocol = models.CharField(max_length=128, blank=True, null=True)
+#    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceId')  # Field name made lowercase.
+#    servertime = models.DateTimeField(db_column='serverTime')  # Field name made lowercase.
+#    devicetime = models.DateTimeField(db_column='deviceTime')  # Field name made lowercase.
+#    fixtime = models.DateTimeField(db_column='fixTime')  # Field name made lowercase.
+#    valid = models.BooleanField()
+#    latitude = models.FloatField()
+#    longitude = models.FloatField()
+#    altitude = models.FloatField()
+#    speed = models.FloatField()
+#    course = models.FloatField()
+#    address = models.CharField(max_length=512, blank=True, null=True)
+#    attributes = models.CharField(max_length=4096)
+#    point = models.PointField(srid=4326, default='SRID=4326;POINT(0.0 0.0)')
+##    objects = models.GeoManager()
+#
+#    class Meta:
+#        managed = True
+#        db_table = 'positions'
+#
+#    def save(self, *args, **kargs):
+#        self.point.x = self.longitude
+#        self.point.y = self.latitude
+#        super(Positions, self).save(*args,**kargs)
+#
+#    def __unicode__(self):
+#        return u"%s %s %s %s" % (self.id, self.deviceid, self.latitude, self.longitude)
 
 
 class Server(models.Model):
@@ -111,15 +147,15 @@ class Server(models.Model):
         db_table = 'server'
 
 
-class Topology(models.Model):
-    name = models.CharField(unique=True, max_length=-1)
-    srid = models.IntegerField()
-    precision = models.FloatField()
-    hasz = models.BooleanField()
-
-    class Meta:
-        managed = False
-        db_table = 'topology'
+#class Topology(models.Model):
+#    name = models.CharField(unique=True, max_length=-1)
+#    srid = models.IntegerField()
+#    precision = models.FloatField()
+#    hasz = models.BooleanField()
+#
+#    class Meta:
+#        managed = False
+#        db_table = 'topology'
 
 
 class UserDevice(models.Model):
