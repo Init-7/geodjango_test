@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'gps',
     'djgeojson',
+    'leaflet',
+    'django_extensions',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -87,7 +89,7 @@ DATABASES = {
         'NAME': 'test',
         'HOST': '104.196.13.123',
         'USER': 'postgres',
-        'PASSWORD': '***',
+        'PASSWORD': 'est.postgres',
         'PORT': '5432',
     },
     'gps': {
@@ -95,7 +97,7 @@ DATABASES = {
         'NAME': 'gps',
         'HOST': '104.196.13.123',
         'USER': 'postgres',
-        'PASSWORD': '***',
+        'PASSWORD': 'est.postgres',
         'PORT': '5432',
     }
 }

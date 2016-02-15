@@ -53,8 +53,10 @@ class Devices(models.Model):
     positionid = models.IntegerField(db_column='positionId', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'devices'
+    def __unicode__(self):
+        return u"%s %s" % (self.id, self.uniqueid)
 
 
 #class Layer(models.Model):

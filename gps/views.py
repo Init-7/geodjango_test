@@ -24,3 +24,5 @@ def positions(request):
 #
 #def vote(request, question_id):
 #    return HttpResponse("Estas votando en la pregunta %s." % question_id)
+
+
