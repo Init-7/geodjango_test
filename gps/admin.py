@@ -6,3 +6,4 @@ from .models import Positions, Devices
 
 admin.site.register(Positions, LeafletGeoAdmin)
 admin.site.register(Devices, LeafletGeoAdmin)
+

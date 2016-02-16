@@ -100,7 +100,6 @@ class Positions(models.Model):
         return u"%s %s %s %s" % (self.id, self.deviceid, self.lat, self.lon)
 
 
-
 #class Positions(models.Model):
 #    protocol = models.CharField(max_length=128, blank=True, null=True)
 #    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceId')  # Field name made lowercase.
@@ -187,3 +186,4 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'users'
+
