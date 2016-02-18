@@ -143,3 +143,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DATABASE_ROUTERS = ['gps.routers.GpsRouter']
+
+#Custom GDAL PATH
+
+GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
