@@ -11,7 +11,7 @@ class Contacto (models.Model):
     tipo_contacto = models.CharField(max_length=128, blank= True, null=True)
 
     def __unicode__(self):
-        return u"%s %s" % (self.nombre, self.tipo_contacto, self.numero)
+        return u"%s %s" % (self.nombre, self.tipo_contacto, self.fono)
 
 
 class Empresa (models.Model):
