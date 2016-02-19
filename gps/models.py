@@ -31,16 +31,16 @@ from django.contrib.gis.db import models
 #        db_table = 'databasechangelog'
 #
 
-#class Databasechangeloglock(models.Model):
-#    id = models.IntegerField(primary_key=True)
-#    locked = models.BooleanField()
-#    lockgranted = models.DateTimeField(blank=True, null=True)
-#    lockedby = models.CharField(max_length=255, blank=True, null=True)
-#
-#    class Meta:
-#        managed = False
-#        db_table = 'databasechangeloglock'
-#
+class Databasechangeloglock(models.Model):
+    id = models.IntegerField(primary_key=True)
+    locked = models.BooleanField()
+    lockgranted = models.DateTimeField(blank=True, null=True)
+    lockedby = models.CharField(max_length=255, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'databasechangeloglock'
+
 
 class Devices(models.Model):
     name = models.CharField(max_length=128)

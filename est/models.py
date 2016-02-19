@@ -10,11 +10,17 @@ class Contacto (models.Model):
     fono = models.CharField(max_length=128)
     tipo_contacto = models.CharField(max_length=128, blank= True, null=True)
 
+    def __unicode__(self):
+        return u"%s %s" % (self.nombre, self.tipo_contacto, self.numero)
+
 
 class Empresa (models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     rut = models.CharField(max_length=128, blank=True, null=True)
     contacto = models.ForeignKey(Contacto)
+
+    def __unicode__(self):
+        return u"%s" % (self.nombre)
 
 
 class Planta(models.Model):
@@ -25,7 +31,7 @@ class Planta(models.Model):
     objects = models.GeoManager()
 
     def __unicode__(self):
-        return u"%s %s" % (self.id, self.nombre)
+        return u"%s" % (self.nombre)
 
 
 class Riesgo(models.Model):
@@ -33,17 +39,18 @@ class Riesgo(models.Model):
     tipo = models.CharField(max_length=128, blank=True, null=True)
 
     def __unicode__(self):
-        return u"%s %s" % (self.id, self.nombre)
+        return u"%s" % (self.nombre)
 
 
 class Zona(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
-    planta = models.ForeignKey(Planta)
+    uso = models.CharField(max_length=128, blank=True, null=True)
+    planta = models.ForeignKey(Planta, blank=True, null=True)
     riesgo = models.ManyToManyField(Riesgo)
     zona = models.MultiPolygonField(srid=4326)
 
     def __unicode__(self):
-        return u"%s %s" % (self.id, self.nombre)
+        return u"%s" % (self.nombre)
 
 
 class CentroNegocios(models.Model):
