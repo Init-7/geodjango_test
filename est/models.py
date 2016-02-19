@@ -46,7 +46,7 @@ class Zona(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     uso = models.CharField(max_length=128, blank=True, null=True)
     planta = models.ForeignKey(Planta, blank=True, null=True)
-    riesgo = models.ManyToManyField(Riesgo)
+    riesgo = models.ManyToManyField(Riesgo, blank=True, null=True)
     zona = models.MultiPolygonField(srid=4326)
 
     def __unicode__(self):
