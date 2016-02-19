@@ -4,11 +4,22 @@ from django.contrib.gis.db import models
 
 from gps.models import Devices
 
-# Create your models here.
+
+class Contacto (models.Model):
+    nombre = models.CharField(max_length=128)
+    fono = models.CharField(max_length=128)
+    tipo_contacto = models.CharField(max_length=128, blank= True, null=True)
+
+
+class Empresa (models.Model):
+    nombre = models.CharField(max_length=128, blank=True, null=True)
+    rut = models.CharField(max_length=128, blank=True, null=True)
+    contacto = models.ForeignKey(Contacto)
+
 
 class Planta(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
-    empresa = models.CharField(max_length=128, blank=True, null=True)
+    empresa = models.ForeignKey(Empresa, blank=True, null=True)
     geom = models.MultiPolygonField(srid=4326)
 
     objects = models.GeoManager()
@@ -60,6 +71,10 @@ class Trabajador(models.Model):
     rol = models.ManyToManyField(Rol)
     gps = models.ForeignKey(Devices, blank=True, null=True)
     supervisor = models.ForeignKey('Trabajador', blank=True, null=True)
+    empresa = models.ForeignKey(Empresa, blank=True, null=True)
+    contacto = models.ForeignKey(Contacto, blank=True, null=True)
     
     def __unicode__(self):
         return u"%s %s" % (self.id, self.nombre, self.centroNegocios)
+
+
