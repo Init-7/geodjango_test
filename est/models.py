@@ -11,7 +11,7 @@ class Contacto (models.Model):
     tipo_contacto = models.CharField(max_length=128, blank= True, null=True)
 
     def __unicode__(self):
-        return u"%s %s" % (self.nombre, self.tipo_contacto, self.fono)
+        return u"%s %s %s" % (self.nombre, self.tipo_contacto, self.fono)
 
 
 class Empresa (models.Model):
@@ -65,7 +65,7 @@ class CentroNegocios(models.Model):
 
 class Rol(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
-    zonas_permitidas = models.ManyToManyField(Zona)
+    zonas_permitidas = models.ManyToManyField(Zona, blank=True, null=True)
 
     def __unicode__(self):
         return u"%s %s" % (self.id, self.nombre)
@@ -82,6 +82,6 @@ class Trabajador(models.Model):
     contacto = models.ForeignKey(Contacto, blank=True, null=True)
     
     def __unicode__(self):
-        return u"%s %s" % (self.id, self.nombre, self.centroNegocios)
+        return u"%s %s %s" % (self.id, self.nombre, self.centroNegocios)
 
 

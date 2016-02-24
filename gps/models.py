@@ -50,7 +50,7 @@ class Devices(models.Model):
     positionid = models.IntegerField(db_column='positionId', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'devices'
     def __unicode__(self):
         return u"%s %s" % (self.id, self.uniqueid)
@@ -90,7 +90,7 @@ class Positions(models.Model):
 #    objects = models.GeoManager()
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'pos'
 
     def __unicode__(self):

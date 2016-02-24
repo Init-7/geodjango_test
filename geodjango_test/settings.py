@@ -85,15 +85,15 @@ DATABASES = {
 #        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    },
-    'default':{
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'test',
-        'HOST': '104.196.13.123',
-        'USER': 'postgres',
-        'PASSWORD': 'est.postgres',
-        'PORT': '5432',
-    },
-    'gps': {
+#    'default':{
+#        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#        'NAME': 'test',
+#        'HOST': '104.196.13.123',
+#        'USER': 'postgres',
+#        'PASSWORD': 'est.postgres',
+#        'PORT': '5432',
+#    },
+    'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'gps',
         'HOST': '104.196.13.123',
@@ -142,7 +142,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-DATABASE_ROUTERS = ['gps.routers.GpsRouter']
+#DATABASE_ROUTERS = ['gps.routers.GpsRouter']
 
 #Custom GDAL PATH
 
