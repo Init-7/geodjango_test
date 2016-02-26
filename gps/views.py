@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 from django.shortcuts import render
 
 #from django.core import serializers
@@ -41,5 +42,5 @@ def puntos(request, planta):
 #    data = serializers.serialize('json', contenidos)
     data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 
-    return HttpResponse(data, content_type='application/json')
+    return HttpResponse(data)#, content_type='application/json')
 #    return GeoJSONResponseMixin(data)

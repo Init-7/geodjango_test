@@ -76,8 +76,8 @@ class Positions(models.Model):
 #    protocol = models.CharField(max_length=128, blank=True, null=True)
     deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceId')  # Field name made lowercase.
 #    servertime = models.DateTimeField(db_column='serverTime')  # Field name made lowercase.
-    devicetime = models.DateTimeField(db_column='deviceTime')  # Field name made lowercase.
-#    fixtime = models.DateTimeField(db_column='fixTime')  # Field name made lowercase.
+#    devicetime = models.DateTimeField(db_column='deviceTime')  # Field name made lowercase.
+    fixtime = models.DateTimeField(db_column='fixTime')  # Field name made lowercase.
     valid = models.BooleanField()
     lat = models.FloatField()
     lon = models.FloatField()
