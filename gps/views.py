@@ -1,11 +1,14 @@
 from django.shortcuts import render
 
-from gps.models import Positions
-
-from django.core import serializers
+#from django.core import serializers
+from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 from django.http import HttpResponse
 
+from est.models import Planta, Zona, Trabajador
+from gps.models import Positions, Devices
+
+from djgeojson.views import GeoJSONResponseMixin
 
 def positions(request):
     last_five = Positions.objects.order_by('-id')[:5]
@@ -25,4 +28,18 @@ def positions(request):
 #def vote(request, question_id):
 #    return HttpResponse("Estas votando en la pregunta %s." % question_id)
 
+def puntos(request, planta):
+    puntos = Positions.objects.all()
+    pl = Planta.objects.get(nombre = planta)
+    
+    contenidos = []
 
+    for p in puntos:
+        if(pl.geom.contains(p.geom)):
+            contenidos.append(p)
+
+#    data = serializers.serialize('json', contenidos)
+    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+
+    return HttpResponse(data, content_type='application/json')
+#    return GeoJSONResponseMixin(data)

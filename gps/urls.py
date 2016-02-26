@@ -15,4 +15,7 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='gps/index.html'), name='home'),
     url(r'^data.geojson$', GeoJSONLayerView.as_view(model=Positions), name='data'),
 #    url(r'^positions.leaftlet$', views.positions, name='positions')
+
+    url(r'^(?P<planta>[\w]+)/puntos/$',views.puntos, name='puntos'),
+
 ]
