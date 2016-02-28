@@ -1,7 +1,7 @@
 from django.contrib.gis import admin
 from leaflet.admin import LeafletGeoAdmin
 
-from .models import Planta, CentroNegocios, Trabajador, Riesgo, Zona, Rol, Empresa, Contacto
+from .models import Planta, CentroNegocios, Trabajador, Riesgo, Zona, Rol, Empresa, Contacto, Salud, Estudios, Capacitacion
 
 class GpsAdmin(LeafletGeoAdmin):
     settings_overrides = {
@@ -17,3 +17,6 @@ admin.site.register(Rol, GpsAdmin)
 admin.site.register(Trabajador, GpsAdmin)
 admin.site.register(Empresa, GpsAdmin)
 admin.site.register(Contacto, GpsAdmin)
+admin.site.register(Salud, GpsAdmin)
+admin.site.register(Estudios, GpsAdmin)
+admin.site.register(Capacitacion, GpsAdmin)
