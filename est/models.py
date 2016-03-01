@@ -50,6 +50,7 @@ class Zona(models.Model):
     planta = models.ForeignKey(Planta, blank=True, null=True)
     riesgo = models.ManyToManyField(Riesgo, blank=True, null=True)
     zona = models.MultiPolygonField(srid=4326)
+    nivel_riesgo = models.IntegerField(blank=True, null=True)
 
     def __unicode__(self):
         return u"%s" % (self.nombre)
@@ -129,6 +130,8 @@ class Trabajador(models.Model):
         ('ESPOSO','Esposa(o)'),
         ('ABUELO','Abuelo(a)'),
         ('HIJO','Hijo(a)'),
+        ('PAREJA','Pareja'),
+        ('POLOLO','Pololo(a)')
     )
 
     nombre = models.CharField(max_length=128, blank=True, null=True)
@@ -151,8 +154,11 @@ class Trabajador(models.Model):
     salud = models.ManyToManyField(Salud, blank=True, null=True)
     estudios = models.ManyToManyField(Estudios, blank=True, null=True)      
     capacitacion = models.ManyToManyField(Capacitacion, blank=True, null=True)
+    nivel_riesgo = models.IntegerField(blank=True, null=True)
+    nota = models.CharField(max_length=256, blank=True, null=True)
+    nota2 = models.CharField(max_length=256, blank=True, null=True)
 
     def __unicode__(self):
-        return u"%s %s %s" % (self.id, self.nombre, self.centroNegocios)
+        return u"%s %s %s %s %s" % (self.id, self.nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
 
