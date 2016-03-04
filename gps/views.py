@@ -6,7 +6,7 @@ from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 from django.http import HttpResponse
 
-from est.models import Planta, Zona, Trabajador
+from est.models import Planta, Zona, Trabajador, CentroNegocios
 from gps.models import Positions, Devices
 
 from djgeojson.views import GeoJSONResponseMixin
@@ -29,7 +29,7 @@ def positions(request):
 #def vote(request, question_id):
 #    return HttpResponse("Estas votando en la pregunta %s." % question_id)
 
-def puntos(request, planta):
+def planta(request, planta):
     puntos = Positions.objects.all()
     pl = Planta.objects.get(nombre = planta)
     
@@ -45,14 +45,14 @@ def puntos(request, planta):
     return HttpResponse(data)#, content_type='application/json')
 #    return GeoJSONResponseMixin(data)
 
-def curriculum(request, trabajador):
-
-    data = Trabajador.objects.get(id=trabajador)
-
-    context = {'data': data}
-
-    return render(request,'cv/cv.html', context)
-
+#def curriculum(request, trabajador):
+#
+#    data = Trabajador.objects.get(id=trabajador)
+#
+#    context = {'data': data}
+#
+#    return render(request,'cv/cv.html', context)
+#
 #    return render(request, '../templates/curriculum/classic.html', {
 #        'resume': resume,
 #        'skills': resume.skills.order_by('category', '-weight'),
@@ -61,3 +61,39 @@ def curriculum(request, trabajador):
 #        'trainings': resume.trainings.order_by('-year', '-month'),
 #        'certifications': resume.certifications.order_by('-start_year', '-start_month')
 #    })
+
+#def centro(request, planta, centro):
+#    puntos = Positions.objects.all()
+#    pl = Planta.objects.get(nombre = planta)
+#    cn = CentroNegocios.get(nombre= centro)
+#
+#    contenidos = []
+#
+#    for p in puntos:
+#        if(pl.geom.contains(p.geom)):
+#            contenidos.append(p)
+#
+#    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+#
+#    return HttpResponse(data)#, content_type='application/json')
+#
+#
+#def trabajador(request, planta, centro, trabajador):
+#    puntos = Positions.objects.all()
+#    pl = Planta.objects.get(nombre = planta)
+#    cn = CentroNegocios.objects.get(id = centro)    
+#
+#    contenidos = []
+#
+#    Trabajador.objects.filer(device_id=)
+#
+#
+##    for in cn:
+    #    for p in puntos:
+    #        if(pl.geom.contains(p.geom)):
+    #            contenidos.append(p)
+#
+#    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+#
+#    return HttpResponse(data)#, content_type='application/json')
+#
