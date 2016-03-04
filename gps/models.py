@@ -53,7 +53,7 @@ class Devices(models.Model):
         managed = False
         db_table = 'devices'
     def __unicode__(self):
-        return u"%s %s" % (self.id, self.uniqueid)
+        return u"%s %s %s" % (self.id, self.name, self.uniqueid)
 
 
 #class Layer(models.Model):
@@ -95,6 +95,28 @@ class Positions(models.Model):
 
     def __unicode__(self):
         return u"%s %s %s %s" % (self.id, self.deviceid, self.lat, self.lon)
+
+class PositionsTraccar(models.Model):
+    protocol = models.CharField(max_length=128, blank=True, null=True)
+    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceId')  # Field name made lowercase.
+    servertime = models.DateTimeField(db_column='serverTime')  # Field name made lowercase.
+    devicetime = models.DateTimeField(db_column='deviceTime')  # Field name made lowercase.
+    fixtime = models.DateTimeField(db_column='fixTime')  # Field name made lowercase.
+    valid = models.BooleanField()
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    altitude = models.FloatField()
+    speed = models.FloatField()
+    course = models.FloatField()
+    address = models.CharField(max_length=512, blank=True, null=True)
+    attributes = models.CharField(max_length=4096)
+
+    class Meta:
+        managed = False
+        db_table = 'positions'
+
+    def __unicode__(self):
+        return u"%s %s %s %s" % (self.id, self.deviceid, self.latitude, self.longitude)
 
 
 #class Positions(models.Model):
