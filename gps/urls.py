@@ -18,5 +18,5 @@ urlpatterns = [
     url(r'^(?P<planta>[\w]+)/puntos/$',views.planta, name='planta'),
     url(r'^(?P<planta>[\w]+)/(?P<centro>[0-9]+)/puntos/$',views.centro, name='centro'),
     url(r'^(?P<planta>[\w]+)/(?P<centro>[0-9]+)/(?P<trabajador>[0-9]+)/puntos/$',views.trabajador, name='trabajador'),
-    url(r'^cv/(?P<trabajador>[0-9]+)/$' ,views.curriculum, name='curriculum'),
+#    url(r'^cv/(?P<trabajador>[0-9]+)/$' ,views.curriculum, name='curriculum'),
 ]
