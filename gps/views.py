@@ -72,14 +72,14 @@ def trabajador(request, planta, centro, trabajador):
     return HttpResponse(data)#, content_type='application/json')
 
 
-#def curriculum(request, trabajador):
-#
-#    data = Trabajador.objects.get(id=trabajador)
-#
-#    context = {'data': data}
-#
-#    return render(request,'cv/cv.html', context)
-#
+def curriculum(request, trabajador):
+
+    data = Trabajador.objects.get(id=trabajador)
+
+    context = {'data': data}
+
+    return render(request,'cv/cv.html', context)
+
 #    return render(request, '../templates/curriculum/classic.html', {
 #        'resume': resume,
 #        'skills': resume.skills.order_by('category', '-weight'),
@@ -88,5 +88,5 @@ def trabajador(request, planta, centro, trabajador):
 #        'trainings': resume.trainings.order_by('-year', '-month'),
 #        'certifications': resume.certifications.order_by('-start_year', '-start_month')
 #    })
-
-
+#
+#
