@@ -137,7 +137,7 @@ class Trabajador(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     apellidop = models.CharField(max_length=128, blank=True, null=True)
     apellidom = models.CharField(max_length=128, blank=True, null=True)
-    foto = models.ImageField(upload_to='cv/img/', blank=True, null=True)
+    foto = models.ImageField(upload_to='est/static/cv/img/', blank=True, null=True)
     fecha_nac = models.DateField(blank=True, null=True)
     direccion = models.CharField(max_length=256, blank=True, null=True)
 #    contacto = models.ForeignKey(Contacto, blank=True, null=True)
