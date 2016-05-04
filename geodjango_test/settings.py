@@ -146,4 +146,4 @@ STATIC_URL = '/static/'
 
 #Custom GDAL PATH
 
-GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
+#GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
