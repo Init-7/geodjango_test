@@ -4,9 +4,9 @@ from est.models import Planta, Zona, Trabajador, CentroNegocios
 
 def curriculum(request, trabajador):
 
-    data = Trabajador.objects.get(id=trabajador)
+    trabajador = Trabajador.objects.get(id=trabajador)
 
-    context = {'data': data}
+    context = {'trabajador': trabajador}
 
     return render(request,'cv/cv.html', context)
 
