@@ -163,14 +163,43 @@ class Trabajador(models.Model):
     qrtext = models.CharField(max_length=256, blank=True, null=True)
     qrimg = models.ImageField(upload_to='est/cv/img/qr/', blank=True, null=True)
  
+#    def save(self, *args, **kwargs):
+#        self.qrtext = "http://www.estchile.cl/cv/"+str(self.id)
+#        qrimg = qrcode.make(self.qrtext)
+#        qrimg.save("est/cv/img/qr/"+str(self.id)+".png", "PNG")
+#        super(Trabajador, self).save(*args, **kwargs)
+#
+#
 
-    def save(self, *args, **kwargs):
+    def get_est_url(self):
         self.qrtext = "http://www.estchile.cl/cv/"+str(self.id)
-        self.qrimg = qrcode.make(self.qrtext)
-        super(Blog, self).save(*args, **kwargs)
+        return self.qrtext
 
+    def get_absolute_url(self):
+        return reverse('events.views.details', args=[str(self.id)])
+
+    def generate_qrcode(self):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=6,
+            border=0,
+        )
+        qr.add_data(self.get_absolute_url())
+        qr.make(fit=True)
+
+        img = qr.make_image()
+
+        buffer = StringIO.StringIO()
+        img.save(buffer)
+        filename = 'events-%s.png' % (self.id)
+        filebuffer = InMemoryUploadedFile(
+            buffer, None, filename, 'image/png', buffer.len, None)
+        self.qrcode.save(filename, filebuffer)
 
     def __unicode__(self):
         return u"%s %s %s %s %s" % (self.id, self.nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
-
+# Agregar en template:
+# <img src="{{ event.qrcode.url }}" alt="Event QR code" />  
+#fuente: https://gilang.chandrasa.com/generate-qr-code-in-django-model/
