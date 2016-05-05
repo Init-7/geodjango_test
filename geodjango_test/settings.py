@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'djgeojson',
     'leaflet',
     'django_extensions',
+    'qrcode',
 ]
 
 MIDDLEWARE_CLASSES = [

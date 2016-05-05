@@ -4,6 +4,8 @@ from django.contrib.gis.db import models
 
 from gps.models import Devices
 
+import qrcode
+
 #from qrcode.image.pure import PymagingImage
 
 class Contacto (models.Model):
@@ -137,7 +139,7 @@ class Trabajador(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     apellidop = models.CharField(max_length=128, blank=True, null=True)
     apellidom = models.CharField(max_length=128, blank=True, null=True)
-    foto = models.ImageField(upload_to='est/cv/img/', blank=True, null=True)
+    foto = models.ImageField(upload_to='est/cv/img/avatar/', blank=True, null=True)
     fecha_nac = models.DateField(blank=True, null=True)
     direccion = models.CharField(max_length=256, blank=True, null=True)
 #    contacto = models.ForeignKey(Contacto, blank=True, null=True)
@@ -158,6 +160,15 @@ class Trabajador(models.Model):
     nivel_riesgo = models.IntegerField(blank=True, null=True)
     nota = models.CharField(max_length=256, blank=True, null=True)
     nota2 = models.CharField(max_length=256, blank=True, null=True)
+    qrtext = models.CharField(max_length=256, blank=True, null=True)
+    qrimg = models.ImageField(upload_to='est/cv/img/qr/', blank=True, null=True)
+ 
+
+    def save(self, *args, **kwargs):
+        self.qrtext = "http://www.estchile.cl/cv/"+str(self.id)
+        self.qrimg = qrcode.make(self.qrtext)
+        super(Blog, self).save(*args, **kwargs)
+
 
     def __unicode__(self):
         return u"%s %s %s %s %s" % (self.id, self.nombre, self.apellidop, self.apellidom, self.centroNegocios)
