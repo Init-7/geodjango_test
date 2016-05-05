@@ -331,7 +331,7 @@
                   <h3 class="section-item-title-1">Fecha Nacimiento</h3>
                   <!-- /Subtitle -->
                   <!-- content -->
-                  <p>{{ trabajador.fecha_nac }}</p>
+                  <p>{{ trabajador.fecha_nac.day|stringformat:"02d" }}-{{ trabajador.fecha_nac.month|stringformat:"02d" }}-{{ trabajador.fecha_nac.year }}</p>
                   <!-- /Content -->
                 </div>
               </div>
