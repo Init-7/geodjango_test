@@ -26,6 +26,7 @@ def curriculum(request, trabajador):
 def card(request, trabajador):
 
     trabajador = Trabajador.objects.get(id=trabajador)
+    trabajador.generate_qrimg()
 
     context = {'trabajador': trabajador,
 #        'qrtext': qrtext,

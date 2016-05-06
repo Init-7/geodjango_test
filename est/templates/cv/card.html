@@ -6,12 +6,28 @@
 </head>
 
 <body>
+  {% load staticfiles %}
 
-{{ trabajador.nombre }} {{trabajador.apellidop}} {{trabajador.apellidom}}
+<img src="{% static 'cv/img/logo.png' %}" alt="logo-est" style="width:200px;height:100px;">
 
-{{ qrtext }}
+<img src="{% static trabajador.foto.url %}" alt="Foto de {{trabajador.nombre}} {{trabajador.apellidop}} {{trabajador.apellidom}}">
 
-{{ qrimg }}
+<p><b>NOMBRE</b></br>
+{{ trabajador.nombre}} {{trabajador.apellidop}} {{ trabajador.apellidom}}
+
+<p><b>CARGO</b></br>
+{{ trabajador.cargo}}
+
+<p><b>AUTORIZADO</b></br>
+{{ trabajador.nota}}
+
+<p><b>ÁREA</b></br>
+{{ trabajador.nota2}}
+
+<p><b>CONTACTO SUPERVISOR DIRECTO</b></br>
+{{trabajador.supervisor.nombre}} {{trabajador.apellidop}} {{trabajador.fono}}
+
+<img src="{% static trabajador.qrimg.url %}" alt="QR de {{trabajador.nombre}} {{trabajador.apellidop}} {{trabajador.apellidom}}"/> 
 
 </body>
 
