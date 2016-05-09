@@ -5,51 +5,52 @@
   <title></title>
 
 
-<style type="text/css">
-#wrapper{
-	height: 204px;    
-    width: 325px;
-    float: left;
-}	
+	<style type="text/css">
 
-#logoEst{
-	display: flex;
-    float: left;
-    height: 50px;
-    width: 100px;
-    margin-left: 5px;
-    margin-top: 5px;
+	body{
+		margin: 0px;
+		width: 325px;
+	}
 
+	#wrapper{
+		height: 204px;    
+	    width: 325px;
+	    float: left;   
+	}	
 
-}
+	#logoEst{
+		display: flex;
+	    float: left;
+	    height: 50px;
+	    width: 100px;
+	    //margin-left: 5px;
+	    //margin-top: 5px;
+	}
 
-#imgTrabajador{
-    float: left;
-    height: 120px;
-    margin-left: 10px;
-    width: 90px;
-}
-#imgQR{
-	float: right;
-    height: 70px;
-    margin-top: 20px;
-    padding-right: 20px;
-    width: 70px;
+	#imgTrabajador{
+	    float: left;
+	    height: 120px;
+	    //margin-left: 10px;
+	    width: 90px;
+	}
+	#imgQR{
+		float: right;
+	    height: 70px;
+	    //margin-top: 20px;
+	    padding-right: 20px;
+	    width: 70px;
 
-}
-#datosTrabajador{
-	float: right;
-    font-family: caption;
-    font-size: 8px;
-    height: 90px;
-    margin-top: 40px;
-    width: 130px;
+	}
+	#datosTrabajador{
+		float: right;
+	    font-family: caption;
+	    font-size: 8px;
+	    height: 90px;
+	    margin-top: 30px;
+	    width: 130px;
+	}
 
-}
-
-
-
-</style>
+	</style>
 
 </head>
 
@@ -59,10 +60,6 @@
 	 {% load staticfiles %}
 	
 	<img id="logoEst" src="{% static 'cv/img/logo.png' %}" alt="logo-est" >
-	
-
-	
-	
 	
 	<img id="imgQR" src="{% static trabajador.qrimg.url %}" alt="QR de {{trabajador.nombre}} {{trabajador.apellidop}} {{trabajador.apellidom}}"/> 
 	<div id="datosTrabajador">
