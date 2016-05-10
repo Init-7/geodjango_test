@@ -3,32 +3,85 @@
 <head>
   <meta charset="utf-8">
   <title></title>
+
+
+	<style type="text/css">
+
+	body{
+		margin: 0px;
+		width: 325px;
+	}
+
+	#wrapper{
+		height: 204px;    
+	    width: 325px;
+	    float: left;   
+	}	
+
+	#logoEst{
+		display: flex;
+	    float: left;
+	    height: 50px;
+	    width: 100px;
+	    //margin-left: 5px;
+	    //margin-top: 5px;
+	}
+
+	#imgTrabajador{
+	    float: left;
+	    height: 120px;
+	    //margin-left: 10px;
+	    width: 90px;
+	}
+	#imgQR{
+		float: right;
+	    height: 70px;
+	    //margin-top: 20px;
+	    padding-right: 20px;
+	    width: 70px;
+
+	}
+	#datosTrabajador{
+		float: right;
+	    font-family: caption;
+	    font-size: 8px;
+	    height: 90px;
+	    margin-top: 30px;
+	    width: 130px;
+	}
+
+	</style>
+
 </head>
 
 <body>
-  {% load staticfiles %}
+ 
+<div id="wrapper">
+	 {% load staticfiles %}
+	
+	<img id="logoEst" src="{% static 'cv/img/logo.png' %}" alt="logo-est" >
+	
+	<img id="imgQR" src="{% static trabajador.qrimg.url %}" alt="QR de {{trabajador.nombre}} {{trabajador.apellidop}} {{trabajador.apellidom}}"/> 
+	<div id="datosTrabajador">
+		<p><b>NOMBRE</b></br>
+		{{ trabajador.nombre}} {{trabajador.apellidop}} {{ trabajador.apellidom}}
 
-<img src="{% static 'cv/img/logo.png' %}" alt="logo-est" style="width:200px;height:100px;">
+		<p><b>CARGO</b></br>
+		{{ trabajador.cargo}}
 
-<img src="{% static trabajador.foto.url %}" alt="Foto de {{trabajador.nombre}} {{trabajador.apellidop}} {{trabajador.apellidom}}">
+		<p><b>AUTORIZADO</b></br>
+		{{ trabajador.nota}}
 
-<p><b>NOMBRE</b></br>
-{{ trabajador.nombre}} {{trabajador.apellidop}} {{ trabajador.apellidom}}
+		<p><b>ÁREA</b></br>
+		{{ trabajador.nota2}}
 
-<p><b>CARGO</b></br>
-{{ trabajador.cargo}}
+		<p><b>CONTACTO SUPERVISOR DIRECTO</b></br>
+		{{trabajador.supervisor.nombre}} {{trabajador.apellidop}} {{trabajador.fono}}
+	</div>
 
-<p><b>AUTORIZADO</b></br>
-{{ trabajador.nota}}
-
-<p><b>ÁREA</b></br>
-{{ trabajador.nota2}}
-
-<p><b>CONTACTO SUPERVISOR DIRECTO</b></br>
-{{trabajador.supervisor.nombre}} {{trabajador.apellidop}} {{trabajador.fono}}
-
-<img src="{% static trabajador.qrimg.url %}" alt="QR de {{trabajador.nombre}} {{trabajador.apellidop}} {{trabajador.apellidom}}"/> 
-
+	<img id="imgTrabajador" src="{% static trabajador.foto.url %}" alt="Foto de {{trabajador.nombre}} {{trabajador.apellidop}} {{trabajador.apellidom}}">
+		
+</div>
 </body>
 
 </html> 
