@@ -162,5 +162,7 @@ class Trabajador(models.Model):
     def __unicode__(self):
         return u"%s %s %s %s %s" % (self.id, self.nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
+    def __str__(self):
+        return u"%s %s %s %s %s" % (self.id, self.nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
 

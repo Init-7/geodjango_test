@@ -21,7 +21,7 @@ def last_five(request):
     return HttpResponse(data, content_type='application/json')
 
 def infoplantas(request):
-	pl= Planta.objects.all()
+	pl=Plantas.objects.all()
 	contenidos=[]
 	for p in pl:
 		contenidos.append(p)
@@ -30,7 +30,7 @@ def infoplantas(request):
 
 def planta(request, planta):
 #Posiciones registradas dentro de una determinada planta    
-    pl = Planta.objects.get(nombre = planta)
+    pl = Plantas.objects.get(nombre = planta)
 
     contenidos = []
 
