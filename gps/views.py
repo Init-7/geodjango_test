@@ -14,6 +14,9 @@ from djgeojson.views import GeoJSONResponseMixin
 
 from django.core.serializers.python import Serializer
 
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+@ensure_csrf_cookie
 #Serialiser copy paste
 class MySerialiser(Serializer):
     def end_object( self, obj ):
@@ -29,11 +32,12 @@ def last_five(request):
     
     return HttpResponse(data, content_type='application/json')
 
+@ensure_csrf_cookie
 def infoplantas(request):
 	pl= Planta.objects.all()
 	contenidos=[]
 
-        serializer = MySerialiser()
+#        serializer = MySerialiser()
 
 	for p in pl:
 		contenidos.append(p)

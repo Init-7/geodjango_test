@@ -44,9 +44,12 @@ INSTALLED_APPS = [
     'leaflet',
     'django_extensions',
     'qrcode',
+    'corsheaders',
 ]
 
 MIDDLEWARE_CLASSES = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -141,10 +144,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATUC_ROOT = '/home/jhonny/geodjango_test/est/static/'
+STATIC_ROOT = '/home/lautaro/development/geodjango_test/est/static/'
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/home/jhonny/geodjango_test/est/media/'
+MEDIA_ROOT = '/home/lautaro/development/geodjango_test/est/media/'
 MEDIA_URL = '/media/'
 
 #DATABASE_ROUTERS = ['gps.routers.GpsRouter']
@@ -152,3 +155,40 @@ MEDIA_URL = '/media/'
 #Custom GDAL PATH
 
 #GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
+
+TASTYPIE_DEFAULT_FORMATS = ['json', 'xml', 'yaml', 'plist', 'jsonp']
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+#CORS_ORIGIN_WHITELIST = ('/hoime/lautaro/development/gps_tracking/Test/DojoJson/', 'localhost','127.0.0.1','localhost:8000','127.0.0.1:8000')
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = (
+        'GET',
+        'POST',
+        'PUT',
+        'PATCH',
+        'DELETE',
+        'OPTIONS'
+    )
+
+CORS_ALLOW_HEADERS = (
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'origin',
+        'authorization',
+        'x-csrftoken'
+    )
+
+CORS_EXPOSE_HEADERS = (
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'origin',
+        'authorization',
+        'x-csrftoken'
+    )
+
+#APPEND_SLASH = False
