@@ -4,6 +4,12 @@ from django.contrib.gis.db import models
 
 from gps.models import Devices
 
+import qrcode
+import StringIO
+
+from django.core.urlresolvers import reverse  
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 #from qrcode.image.pure import PymagingImage
 
 class Contacto (models.Model):
@@ -141,7 +147,7 @@ class Trabajador(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     apellidop = models.CharField(max_length=128, blank=True, null=True)
     apellidom = models.CharField(max_length=128, blank=True, null=True)
-    foto = models.ImageField(upload_to='est/static/cv/img/', blank=True, null=True)
+    foto = models.ImageField(upload_to='avatar/', blank=True, null=True)
     fecha_nac = models.DateField(blank=True, null=True)
     direccion = models.CharField(max_length=256, blank=True, null=True)
 #    contacto = models.ForeignKey(Contacto, blank=True, null=True)
@@ -162,9 +168,45 @@ class Trabajador(models.Model):
     nivel_riesgo = models.IntegerField(blank=True, null=True)
     nota = models.CharField(max_length=256, blank=True, null=True)
     nota2 = models.CharField(max_length=256, blank=True, null=True)
+    qrtext = models.CharField(max_length=256, blank=True, null=True)
+    qrimg = models.ImageField(upload_to='qr/', blank=True, null=True)
+ 
+#    def save(self, *args, **kwargs):
+#        self.qrtext = "http://www.estchile.cl/cv/"+str(self.id)
+#        qrimg = qrcode.make(self.qrtext)
+#        qrimg.save("est/cv/img/qr/"+str(self.id)+".png", "PNG")
+#        super(Trabajador, self).save(*args, **kwargs)
+#
+#
 
     def __unicode__(self):
         return u"%s %s %s %s %s" % (self.id, self.nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
+    def get_est_url(self):
+        self.qrtext = "http://www.estchile.cl/cv/"+str(self.id)
+        return self.qrtext
+
+    def get_absolute_url(self):
+        return reverse('est.views.card', args=[str(self.id)])
+
+    def generate_qrimg(self):
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=6,
+            border=0,
+        )
+        qr.add_data(self.get_absolute_url())
+#        qr.add_data(self.get_est_url())
+        qr.make(fit=True)
+
+        img = qr.make_image()
+
+        buffer = StringIO.StringIO()
+        img.save(buffer)
+        filename = 'trabajador-%s.png' % (self.id)
+        filebuffer = InMemoryUploadedFile(
+            buffer, None, filename, 'image/png', buffer.len, None)
+        self.qrimg.save(filename, filebuffer)
 
 

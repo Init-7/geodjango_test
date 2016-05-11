@@ -1,13 +1,11 @@
-<h1></h1>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8">
   <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>EST |{{ data.nombre}} {{data.apellidop}} {{data.apellidom}}</title>
+    <title>EST |{{ trabajador.nombre}} {{trabajador.apellidop}} {{trabajador.apellidom}}</title>
   {% load staticfiles %}
   <!-- CSS Files
   ========================================================= -->
@@ -97,8 +95,8 @@
           <div class="profile-pic">
             <div class="profile-border">
               <!-- Put your picture here ( 308px by 308px for retina display)-->
-<!--              <img src="{foto}img/avatar.jpg" alt=""> -->
-              <img src="{{data.foto}}" alt="">
+<!--              <img src="img/avatar.jpg" alt=""> -->
+              <img src="{{trabajador.foto.url}}" alt="Foto de {{ trabajador.nombre}} {{trabajador.apellidop}}">
               <!-- /Put your picture here -->
             </div>          
           </div>
@@ -109,10 +107,10 @@
         <!-- Right Columm -->
         <div class="col-md-7">
           <!-- Welcome Title-->
-          <h1 class="intro-title1"><span class="color1 bold">{{data.nombre}}{{ data.apellido}}</span></h1>
+          <h1 class="intro-title1"><span class="color1 bold">{{trabajador.nombre}} {{ trabajador.apellidop}} {{trabajador.apellidom}}</span></h1>
           <!-- /Welcome Title -->
           <!-- Job - -->
-          <h2 class="intro-title2">{{data.cargo}}</h2>
+          <h2 class="intro-title2">{{trabajador.cargo}}</h2>
           <!-- /job -->
 <!--
 		  <p><strong>Turpis, sit amet iaculis dui consectetur at.</strong> Cras sagittis molestie orci. <strong>Suspendisse ut laoreet mi</strong>. Phasellus eu tortor vehicula, blandit enim eu, auctor massa. Nulla ultricies tortor dolor, sit amet suscipit enim <strong>condimentum id</strong>. Etiam eget iaculis tellus.  Varius sit amet.</p>
@@ -196,10 +194,10 @@
                   <h3 class="section-item-title-1">Notificar a:</h3>
                   <!-- /Subtitle -->
                   <!-- content -->
-                  <p><b>Fabiola Saldias Lupas</b></p>
-                  <p><b>Fono: </b>64955777</p>
-                  <p><b>Ocupación: </b>Educadora de Parvulos</p>
-                  <p><b>Relación: </b>Pareja</p>
+                  <p><b>{{ trabajador.emergencia.nombre }}</b></p>
+                  <p><b>Fono: </b> {{ trabajador.emergencia.fono }}</p>
+                  <p><b>Ocupación: </b> {{ trabajador.emergencia.nota }}</p>
+                  <p><b>Relación: </b>{{ trabajador.tipo_contacto}}</p>
                   <!-- /Content -->
                 </div>
               </div>
@@ -258,7 +256,7 @@
                   <h3 class="section-item-title-1">Nombre Completo</h3>
                   <!-- /Subtitle -->
                   <!-- content -->
-                  <p>Ignacio Alejandro Torres Gonzalez</p>
+                  <p>{{ trabajador.nombre }} {{trabajador.apellidop}} {{trabajador.apellidom}}</p>
                   <!-- /Content -->
                 </div>
               </div>
@@ -282,7 +280,7 @@
                   <h3 class="section-item-title-1">Dirección</h3>
                   <!-- /Subtitle -->
                   <!-- content -->
-                  <p>Yerbas Buernas S/N</p>
+                  <p>{{ trabajador.direccion }}</p>
                   <!-- /Content -->
                 </div>
               </div>
@@ -307,7 +305,7 @@
                   <h3 class="section-item-title-1">Teléfono</h3>
                   <!-- /Subtitle -->
                   <!-- content -->
-                  <p>74524520</p>
+                  <p>{{ trabajador.fono }}</p>
                   <!-- /Content -->
                 </div>
               </div>
@@ -331,7 +329,7 @@
                   <h3 class="section-item-title-1">Fecha Nacimiento</h3>
                   <!-- /Subtitle -->
                   <!-- content -->
-                  <p>01 Enero de 1988</p>
+                  <p>{{ trabajador.fecha_nac.day|stringformat:"02d" }}-{{ trabajador.fecha_nac.month|stringformat:"02d" }}-{{ trabajador.fecha_nac.year }}</p>
                   <!-- /Content -->
                 </div>
               </div>
@@ -355,7 +353,7 @@
                   <h3 class="section-item-title-1">Email</h3>
                   <!-- /Subtitle -->
                   <!-- content -->
-                  <p>naxotorres@live.cl</p>
+                  <p>{{ trabajador.e_mail }}</p>
                   <!-- /Content -->
                 </div>
               </div>
