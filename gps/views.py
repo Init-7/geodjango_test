@@ -12,6 +12,15 @@ from itertools import chain
 from datetime import datetime
 from djgeojson.views import GeoJSONResponseMixin
 
+from django.core.serializers.python import Serializer
+
+#Serialiser copy paste
+class MySerialiser(Serializer):
+    def end_object( self, obj ):
+        self._current['id'] = obj._get_pk_val()
+        self.objects.append( self._current )
+
+
 def last_five(request):
 #Ultimas 5 posiciones registradas
     last_five = Positions.objects.order_by('-id')[:5]
@@ -23,10 +32,16 @@ def last_five(request):
 def infoplantas(request):
 	pl= Planta.objects.all()
 	contenidos=[]
+
+        serializer = MySerialiser()
+
 	for p in pl:
 		contenidos.append(p)
-	data = serializers.serialize('json', contenidos)
+        data = serializers.serialize('json', contenidos, fields=('nombre'))
+#        data = serializer.serialize(contenidos)
 	return HttpResponse(data, content_type='application/json')
+
+
 
 def planta(request, planta):
 #Posiciones registradas dentro de una determinada planta    
