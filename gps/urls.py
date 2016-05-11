@@ -23,5 +23,6 @@ urlpatterns = [
     url(r'^(?P<planta>[\w]+)/(?P<trabajador>[\w]+)/(?P<fechainicio>(\d{4})[/.-](\d{2})[/.-](\d{2}))/(?P<fechafin>(\d{4})[/.-](\d{2})[/.-](\d{2}))/$',views.lugarestrabajador, name='centro'),
     url(r'^(?P<planta>[\w]+)/ranking_riesgo/(?P<nro>[0-9]+)/$',views.riesgotrabajador),
     url(r'^plantas/$',views.infoplantas),
+    url(r'^datosinforme/(?P<planta>[\w]+)/(?P<cnegocios>[\w]+)/(?P<trabajador>[\w]+)/(?P<fechainicio>(\d{4})[/.-](\d{2})[/.-](\d{2}))/(?P<fechafin>(\d{4})[/.-](\d{2})[/.-](\d{2}))/$',views.datosinforme),
 #    url(r'^cv/(?P<trabajador>[0-9]+)/$' ,views.curriculum, name='curriculum'),
 ]

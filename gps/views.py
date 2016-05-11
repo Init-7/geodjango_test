@@ -6,7 +6,7 @@ from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 from django.http import HttpResponse
 
-from est.models import Planta, Zona, Trabajador, CentroNegocios
+from est.models import Planta, Zona, Trabajador, CentroNegocios,Tiempozona
 from gps.models import Positions, Devices, Posicionestrabajador
 from itertools import chain
 from datetime import datetime
@@ -146,8 +146,9 @@ def tiempoplantaconhoras(request, planta, fechainicio, fechafin):
 
 def lugarestrabajador(request, trabajador,planta, fechainicio, fechafin):
 #Posiciones de un trabajador de la planta en un rango de tiempo
-	
+	cn =CentroNegocios.filter()
     	pl = Planta.objects.get(nombre = planta)
+	
 	posiciones = Positions.objects.filter(fixtime__range=[fechainicio,fechafin])
         t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
@@ -159,6 +160,57 @@ def lugarestrabajador(request, trabajador,planta, fechainicio, fechafin):
 	
 	data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
+
+def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
+#Posiciones de un trabajador de la planta en un rango de tiempo
+	
+    	pl = Planta.objects.get(nombre = planta)
+	zonas= Zona.objects.filter(planta__nombre=planta)
+	posiciones = Positions.objects.filter(fixtime__range=[fechainicio,fechafin])
+        t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
+	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
+	posiciones = Positions.objects.filter(deviceid=dev)
+	contenidos = []
+	tiempozonas = []
+	posicioneszona =[]
+	contenidozona=[]	
+
+	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
+		contenidozona=[]
+		for p in posiciones: #Para cada una de las posiciones
+			if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
+				contenidozona.append(p)
+		if(contenidozona):		
+			pr=contenidozona[0].fixtime
+			ul=contenidozona[-1].fixtime
+			tiempozona=pr-ul
+			obj=Tiempozona()
+			obj.nombre=z.nombre
+			obj.horas=abs(tiempozona.seconds/3600)
+			obj.minutos=abs((tiempozona.seconds - abs(tiempozona.seconds/3600)*3600)/60)
+			contenidos.append(obj)
+		else:
+			obj=Tiempozona()
+			obj.nombre=z.nombre
+			obj.horas=0
+			obj.minutos=0
+			contenidos.append(obj)
+
+	#for i,z in enumerate(zonas):
+	#	pr=posicioneszona[i].first().fixtime
+	#	ul=posicioneszona[i].last().fixtime
+	#	dif=pr-ul
+	#	contenidos.append(dif)	
+			
+	#primero= posiciones.first().fixtime
+	#ultimo= posiciones.last().fixtime
+	#total=ultimo-primero
+	
+	#dias=diferencia.days
+	#horas=diferencia.
+
+	data = serializers.serialize('json', contenidos)
+	return HttpResponse(data, content_type='application/json')
 
 def riesgotrabajador(request, planta, nro):
 #Posiciones de trabajadores con mayor riesgo

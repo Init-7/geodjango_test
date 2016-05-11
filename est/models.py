@@ -55,6 +55,10 @@ class Zona(models.Model):
     def __unicode__(self):
         return u"%s" % (self.nombre)
 
+class Tiempozona(models.Model):
+	nombre = models.CharField(max_length=128, blank=True, null=True)
+	horas =models.IntegerField(blank=True, null=True)
+	minutos = models.IntegerField(blank=True, null=True)
 
 class CentroNegocios(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
