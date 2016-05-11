@@ -171,15 +171,13 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
 	posiciones = Positions.objects.filter(deviceid=dev)
 	contenidos = []
-	tiempozonas = []
-	posicioneszona =[]
 	contenidozona=[]	
 
 	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
 		contenidozona=[]
 		for p in posiciones: #Para cada una de las posiciones
 			if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
-				contenidozona.append(p)
+				contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
 		if(contenidozona):		
 			pr=contenidozona[0].fixtime
 			ul=contenidozona[-1].fixtime

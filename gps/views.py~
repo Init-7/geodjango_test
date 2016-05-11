@@ -189,6 +189,12 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 			obj.horas=abs(tiempozona.seconds/3600)
 			obj.minutos=abs((tiempozona.seconds - abs(tiempozona.seconds/3600)*3600)/60)
 			contenidos.append(obj)
+		else:
+			obj=Tiempozona()
+			obj.nombre=z.nombre
+			obj.horas=0
+			obj.minutos=0
+			contenidos.append(obj)
 
 	#for i,z in enumerate(zonas):
 	#	pr=posicioneszona[i].first().fixtime
