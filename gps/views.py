@@ -11,10 +11,35 @@ from gps.models import Positions, Devices, Posicionestrabajador
 from itertools import chain
 from datetime import datetime
 from djgeojson.views import GeoJSONResponseMixin
-
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+json.dumps("{}", cls=DjangoJSONEncoder)
 from django.core.serializers.python import Serializer
 
 from django.views.decorators.csrf import ensure_csrf_cookie
+
+class FlatJsonSerializer(Serializer):
+    def get_dump_object(self, obj):
+        data = self._current
+        if not self.selected_fields or 'id' in self.selected_fields:
+            data['id'] = obj.id
+        return data
+
+    def end_object(self, obj):
+        if not self.first:
+            self.stream.write(', ')
+        json.dump(self.get_dump_object(obj), self.stream,
+                  cls=DjangoJSONEncoder)
+        self._current = None
+
+    def start_serialization(self):
+        self.stream.write("[")
+
+    def end_serialization(self):
+        self.stream.write("]")
+
+    def getvalue(self):
+        return super(Serializer, self).getvalue()
 
 @ensure_csrf_cookie
 #Serialiser copy paste
@@ -22,27 +47,29 @@ class MySerialiser(Serializer):
     def end_object( self, obj ):
         self._current['id'] = obj._get_pk_val()
         self.objects.append( self._current )
-#Adaptar este serializer segun la documentacion de http://stackoverflow.com/questions/15453072/django-serializers-to-json-custom-json-output-format
-
+	
 
 
 def last_five(request):
 #Ultimas 5 posiciones registradas
     last_five = Positions.objects.order_by('-id')[:5]
-    
-    data = serializers.serialize('json', last_five)
-    
+    #serializer = MySerialiser()
+    s = FlatJsonSerializer()
+    #s.serialize(MyModel.objects.all())
+    data = s.serialize(Positions.objects.order_by('-id')[:5])
+    #data = serializers.serialize('json', last_five)
+    #data=serializers.serialize('json', last_five, fields=('deviceid','fixtime'))
     return HttpResponse(data, content_type='application/json')
 
 @ensure_csrf_cookie
 def infoplantas(request):
     pl= Planta.objects.all()
     contenidos=[]
-
+    s = FlatJsonSerializer()
     for p in pl:
         print p.nombre
         contenidos.append(p)
-        data = serializers.serialize('json', contenidos)
+        data = s.serialize('json', contenidos)
 #        data = serializer.serialize(contenidos)
     return HttpResponse(data, content_type='application/json')
 
@@ -51,7 +78,7 @@ def infoplantas(request):
 def planta(request, planta):
 #Posiciones registradas dentro de una determinada planta    
     pl = Planta.objects.get(nombre = planta)
-
+    s = FlatJsonSerializer()
     contenidos = []
 
     for d in Devices.objects.all():
@@ -70,9 +97,9 @@ def planta(request, planta):
     return HttpResponse(data)#, content_type='application/json')
 
 def centro(request, planta, centro):
-
+    
     tcn = Trabajador.objects.filter(centroNegocios__id = centro)
-
+    s = FlatJsonSerializer()
     contenidos = []
 
     for tr in tcn:
@@ -97,15 +124,16 @@ def centro(request, planta, centro):
 	#auxiliar.centroNegocios=t.centroNegocios
 	#auxiliar.gps=t.gps
 	contenidos.append(auxiliar)
-
-    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+    data = s.serialize(contenidos)
+    #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 
     return HttpResponse(data)#, content_type='application/json')
 
 
 
 def trabajador(request, trabajador):
-#Ultima posicion de un trabajador     
+#Ultima posicion de un trabajador    
+	s = FlatJsonSerializer() 
 	t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
 	punto = Positions.objects.get(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
@@ -132,13 +160,14 @@ def trabajador(request, trabajador):
 	#auxiliar.centroNegocios=t.centroNegocios
 	#auxiliar.gps=t.gps
 	contenidos.append(auxiliar)
-		
-	data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	data = s.serialize(contenidos)	
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 
 	return HttpResponse(data)#, content_type='application/json')
 
 def tiempoplanta(request, planta, fechainicio, fechafin):
 #Posiciones registradas en una determinada planta, durante un rango de tiempo (fecha)
+	s = FlatJsonSerializer()	
 	pl = Planta.objects.get(nombre = planta)
 
 	posiciones = Positions.objects.filter(fixtime__range=[fechainicio,fechafin])
@@ -146,13 +175,13 @@ def tiempoplanta(request, planta, fechainicio, fechafin):
 	for p in posiciones:
 		if(pl.geom.contains(p.geom)):
 			contenidos.append(p)			
-	
-	data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
 
 def tiempoplantaconhoras(request, planta, fechainicio, fechafin):
 #Posiciones registradas en una determinada planta, durante un rango de tiempo (fecha,hora)
-	
+	s = FlatJsonSerializer()
     	pl = Planta.objects.get(nombre = planta)	
 	
 	posiciones = Positions.objects.filter(fixtime__range=[fechainicio,fechafin])
@@ -160,13 +189,13 @@ def tiempoplantaconhoras(request, planta, fechainicio, fechafin):
 	for p in posiciones:
 		if(pl.geom.contains(p.geom)):
 			contenidos.append(p)		
-	
-	data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
 
 def lugarestrabajador(request, trabajador,planta, fechainicio, fechafin):
 #Posiciones de un trabajador de la planta en un rango de tiempo
-	
+	s = FlatJsonSerializer()
     	pl = Planta.objects.get(nombre = planta)
 	fechai = datetime.strptime(fechainicio, '%Y-%m-%d')
 	fechaf = datetime.strptime(fechafin, '%Y-%m-%d')
@@ -178,13 +207,13 @@ def lugarestrabajador(request, trabajador,planta, fechainicio, fechafin):
 	for p in posiciones:
 		if(pl.geom.contains(p.geom)):
 			contenidos.append(p)						
-	
-	data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
 
 def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 #Posiciones de un trabajador de la planta en un rango de tiempo
-	
+	s = FlatJsonSerializer()
 	fechai = datetime.strptime(fechainicio, '%Y-%m-%d')
 	fechaf = datetime.strptime(fechafin, '%Y-%m-%d')
     	pl = Planta.objects.get(nombre = planta)
@@ -236,12 +265,13 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	#dias=diferencia.days
 	#horas=diferencia.
 
-	data = serializers.serialize('json', contenidos)
+	data = s.serialize(contenidos)
+	#data = serializers.serialize('json', contenidos)
 	return HttpResponse(data, content_type='application/json')
 
 def riesgotrabajador(request, planta, nro):
 #Posiciones de trabajadores con mayor riesgo
-    	
+    	s = FlatJsonSerializer()
 	pl = Planta.objects.get(nombre = planta)
 	tr = Trabajador.objects.order_by('-nivel_riesgo')[:nro]
 	contenidos = []
@@ -268,12 +298,13 @@ def riesgotrabajador(request, planta, nro):
 			#auxiliar.gps=t.gps
 			contenidos.append(auxiliar)									
 	
-	data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
 
 
 def curriculum(request, trabajador):
-
+    s = FlatJsonSerializer()
     data = Trabajador.objects.get(id=trabajador)
 
     context = {'data': data}

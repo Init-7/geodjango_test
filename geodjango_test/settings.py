@@ -144,14 +144,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-<<<<<<< HEAD
-STATUC_ROOT = '/home/lautaro/development/geodjango_test/est/static/'
-=======
-STATIC_ROOT = '/home/lautaro/development/geodjango_test/est/static/'
->>>>>>> master
+#<<<<<<< HEAD
+STATUC_ROOT = '/home/daniel/geodjango_test/est/static/'
+#=======
+STATIC_ROOT = '/home/daniel/geodjango_test/est/static/'
+#>>>>>>> master
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/home/lautaro/development/geodjango_test/est/media/'
+MEDIA_ROOT = '/home/daniel/geodjango_test/est/media/'
 MEDIA_URL = '/media/'
 
 #DATABASE_ROUTERS = ['gps.routers.GpsRouter']
