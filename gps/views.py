@@ -22,6 +22,8 @@ class MySerialiser(Serializer):
     def end_object( self, obj ):
         self._current['id'] = obj._get_pk_val()
         self.objects.append( self._current )
+#Adaptar este serializer segun la documentacion de http://stackoverflow.com/questions/15453072/django-serializers-to-json-custom-json-output-format
+
 
 
 def last_five(request):
@@ -34,16 +36,15 @@ def last_five(request):
 
 @ensure_csrf_cookie
 def infoplantas(request):
-	pl= Planta.objects.all()
-	contenidos=[]
+    pl= Planta.objects.all()
+    contenidos=[]
 
-#        serializer = MySerialiser()
-
-	for p in pl:
-		contenidos.append(p)
-        data = serializers.serialize('json', contenidos, fields=('nombre'))
+    for p in pl:
+        print p.nombre
+        contenidos.append(p)
+        data = serializers.serialize('json', contenidos)
 #        data = serializer.serialize(contenidos)
-	return HttpResponse(data, content_type='application/json')
+    return HttpResponse(data, content_type='application/json')
 
 
 

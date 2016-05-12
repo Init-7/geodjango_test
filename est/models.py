@@ -39,7 +39,7 @@ class Planta(models.Model):
     objects = models.GeoManager()
 
     def __unicode__(self):
-        return u"%s" % (self.nombre)
+        return u"%s %s" % (self.nombre, self.empresa)
 
 
 class Riesgo(models.Model):
