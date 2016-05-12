@@ -2,11 +2,13 @@ from django.shortcuts import render
 
 from est.models import Planta, Zona, Trabajador, CentroNegocios
 
+import qrcode
+
 def curriculum(request, trabajador):
 
-    data = Trabajador.objects.get(id=trabajador)
+    trabajador = Trabajador.objects.get(id=trabajador)
 
-    context = {'data': data}
+    context = {'trabajador': trabajador}
 
     return render(request,'cv/cv.html', context)
 
@@ -20,3 +22,16 @@ def curriculum(request, trabajador):
 #    })
 #
 #
+
+def card(request, trabajador):
+
+    trabajador = Trabajador.objects.get(id=trabajador)
+    trabajador.generate_qrimg()
+
+    context = {'trabajador': trabajador,
+#        'qrtext': qrtext,
+#        'qrimg': qrimg,
+    }
+
+    return render(request,'cv/card.html', context)
+
