@@ -146,13 +146,14 @@ def tiempoplantaconhoras(request, planta, fechainicio, fechafin):
 
 def lugarestrabajador(request, trabajador,planta, fechainicio, fechafin):
 #Posiciones de un trabajador de la planta en un rango de tiempo
-	cn =CentroNegocios.filter()
-    	pl = Planta.objects.get(nombre = planta)
 	
-	posiciones = Positions.objects.filter(fixtime__range=[fechainicio,fechafin])
+    	pl = Planta.objects.get(nombre = planta)
+	fechai = datetime.strptime(fechainicio, '%Y-%m-%d')
+	fechaf = datetime.strptime(fechafin, '%Y-%m-%d')
+	
         t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
-	posiciones = Positions.objects.filter(deviceid=dev)
+	posiciones = Positions.objects.filter(fixtime__range=[fechai,fechaf],deviceid=dev)
 	contenidos = []
 	for p in posiciones:
 		if(pl.geom.contains(p.geom)):
@@ -164,30 +165,36 @@ def lugarestrabajador(request, trabajador,planta, fechainicio, fechafin):
 def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 #Posiciones de un trabajador de la planta en un rango de tiempo
 	
+	fechai = datetime.strptime(fechainicio, '%Y-%m-%d')
+	fechaf = datetime.strptime(fechafin, '%Y-%m-%d')
     	pl = Planta.objects.get(nombre = planta)
-	zonas= Zona.objects.filter(planta__nombre=planta)
-	posiciones = Positions.objects.filter(fixtime__range=[fechainicio,fechafin])
+	zonas = Zona.objects.filter(planta__nombre=planta)
+	#posiciones = Positions.objects.all()
+	
         t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
-	posiciones = Positions.objects.filter(deviceid=dev)
+	#posiciones = posiciones = Positions.objects.filter(fixtime__range=[fechai,fechaf],deviceid=dev)
+	posiciones = posiciones = Positions.objects.filter(deviceid=dev)
 	contenidos = []
-	tiempozonas = []
-	posicioneszona =[]
 	contenidozona=[]	
-
+        
 	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
 		contenidozona=[]
 		for p in posiciones: #Para cada una de las posiciones
-			if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
-				contenidozona.append(p)
+			if((p.fixtime>=fechai)&(p.fixtime<=fechaf)):
+				if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
+					contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
 		if(contenidozona):		
 			pr=contenidozona[0].fixtime
 			ul=contenidozona[-1].fixtime
-			tiempozona=pr-ul
+			tiempozona=ul-pr
 			obj=Tiempozona()
 			obj.nombre=z.nombre
 			obj.horas=abs(tiempozona.seconds/3600)
 			obj.minutos=abs((tiempozona.seconds - abs(tiempozona.seconds/3600)*3600)/60)
+			obj.dias=abs(tiempozona.days)			
+			obj.primero=pr
+			obj.ultimo=ul
 			contenidos.append(obj)
 		else:
 			obj=Tiempozona()

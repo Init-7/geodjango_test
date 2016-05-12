@@ -57,8 +57,11 @@ class Zona(models.Model):
 
 class Tiempozona(models.Model):
 	nombre = models.CharField(max_length=128, blank=True, null=True)
+	dias=models.IntegerField(blank=True, null=True)
 	horas =models.IntegerField(blank=True, null=True)
 	minutos = models.IntegerField(blank=True, null=True)
+	primero= models.DateField(blank=True, null=True)
+	ultimo= models.DateField(blank=True, null=True)
 
 class CentroNegocios(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
