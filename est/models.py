@@ -68,7 +68,22 @@ class Tiempozona(models.Model):
 	minutos = models.IntegerField(blank=True, null=True)
 	primero= models.DateField(blank=True, null=True)
 	ultimo= models.DateField(blank=True, null=True)
+	dif=models.FloatField()
 
+class Rangozona(models.Model):
+	zona=models.ForeignKey(Zona, blank=True, null=True)
+	inicio= models.DateTimeField(blank=True, null=True)
+	fin= models.DateTimeField(blank=True, null=True)
+
+        def __unicode__(self):
+            return u"%s %s %s" % (self.zona, self.inicio, self.fin)
+
+class Listatrabajadores(models.Model):
+	nombre= models.CharField(max_length=128, blank=True, null=True)
+
+class Listaplantas(models.Model):
+	nombre= models.CharField(max_length=128, blank=True, null=True)
+	
 class CentroNegocios(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     planta = models.ForeignKey(Planta, blank=True, null=True)

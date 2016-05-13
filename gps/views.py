@@ -6,7 +6,7 @@ from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 from django.http import HttpResponse
 
-from est.models import Planta, Zona, Trabajador, CentroNegocios,Tiempozona
+from est.models import Planta, Zona, Trabajador, CentroNegocios,Tiempozona, Rangozona,Empresa, Listatrabajadores,Listaplantas
 from gps.models import Positions, Devices, Posicionestrabajador
 from itertools import chain
 from datetime import datetime
@@ -15,7 +15,7 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 json.dumps("{}", cls=DjangoJSONEncoder)
 from django.core.serializers.python import Serializer
-
+from datetime import timedelta
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 class FlatJsonSerializer(Serializer):
@@ -211,6 +211,33 @@ def lugarestrabajador(request, trabajador,planta, fechainicio, fechafin):
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
 
+
+def trabajadoresplanta(request, nombreplanta):
+#Posiciones de un trabajador de la planta en un rango de tiempo
+	s = FlatJsonSerializer()
+	contenidos=[]
+    	emp=Empresa.objects.filter(planta__nombre=nombreplanta)
+        tr = Trabajador.objects.filter(empresa=emp) #Trabajadores con el id solicitado
+	for t in tr:
+		el=Listatrabajadores()
+		el.nombre=t.nombre+" "+t.apellidop+" "+t.apellidom
+		contenidos.append(el)					
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	return HttpResponse(data)
+
+def listaplantas(request):
+	s = FlatJsonSerializer()
+	contenidos=[]
+	pl=Planta.objects.all()
+	for p in pl:
+		el=Listaplantas()
+		el.nombre=p.nombre
+		contenidos.append(el)					
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	return HttpResponse(data)
+
 def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 #Posiciones de un trabajador de la planta en un rango de tiempo
 	s = FlatJsonSerializer()
@@ -222,35 +249,66 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	
         t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
-	#posiciones = posiciones = Positions.objects.filter(fixtime__range=[fechai,fechaf],deviceid=dev)
+	#posiciones = Positions.objects.filter(fixtime__range=[fechai,fechaf],deviceid=dev)
 	posiciones = Positions.objects.filter(deviceid=dev)
 	contenidos = []
 	contenidozona=[]	
         
+	total=timedelta(microseconds=0)			
 	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
 		contenidozona=[]
+		tiempozona=Tiempozona()
+		tiempozona.dif=timedelta(microseconds=0)	
 		for p in posiciones: #Para cada una de las posiciones
-			if((p.fixtime>=fechai)&(p.fixtime<=fechaf)):
+		
+			if((p.fixtime>=fechai)&(p.fixtime<=fechaf)) & (p.valid):
+				
 				if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
-					contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
-		if(contenidozona):		
-			pr=contenidozona[0].fixtime
-			ul=contenidozona[-1].fixtime
-			tiempozona=ul-pr
-			obj=Tiempozona()
-			obj.nombre=z.nombre
-			obj.horas=abs(tiempozona.seconds/3600)
-			obj.minutos=abs((tiempozona.seconds - abs(tiempozona.seconds/3600)*3600)/60)
-			obj.dias=abs(tiempozona.days)			
-			obj.primero=pr
-			obj.ultimo=ul
-			contenidos.append(obj)
-		else:
-			obj=Tiempozona()
-			obj.nombre=z.nombre
-			obj.horas=0
-			obj.minutos=0
-			contenidos.append(obj)
+					#contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
+					#if not(rango):
+						#rango=Rangozona()
+					if not(rango):
+						rango=Rangozona()
+						rango.zona=z
+						rango.fin=p.fixtime
+						rango.inicio=p.fixtime
+					#if not(rango.fin):
+						#rango.fin=p.fixtime
+					#if not(rango.inicio):
+						#rango.inicio=p.fixtime
+					else:
+						if(p.fixtime>rango.fin):
+							rango.fin=p.fixtime
+							
+				else:	
+					if rango:			
+						tiempozona.dif=tiempozona.dif + (rango.fin) - (rango.inicio)
+						contenidos.append(tiempozona)
+						rango=None
+						total=timedelta(microseconds=0)	
+				
+				
+		#if(contenidozona):		
+			#pr=contenidozona[0].fixtime
+			#ul=contenidozona[-1].fixtime
+			#tiempozona=ul-pr
+			#obj=Tiempozona()
+			#obj.nombre=z.nombre
+			#obj.horas=abs(tiempozona.seconds/3600)
+			#obj.horas=abs((len(contenidozona)*30)/3600)
+			#obj.minutos=abs((tiempozona.seconds - abs(tiempozona.seconds/3600)*3600)/60)
+			
+			#obj.minutos=abs((len(contenidozona)*30 - abs(len(contenidozona)*30/3600)*3600)/60)
+			#obj.dias=abs(tiempozona.days)			
+			#obj.primero=pr
+			#obj.ultimo=ul
+			#contenidos.append(obj)
+		#else:
+			#obj=Tiempozona()
+			#obj.nombre=z.nombre
+			#obj.horas=0
+			#obj.minutos=0
+			#contenidos.append(obj)
 
 	#for i,z in enumerate(zonas):
 	#	pr=posicioneszona[i].first().fixtime
