@@ -6,8 +6,8 @@ from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 from django.http import HttpResponse
 
-from est.models import Planta, Zona, Trabajador, CentroNegocios, Empresa
-from est.lib import Tiempozona, Rangozona, Listatrabajadores,Listaplantas
+from est.lib import Tiempozona, Rangozona
+from est.models import Planta, Zona, Trabajador, CentroNegocios,Empresa
 from gps.models import Positions, Devices, Posicionestrabajador
 from itertools import chain
 from datetime import datetime
@@ -250,44 +250,68 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	
         t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
-	#posiciones = Positions.objects.filter(fixtime__range=[fechai,fechaf],deviceid=dev)
+	#posiciones = Positions.objects.filter(fixtime__range=[fechai,fechaf])
 	posiciones = Positions.objects.filter(deviceid=dev)
 	contenidos = []
-	contenidozona=[]	
-        
+		#Cuenta en segundos
+        rango=Rangozona(None,None)			
+	rango.zona=None
+	rango.fin=None
+	rango.inicio=None
+	aux1=datetime.datetime.now()
+	aux1 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
+	aux2=datetime.datetime.now()
+	aux2 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
+	aux3=timedelta()
+	
 	total=timedelta(microseconds=0)			
 	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
+		
 		contenidozona=[]
 		tiempozona=Tiempozona()
 		tiempozona.dif=timedelta(microseconds=0)	
-		for p in posiciones: #Para cada una de las posiciones
-		
-			if((p.fixtime>=fechai)&(p.fixtime<=fechaf)) & (p.valid):
+		for p in posiciones: #Para cada una de las posiciones			
+			if((p.fixtime>=fechai)&(p.fixtime<=fechaf) & (p.valid)):
 				
 				if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
 					#contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
-					#if not(rango):
-						#rango=Rangozona()
 					if not(rango):
-						rango=Rangozona()
+						rango=Rangozona()			
 						rango.zona=z
 						rango.fin=p.fixtime
+						aux1=datetime.date(p.fixtime)
+						print(aux1)
 						rango.inicio=p.fixtime
-					#if not(rango.fin):
-						#rango.fin=p.fixtime
-					#if not(rango.inicio):
-						#rango.inicio=p.fixtime
+						aux2=datetime.date(p.fixtime)
+						print(aux2)
+						#if not(rango.fin):
+							#rango.fin=p.fixtime
+						#if not(rango.inicio):
+							#rango.inicio=p.fixtime
 					else:
 						if(p.fixtime>rango.fin):
 							rango.fin=p.fixtime
+							aux2=datetime.date(p.fixtime)
+								#contenidos.append(rango)
+    				else:
+					if(rango):
 							
-				else:	
-					if rango:			
-						tiempozona.dif=tiempozona.dif + (rango.fin) - (rango.inicio)
-						contenidos.append(tiempozona)
+						rango.aux= aux2-aux1
+						print aux1
+						print aux2
+						print aux3
+						aux3= aux3 + aux2 - aux1
+						#contenidos.append(tiempozona)
 						rango=None
-						total=timedelta(microseconds=0)	
-				
+						#total=timedelta(microseconds=0)
+						aux1=None
+						aux2=None	
+		
+		tiempozona=Tiempozona()
+		tiempozona.nombre=z
+		tiempozona.dias=aux3
+		contenidos.append(tiempozona)	
+		aux3=None
 				
 		#if(contenidozona):		
 			#pr=contenidozona[0].fixtime
@@ -338,24 +362,25 @@ def riesgotrabajador(request, planta, nro):
 	for t in tr:
 		dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
 		punto = Positions.objects.get(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
-       		if(pl.geom.contains(punto.geom)):
-			auxiliar=Posicionestrabajador()
-			auxiliar.lat=punto.lat	
-			auxiliar.lon=punto.lon
-			auxiliar.address=punto.address
-			auxiliar.fixtime=punto.fixtime	
+		if(punto):      		
+			if(pl.geom.contains(punto.geom)):
+				auxiliar=Posicionestrabajador()
+				auxiliar.lat=punto.lat	
+				auxiliar.lon=punto.lon
+				auxiliar.address=punto.address
+				auxiliar.fixtime=punto.fixtime	
 	
-			auxiliar.nombre=t.nombre
-			auxiliar.apellidop=t.apellidop
-			auxiliar.apellidom=t.apellidom
-			auxiliar.fecha_nac=t.fecha_nac
-			#auxiliar.estudios=t.estudios
-			auxiliar.rut=t.rut
-			auxiliar.nivel_riesgo=t.nivel_riesgo
-			auxiliar.direccion=t.direccion
-			#auxiliar.centroNegocios=t.centroNegocios
-			#auxiliar.gps=t.gps
-			contenidos.append(auxiliar)									
+				auxiliar.nombre=t.nombre
+				auxiliar.apellidop=t.apellidop
+				auxiliar.apellidom=t.apellidom
+				auxiliar.fecha_nac=t.fecha_nac
+				#auxiliar.estudios=t.estudios
+				auxiliar.rut=t.rut
+				auxiliar.nivel_riesgo=t.nivel_riesgo
+				auxiliar.direccion=t.direccion
+				#auxiliar.centroNegocios=t.centroNegocios
+				#auxiliar.gps=t.gps
+				contenidos.append(auxiliar)									
 	
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
