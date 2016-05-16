@@ -6,7 +6,7 @@ import qrcode
 
 def curriculum(request, trabajador):
 
-    trabajador = Trabajador.objects.get(id=trabajador)
+    trabajador = Trabajador.objects.get(estid=trabajador)
 
     context = {'trabajador': trabajador}
 
@@ -25,7 +25,7 @@ def curriculum(request, trabajador):
 
 def card(request, trabajador):
 
-    trabajador = Trabajador.objects.get(id=trabajador)
+    trabajador = Trabajador.objects.get(estid=trabajador)
     trabajador.generate_qrimg()
 
     context = {'trabajador': trabajador,

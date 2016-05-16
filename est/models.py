@@ -141,11 +141,13 @@ class Trabajador(models.Model):
     )
     
     estid = models.IntegerField(blank=True, null=True)
-    nombre = models.CharField(max_length=128, blank=True, null=True)
+    primer_nombre = models.CharField(max_length=128, blank=True, null=True)
+    segundo_nombre = models.CharField(max_length=128, blank=True, null=True)
     apellidop = models.CharField(max_length=128, blank=True, null=True)
     apellidom = models.CharField(max_length=128, blank=True, null=True)
     foto = models.ImageField(upload_to='avatar/', blank=True, null=True)
     fecha_nac = models.DateField(blank=True, null=True)
+    edad = models.IntegerField(blank=True, null=True)
     direccion = models.CharField(max_length=256, blank=True, null=True)
 #    contacto = models.ForeignKey(Contacto, blank=True, null=True)
     fono = models.IntegerField(blank=True, null=True)
@@ -177,7 +179,7 @@ class Trabajador(models.Model):
 #
 
     def __unicode__(self):
-        return u"%s %s %s %s %s" % (self.id, self.nombre, self.apellidop, self.apellidom, self.centroNegocios)
+        return u"%s %s %s %s %s" % (self.id, self.primer_nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
     def get_est_url(self):
         self.qrtext = "http://www.estchile.cl/cv/"+str(self.id)
