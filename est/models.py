@@ -74,7 +74,7 @@ class Rangozona(models.Model):
 	zona=models.ForeignKey(Zona, blank=True, null=True)
 	inicio= models.DateTimeField(blank=True, null=True)
 	fin= models.DateTimeField(blank=True, null=True)
-
+	aux=models.IntegerField(blank=True, null=True)
         def __unicode__(self):
             return u"%s %s %s" % (self.zona, self.inicio, self.fin)
 
@@ -198,7 +198,7 @@ class Trabajador(models.Model):
 #
 
     def __unicode__(self):
-        return u"%s %s %s %s %s" % (self.id, self.nombre, self.apellidop, self.apellidom, self.centroNegocios)
+        return u"%s %s %s %s %s" % (self.id, self.primer_nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
     def get_est_url(self):
         self.qrtext = "http://www.estchile.cl/cv/"+str(self.id)
