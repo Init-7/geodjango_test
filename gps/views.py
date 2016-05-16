@@ -6,7 +6,8 @@ from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 from django.http import HttpResponse
 
-from est.models import Planta, Zona, Trabajador, CentroNegocios,Tiempozona, Rangozona,Empresa, Listatrabajadores,Listaplantas
+from est.models import Planta, Zona, Trabajador, CentroNegocios, Empresa
+from est.lib import Tiempozona, Rangozona, Listatrabajadores,Listaplantas
 from gps.models import Positions, Devices, Posicionestrabajador
 from itertools import chain
 from datetime import datetime
