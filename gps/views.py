@@ -232,8 +232,7 @@ def listaplantas(request):
 	contenidos=[]
 	pl=Planta.objects.all()
 	for p in pl:
-		el=Listaplantas()
-		el.nombre=p.nombre
+		el=Listaplantas(p.nombre)
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
@@ -243,24 +242,25 @@ def listacentronegocios(request, planta):
 	s = FlatJsonSerializer()
 	contenidos=[]
 	pl=Planta.objects.get(nombre=planta)
-	cn=CentroNegocios.filter(planta=pl)
-	for c in cl:
-		el=Listacn(None)
-		el.nombre=c.nombre
+	cn=CentroNegocios.objects.filter(planta=pl)
+	for c in cn:
+		el=Listacn()
+		el.id=c.nombre
 		el.planta=planta
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
 
-def listatrabajadores(request, centro):
+def listatrabajadores(request, cnegocios):
 	s = FlatJsonSerializer()
 	contenidos=[]
-	cn=CentroNegocios.get(nombre=centro)
-	tr=Trabajador.filter(centroNegocios=cn)
+	cn=CentroNegocios.objects.get(codigo=cnegocios)
+	tr=Trabajador.objects.filter(centroNegocios=cn)
 	for t in tr:
-		el=Listatrabajadores(None)
-		el.nombre=t.nombre+" "+t.apellidop+" "+t.apellidom
+		el=Listatrabajadores()
+		el.id=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
+		el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
@@ -296,7 +296,7 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
 		
 		contenidozona=[]
-		tiempozona=Tiempozona(None,None,None,None,None,None,None)
+		tiempozona=Tiempozona(None,None,None,None,None,None,None,None)
 		tiempozona.dif=timedelta(microseconds=0)	
 		for p in posiciones: #Para cada una de las posiciones			
 			if((p.fixtime>=fechai)&(p.fixtime<=fechaf) & (p.valid)):
@@ -332,9 +332,9 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 						aux1=None
 						aux2=None	
 		
-		tiempozona=Tiempozona(None,None,None,None,None,None,None)
+		tiempozona=Tiempozona(None,None,None,None,None,None,None,None)
 		tiempozona.nombre=z
-		tiempozona.dias=aux3
+		tiempozona.id=aux3
 		contenidos.append(tiempozona)	
 		aux3=None
 				

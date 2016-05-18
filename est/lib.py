@@ -1,10 +1,10 @@
 from django.contrib.gis.db import models
 from est.models import Zona
 
-class Tiempozona(object):
+class Tiempozona(models.Model):
 
-    def __init__(self, nombre, dias, horas, minutos, primero, ultimo, dif):
-
+    def __init__(self,id, nombre, dias, horas, minutos, primero, ultimo, dif):
+	self.id=id
 	self.nombre = nombre
 	self.dias = dias
 	self.horas = horas
@@ -21,21 +21,22 @@ class Rangozona(object):
         self.inicio = inicio
         self.fin = fin 
 
-class Listatrabajadores(object):
+class Listatrabajadores(models.Model):
     
-    def __init__(self, nombre):
-        self.nombre = nombre
+    def __init__( self):
+        self.nombre = None
+	self.id = None
 
-class Listaplantas(object):
+class Listaplantas(models.Model):
 
-    def __init__(self, nombre):
-	self.nombre= nombre	
+    def __init__(self,id):
+	self.id=id
 
-class Listacn(object):
+class Listacn(models.Model):
 
-    def __init__(self, nombre,planta):
-	self.nombre= nombre
-	self.planta= planta	
+    def __init__(self):
+	self.nombre= None
+	self.id= None	
 
 
 
