@@ -61,29 +61,7 @@ class Zona(models.Model):
     def __unicode__(self):
         return u"%s" % (self.nombre)
 
-class Tiempozona(models.Model):
-	nombre = models.CharField(max_length=128, blank=True, null=True)
-	dias=models.IntegerField(blank=True, null=True)
-	horas =models.IntegerField(blank=True, null=True)
-	minutos = models.IntegerField(blank=True, null=True)
-	primero= models.DateField(blank=True, null=True)
-	ultimo= models.DateField(blank=True, null=True)
-	dif=models.FloatField()
 
-class Rangozona(models.Model):
-	zona=models.ForeignKey(Zona, blank=True, null=True)
-	inicio= models.DateTimeField(blank=True, null=True)
-	fin= models.DateTimeField(blank=True, null=True)
-	aux=models.IntegerField(blank=True, null=True)
-        def __unicode__(self):
-            return u"%s %s %s" % (self.zona, self.inicio, self.fin)
-
-class Listatrabajadores(models.Model):
-	nombre= models.CharField(max_length=128, blank=True, null=True)
-
-class Listaplantas(models.Model):
-	nombre= models.CharField(max_length=128, blank=True, null=True)
-	
 class CentroNegocios(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     planta = models.ForeignKey(Planta, blank=True, null=True)
@@ -161,12 +139,15 @@ class Trabajador(models.Model):
         ('PAREJA','Pareja'),
         ('POLOLO','Pololo(a)')
     )
-
-    nombre = models.CharField(max_length=128, blank=True, null=True)
+    
+    estid = models.IntegerField(blank=True, null=True)
+    primer_nombre = models.CharField(max_length=128, blank=True, null=True)
+    segundo_nombre = models.CharField(max_length=128, blank=True, null=True)
     apellidop = models.CharField(max_length=128, blank=True, null=True)
     apellidom = models.CharField(max_length=128, blank=True, null=True)
     foto = models.ImageField(upload_to='avatar/', blank=True, null=True)
     fecha_nac = models.DateField(blank=True, null=True)
+    edad = models.IntegerField(blank=True, null=True)
     direccion = models.CharField(max_length=256, blank=True, null=True)
 #    contacto = models.ForeignKey(Contacto, blank=True, null=True)
     fono = models.IntegerField(blank=True, null=True)

@@ -6,7 +6,8 @@ from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 from django.http import HttpResponse
 
-from est.models import Planta, Zona, Trabajador, CentroNegocios,Tiempozona, Rangozona,Empresa, Listatrabajadores,Listaplantas
+from est.lib import Tiempozona, Rangozona, Listacn , Listatrabajadores, Listaplantas
+from est.models import Planta, Zona, Trabajador, CentroNegocios,Empresa
 from gps.models import Positions, Devices, Posicionestrabajador
 from itertools import chain
 from datetime import datetime
@@ -231,8 +232,35 @@ def listaplantas(request):
 	contenidos=[]
 	pl=Planta.objects.all()
 	for p in pl:
-		el=Listaplantas()
-		el.nombre=p.nombre
+		el=Listaplantas(p.nombre)
+		contenidos.append(el)					
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	return HttpResponse(data)
+
+def listacentronegocios(request, planta):
+	s = FlatJsonSerializer()
+	contenidos=[]
+	pl=Planta.objects.get(nombre=planta)
+	cn=CentroNegocios.objects.filter(planta=pl)
+	for c in cn:
+		el=Listacn()
+		el.id=c.nombre
+		el.planta=planta
+		contenidos.append(el)					
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	return HttpResponse(data)
+
+def listatrabajadores(request, cnegocios):
+	s = FlatJsonSerializer()
+	contenidos=[]
+	cn=CentroNegocios.objects.get(codigo=cnegocios)
+	tr=Trabajador.objects.filter(centroNegocios=cn)
+	for t in tr:
+		el=Listatrabajadores()
+		el.id=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
+		el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
@@ -253,6 +281,7 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	posiciones = Positions.objects.filter(deviceid=dev)
 	contenidos = []
 		#Cuenta en segundos
+<<<<<<< HEAD
         rango=Rangozona()			
 	rango.zona=None
 	rango.fin=None
@@ -263,11 +292,24 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	aux2 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
 	aux3=timedelta()
 	
+=======
+   			
+
+
+	aux3=datetime.now()
+	aux3 = aux3.replace(hour=0, minute=0, second=0, microsecond=0) 
+	#aux2=datetime.datetime.now()
+	#aux2 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
+	#aux3=timedelta()
+	rango=None
+	aux1=None
+	aux2=None
+>>>>>>> master
 	total=timedelta(microseconds=0)			
 	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
 		
 		contenidozona=[]
-		tiempozona=Tiempozona()
+		tiempozona=Tiempozona(None,None,None,None,None,None,None,None)
 		tiempozona.dif=timedelta(microseconds=0)	
 		for p in posiciones: #Para cada una de las posiciones			
 			if((p.fixtime>=fechai)&(p.fixtime<=fechaf) & (p.valid)):
@@ -275,7 +317,11 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 				if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
 					#contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
 					if not(rango):
+<<<<<<< HEAD
 						rango=Rangozona()			
+=======
+						rango=Rangozona(None,None,None)			
+>>>>>>> master
 						rango.zona=z
 						rango.fin=p.fixtime
 						aux1=datetime.date(p.fixtime)
@@ -295,20 +341,31 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
     				else:
 					if(rango):
 							
+<<<<<<< HEAD
 						rango.aux= aux2-aux1
 						print aux1
 						print aux2
 						print aux3
 						aux3= aux3 + aux2 - aux1
+=======
+						rango.aux= aux2 - aux1
+						aux3= (aux3 + aux2) - aux1
+>>>>>>> master
 						#contenidos.append(tiempozona)
 						rango=None
 						#total=timedelta(microseconds=0)
 						aux1=None
 						aux2=None	
 		
+<<<<<<< HEAD
 		tiempozona=Tiempozona()
 		tiempozona.nombre=z
 		tiempozona.dias=aux3
+=======
+		tiempozona=Tiempozona(None,None,None,None,None,None,None,None)
+		tiempozona.nombre=z
+		tiempozona.id=aux3
+>>>>>>> master
 		contenidos.append(tiempozona)	
 		aux3=None
 				

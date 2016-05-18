@@ -144,11 +144,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-#<<<<<<< HEAD
-STATUC_ROOT = '/home/daniel/geodjango_test/est/static/'
-#=======
 STATIC_ROOT = '/home/daniel/geodjango_test/est/static/'
-#>>>>>>> master
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = '/home/daniel/geodjango_test/est/media/'
