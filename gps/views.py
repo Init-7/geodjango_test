@@ -6,7 +6,7 @@ from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 from django.http import HttpResponse
 
-from est.lib import Tiempozona, Rangozona
+from est.lib import Tiempozona, Rangozona, Listacn , Listatrabajadores, Listaplantas
 from est.models import Planta, Zona, Trabajador, CentroNegocios,Empresa
 from gps.models import Positions, Devices, Posicionestrabajador
 from itertools import chain
@@ -239,6 +239,33 @@ def listaplantas(request):
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
 
+def listacentronegocios(request, planta):
+	s = FlatJsonSerializer()
+	contenidos=[]
+	pl=Planta.objects.get(nombre=planta)
+	cn=CentroNegocios.filter(planta=pl)
+	for c in cl:
+		el=Listacn(None)
+		el.nombre=c.nombre
+		el.planta=planta
+		contenidos.append(el)					
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	return HttpResponse(data)
+
+def listatrabajadores(request, centro):
+	s = FlatJsonSerializer()
+	contenidos=[]
+	cn=CentroNegocios.get(nombre=centro)
+	tr=Trabajador.filter(centroNegocios=cn)
+	for t in tr:
+		el=Listatrabajadores(None)
+		el.nombre=t.nombre+" "+t.apellidop+" "+t.apellidom
+		contenidos.append(el)					
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	return HttpResponse(data)
+
 def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 #Posiciones de un trabajador de la planta en un rango de tiempo
 	s = FlatJsonSerializer()
@@ -254,21 +281,22 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	posiciones = Positions.objects.filter(deviceid=dev)
 	contenidos = []
 		#Cuenta en segundos
-        rango=Rangozona(None,None)			
-	rango.zona=None
-	rango.fin=None
-	rango.inicio=None
-	aux1=datetime.datetime.now()
-	aux1 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
-	aux2=datetime.datetime.now()
-	aux2 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
-	aux3=timedelta()
-	
+   			
+
+
+	aux3=datetime.now()
+	aux3 = aux3.replace(hour=0, minute=0, second=0, microsecond=0) 
+	#aux2=datetime.datetime.now()
+	#aux2 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
+	#aux3=timedelta()
+	rango=None
+	aux1=None
+	aux2=None
 	total=timedelta(microseconds=0)			
 	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
 		
 		contenidozona=[]
-		tiempozona=Tiempozona()
+		tiempozona=Tiempozona(None,None,None,None,None,None,None)
 		tiempozona.dif=timedelta(microseconds=0)	
 		for p in posiciones: #Para cada una de las posiciones			
 			if((p.fixtime>=fechai)&(p.fixtime<=fechaf) & (p.valid)):
@@ -276,7 +304,7 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 				if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
 					#contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
 					if not(rango):
-						rango=Rangozona()			
+						rango=Rangozona(None,None,None)			
 						rango.zona=z
 						rango.fin=p.fixtime
 						aux1=datetime.date(p.fixtime)
@@ -296,18 +324,15 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
     				else:
 					if(rango):
 							
-						rango.aux= aux2-aux1
-						print aux1
-						print aux2
-						print aux3
-						aux3= aux3 + aux2 - aux1
+						rango.aux= aux2 - aux1
+						aux3= (aux3 + aux2) - aux1
 						#contenidos.append(tiempozona)
 						rango=None
 						#total=timedelta(microseconds=0)
 						aux1=None
 						aux2=None	
 		
-		tiempozona=Tiempozona()
+		tiempozona=Tiempozona(None,None,None,None,None,None,None)
 		tiempozona.nombre=z
 		tiempozona.dias=aux3
 		contenidos.append(tiempozona)	

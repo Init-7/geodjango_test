@@ -10,12 +10,12 @@ class Tiempozona(object):
 	self.horas = horas
 	self.minutos = minutos
         self.primero = primero
-        self.ultirmo = ultimo
+        self.ultimo = ultimo
         self.dif = dif
 
 class Rangozona(object):
 
-    def __init__(zona, inicio, fin):
+    def __init__(self, zona, inicio, fin):
 
         self.zona = zona
         self.inicio = inicio
@@ -23,10 +23,19 @@ class Rangozona(object):
 
 class Listatrabajadores(object):
     
-    def __init__(nombre):
+    def __init__(self, nombre):
         self.nombre = nombre
 
 class Listaplantas(object):
 
-    def __init__(nombre):
+    def __init__(self, nombre):
 	self.nombre= nombre	
+
+class Listacn(object):
+
+    def __init__(self, nombre,planta):
+	self.nombre= nombre
+	self.planta= planta	
+
+
+
