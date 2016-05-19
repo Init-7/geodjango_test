@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^data.geojson$', GeoJSONLayerView.as_view(model=Positions), name='data'),
 #    url(r'^positions.leaftlet$', views.positions, name='positions')
     url(r'^(?P<planta>[\w]+)/puntos/$',views.planta, name='planta'),
-    url(r'^(?P<planta>[\w]+)/(?P<centro>[0-9]+)/puntos/$',views.centro, name='centro'),
+    url(r'^(?P<planta>[\w]+)/(?P<centro>[\w]+)/puntos/$',views.centro, name='centro'),
     url(r'^trabajador/(?P<trabajador>[0-9]+)/$',views.trabajador, name='trabajador'), # Se elimina la palabra "puntos" para evitar procesar consulta anterior
     url(r'^plantas/$',views.listaplantas, name='plantas'),
     url(r'^trabajadores/(?P<cnegocios>[\w]+)/$',views.listatrabajadores, name='trabajadores'),

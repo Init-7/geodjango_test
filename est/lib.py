@@ -29,8 +29,9 @@ class Listatrabajadores(models.Model):
 
 class Listaplantas(models.Model):
 
-    def __init__(self,id):
-	self.id=id
+    def __init__(self, id, nombre):
+	self.id = id
+	self.nombre=nombre
 
 class Listacn(models.Model):
 

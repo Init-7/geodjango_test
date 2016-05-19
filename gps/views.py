@@ -24,6 +24,7 @@ class FlatJsonSerializer(Serializer):
         data = self._current
         if not self.selected_fields or 'id' in self.selected_fields:
             data['id'] = obj.id
+	    data['nombre'] = obj.nombre 
         return data
 
     def end_object(self, obj):
@@ -57,8 +58,8 @@ def last_five(request):
     #serializer = MySerialiser()
     s = FlatJsonSerializer()
     #s.serialize(MyModel.objects.all())
-    data = s.serialize(Positions.objects.order_by('-id')[:5])
-    #data = serializers.serialize('json', last_five)
+    #data = s.serialize(Positions.objects.order_by('-id')[:5])
+    data = s.serialize(last_five)
     #data=serializers.serialize('json', last_five, fields=('deviceid','fixtime'))
     return HttpResponse(data, content_type='application/json')
 
@@ -70,8 +71,9 @@ def infoplantas(request):
     for p in pl:
         print p.nombre
         contenidos.append(p)
-        data = s.serialize('json', contenidos)
-#        data = serializer.serialize(contenidos)
+        data = serializers.serialize('json', contenidos)
+#       data = serializer.serialize(contenidos)
+    data = s.serialize(contenidos)
     return HttpResponse(data, content_type='application/json')
 
 
@@ -99,32 +101,32 @@ def planta(request, planta):
 
 def centro(request, planta, centro):
     
-    tcn = Trabajador.objects.filter(centroNegocios__id = centro)
+    tcn = Trabajador.objects.filter(centroNegocios__codigo = centro)
     s = FlatJsonSerializer()
     contenidos = []
-
+    punto=None
     for tr in tcn:
         if tr.gps_id:
 #        t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
             dev = Devices.objects.get(id=tr.gps_id) #Dispositivo correspondiente al trabajador
             punto = Positions.objects.get(id = dev.positionid)
-	auxiliar=Posicionestrabajador()	
-	auxiliar.lat=punto.lat	
-	auxiliar.lon=punto.lon
-	auxiliar.address=punto.address
-	auxiliar.fixtime=punto.fixtime	
+	    auxiliar=Posicionestrabajador()	
+	    auxiliar.lat=punto.lat	
+	    auxiliar.lon=punto.lon
+	    auxiliar.address=punto.address
+	    auxiliar.fixtime=punto.fixtime	
 	
-	auxiliar.nombre=tr.nombre
-	auxiliar.apellidop=tr.apellidop
-	auxiliar.apellidom=tr.apellidom
-	auxiliar.fecha_nac=tr.fecha_nac
-	#auxiliar.estudios=t.estudios
-	auxiliar.rut=tr.rut
-	auxiliar.nivel_riesgo=tr.nivel_riesgo
-	auxiliar.direccion=tr.direccion
-	#auxiliar.centroNegocios=t.centroNegocios
-	#auxiliar.gps=t.gps
-	contenidos.append(auxiliar)
+       	    auxiliar.nombre=tr.primer_nombre
+	    auxiliar.apellidop=tr.apellidop
+	    auxiliar.apellidom=tr.apellidom
+	    auxiliar.fecha_nac=tr.fecha_nac
+	    #auxiliar.estudios=t.estudios
+	    auxiliar.rut=tr.rut
+	    auxiliar.nivel_riesgo=tr.nivel_riesgo
+	    auxiliar.direccion=tr.direccion
+	    #auxiliar.centroNegocios=t.centroNegocios
+	    #auxiliar.gps=t.gps
+	    contenidos.append(auxiliar)
     data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 
@@ -137,7 +139,8 @@ def trabajador(request, trabajador):
 	s = FlatJsonSerializer() 
 	t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
-	punto = Positions.objects.get(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
+	validos=Positions.objects.filter(valid=True)
+	punto = validos.get(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
 		
 	contenidos = []
 
@@ -148,9 +151,10 @@ def trabajador(request, trabajador):
 	auxiliar.lat=punto.lat	
 	auxiliar.lon=punto.lon
 	auxiliar.address=punto.address
-	auxiliar.fixtime=punto.fixtime	
+	auxiliar.fixtime=punto.fixtime
+	auxiliar.valid=punto.valid	
 	
-	auxiliar.nombre=t.nombre
+	auxiliar.nombre=t.primer_nombre
 	auxiliar.apellidop=t.apellidop
 	auxiliar.apellidom=t.apellidom
 	auxiliar.fecha_nac=t.fecha_nac
@@ -232,7 +236,7 @@ def listaplantas(request):
 	contenidos=[]
 	pl=Planta.objects.all()
 	for p in pl:
-		el=Listaplantas(p.nombre)
+		el=Listaplantas(p.id, p.nombre)
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
@@ -245,8 +249,8 @@ def listacentronegocios(request, planta):
 	cn=CentroNegocios.objects.filter(planta=pl)
 	for c in cn:
 		el=Listacn()
-		el.id=c.nombre
-		el.planta=planta
+		el.id=c.id
+		el.nombre=c.nombre
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
@@ -259,7 +263,7 @@ def listatrabajadores(request, cnegocios):
 	tr=Trabajador.objects.filter(centroNegocios=cn)
 	for t in tr:
 		el=Listatrabajadores()
-		el.id=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
+		el.id=t.id
 		el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
@@ -273,39 +277,18 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	fechaf = datetime.strptime(fechafin, '%Y-%m-%d')
     	pl = Planta.objects.get(nombre = planta)
 	zonas = Zona.objects.filter(planta__nombre=planta)
-	#posiciones = Positions.objects.all()
 	
         t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
 	#posiciones = Positions.objects.filter(fixtime__range=[fechai,fechaf])
 	posiciones = Positions.objects.filter(deviceid=dev)
 	contenidos = []
-		#Cuenta en segundos
-<<<<<<< HEAD
-        rango=Rangozona()			
-	rango.zona=None
-	rango.fin=None
-	rango.inicio=None
-	aux1=datetime.datetime.now()
-	aux1 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
-	aux2=datetime.datetime.now()
-	aux2 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
-	aux3=timedelta()
-	
-=======
-   			
 
-
-	aux3=datetime.now()
-	aux3 = aux3.replace(hour=0, minute=0, second=0, microsecond=0) 
-	#aux2=datetime.datetime.now()
-	#aux2 = aux1.replace(hour=0, minute=0, second=0, microsecond=0) 
-	#aux3=timedelta()
 	rango=None
 	aux1=None
 	aux2=None
->>>>>>> master
-	total=timedelta(microseconds=0)			
+
+	aux3=timedelta(microseconds=0)			
 	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
 		
 		contenidozona=[]
@@ -317,17 +300,15 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 				if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
 					#contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
 					if not(rango):
-<<<<<<< HEAD
-						rango=Rangozona()			
-=======
+
 						rango=Rangozona(None,None,None)			
->>>>>>> master
+
 						rango.zona=z
 						rango.fin=p.fixtime
-						aux1=datetime.date(p.fixtime)
+						aux1=p.fixtime
 						print(aux1)
 						rango.inicio=p.fixtime
-						aux2=datetime.date(p.fixtime)
+						aux2=p.fixtime
 						print(aux2)
 						#if not(rango.fin):
 							#rango.fin=p.fixtime
@@ -336,38 +317,28 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 					else:
 						if(p.fixtime>rango.fin):
 							rango.fin=p.fixtime
-							aux2=datetime.date(p.fixtime)
+							aux2=p.fixtime
 								#contenidos.append(rango)
     				else:
 					if(rango):
 							
-<<<<<<< HEAD
-						rango.aux= aux2-aux1
-						print aux1
-						print aux2
-						print aux3
-						aux3= aux3 + aux2 - aux1
-=======
+
 						rango.aux= aux2 - aux1
-						aux3= (aux3 + aux2) - aux1
->>>>>>> master
+						aux3 =aux3 + aux2 - aux1
+
 						#contenidos.append(tiempozona)
 						rango=None
 						#total=timedelta(microseconds=0)
 						aux1=None
 						aux2=None	
 		
-<<<<<<< HEAD
-		tiempozona=Tiempozona()
-		tiempozona.nombre=z
-		tiempozona.dias=aux3
-=======
+
 		tiempozona=Tiempozona(None,None,None,None,None,None,None,None)
-		tiempozona.nombre=z
-		tiempozona.id=aux3
->>>>>>> master
+		tiempozona.nombre=z.nombre
+		tiempozona.id=str(aux3)
+
 		contenidos.append(tiempozona)	
-		aux3=None
+		aux3=timedelta(microseconds=0)			
 				
 		#if(contenidozona):		
 			#pr=contenidozona[0].fixtime
