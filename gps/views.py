@@ -24,7 +24,7 @@ class FlatJsonSerializer(Serializer):
         data = self._current
         if not self.selected_fields or 'id' in self.selected_fields:
             data['id'] = obj.id
-	    data['nombre'] = obj.nombre 
+	    data['name'] = obj.nombre 
         return data
 
     def end_object(self, obj):
@@ -249,7 +249,7 @@ def listacentronegocios(request, planta):
 	cn=CentroNegocios.objects.filter(planta=pl)
 	for c in cn:
 		el=Listacn()
-		el.id=c.id
+		el.id=c.codigo
 		el.nombre=c.nombre
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
@@ -287,8 +287,8 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 	rango=None
 	aux1=None
 	aux2=None
-
 	aux3=timedelta(microseconds=0)			
+	
 	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
 		
 		contenidozona=[]
