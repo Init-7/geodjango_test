@@ -383,7 +383,9 @@ def riesgotrabajador(request, planta, nro):
 #Posiciones de trabajadores con mayor riesgo
     	s = FlatJsonSerializer()
 	pl = Planta.objects.get(nombre = planta)
-	tr = Trabajador.objects.order_by('-nivel_riesgo')[:nro]
+	empresa= Empresa.objects.get(planta=pl)
+	trabs=Trabajador.objects.filter(empresa=empresa)
+	tr = trabs.order_by('-nivel_riesgo')[:nro]
 	contenidos = []
 	
 	for t in tr:
@@ -397,7 +399,7 @@ def riesgotrabajador(request, planta, nro):
 				auxiliar.address=punto.address
 				auxiliar.fixtime=punto.fixtime	
 	
-				auxiliar.nombre=t.nombre
+				auxiliar.nombre=t.primer_nombre
 				auxiliar.apellidop=t.apellidop
 				auxiliar.apellidom=t.apellidom
 				auxiliar.fecha_nac=t.fecha_nac
