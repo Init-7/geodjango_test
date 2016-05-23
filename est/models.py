@@ -182,7 +182,7 @@ class Trabajador(models.Model):
         return u"%s %s %s %s %s" % (self.id, self.primer_nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
     def get_est_url(self):
-        self.qrtext = "http://www.estchile.cl/cv/"+str(self.id)
+        self.qrtext = "http://www.estchile.cl/cv/"+str(self.estid)
         return self.qrtext
 
     def get_absolute_url(self):
@@ -195,8 +195,8 @@ class Trabajador(models.Model):
             box_size=6,
             border=0,
         )
-        qr.add_data(self.get_absolute_url())
-#        qr.add_data(self.get_est_url())
+#        qr.add_data(self.get_absolute_url())
+        qr.add_data(self.get_est_url())
         qr.make(fit=True)
 
         img = qr.make_image()

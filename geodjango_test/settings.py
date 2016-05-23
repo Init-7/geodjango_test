@@ -144,23 +144,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT = '/home/daniel/geodjango_test/est/static/'
+STATIC_ROOT = '/home/lautaro/development/geiodjango_test/est/static/'
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/home/daniel/geodjango_test/est/media/'
+MEDIA_ROOT = '/home/lautaro/development/geodjango_test/est/media/'
 MEDIA_URL = '/media/'
 
 #DATABASE_ROUTERS = ['gps.routers.GpsRouter']
 
 #Custom GDAL PATH
 
-#GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
+GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
 
 TASTYPIE_DEFAULT_FORMATS = ['json', 'xml', 'yaml', 'plist', 'jsonp']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-#CORS_ORIGIN_WHITELIST = ('/hoime/lautaro/development/gps_tracking/Test/DojoJson/', 'localhost','127.0.0.1','localhost:8000','127.0.0.1:8000')
+#CORS_ORIGIN_WHITELIST = ('/home/lautaro/development/gps_tracking/Test/DojoJson/', 'localhost','127.0.0.1','localhost:8000','127.0.0.1:8000')
 
 CORS_ALLOW_CREDENTIALS = True
 
