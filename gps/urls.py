@@ -9,9 +9,11 @@ from .models import Positions
 
 urlpatterns = [
 #URL que entrega las ultimas 5 posiciones en Json normal
-    url(r'^positions$', views.last_five, name='positions'),
+url(r'^positions$', views.last_five, name='positions'),
+#
+url(r'^$', TemplateView.as_view(template_name='gps/index2.html'), name='home'),
 #URL que entrega un mapa leaflet con todos los puntos de posiciones
-    url(r'^$', TemplateView.as_view(template_name='gps/index.html'), name='home'),
+    #url(r'^$', TemplateView.as_view(template_name='gps/index.html'), name='home'),
 #URL que entrega un GeoJSON de todas las posiciones
     url(r'^data.geojson$', GeoJSONLayerView.as_view(model=Positions), name='data'),
 #    url(r'^positions.leaftlet$', views.positions, name='positions')

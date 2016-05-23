@@ -26,6 +26,8 @@ class Listatrabajadores(models.Model):
     def __init__( self):
         self.nombre = None
 	self.id = None
+	self.lat=None
+	self.lon=None
 
 class Listaplantas(models.Model):
 

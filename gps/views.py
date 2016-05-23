@@ -5,7 +5,7 @@ from django.core import serializers
 from djgeojson.serializers import Serializer as GeoJSONSerializer
 
 from django.http import HttpResponse
-
+from django.core.exceptions import ObjectDoesNotExist
 from est.lib import Tiempozona, Rangozona, Listacn , Listatrabajadores, Listaplantas
 from est.models import Planta, Zona, Trabajador, CentroNegocios,Empresa
 from gps.models import Positions, Devices, Posicionestrabajador
@@ -24,7 +24,33 @@ class FlatJsonSerializer(Serializer):
         data = self._current
         if not self.selected_fields or 'id' in self.selected_fields:
             data['id'] = obj.id
+	    data['name'] = obj.nombre
+        return data
+
+    def end_object(self, obj):
+        if not self.first:
+            self.stream.write(', ')
+        json.dump(self.get_dump_object(obj), self.stream,
+                  cls=DjangoJSONEncoder)
+        self._current = None
+
+    def start_serialization(self):
+        self.stream.write("[")
+
+    def end_serialization(self):
+        self.stream.write("]")
+
+    def getvalue(self):
+        return super(Serializer, self).getvalue()
+
+class FlatJsonSerializer2(Serializer):
+    def get_dump_object(self, obj):
+        data = self._current
+        if not self.selected_fields or 'id' in self.selected_fields:
+            data['id'] = obj.id
 	    data['name'] = obj.nombre 
+	    data['lat']=obj.lat
+	    data['lon']=obj.lon
         return data
 
     def end_object(self, obj):
@@ -245,24 +271,50 @@ def listaplantas(request):
 def listacentronegocios(request, planta):
 	s = FlatJsonSerializer()
 	contenidos=[]
-	pl=Planta.objects.get(nombre=planta)
-	cn=CentroNegocios.objects.filter(planta=pl)
-	for c in cn:
-		el=Listacn()
-		el.id=c.codigo
-		el.nombre=c.nombre
-		contenidos.append(el)					
+	if(planta=="Todos"):
+		cn=CentroNegocios.objects.all()
+		for c in cn:
+			el=Listacn()
+			el.id=c.codigo
+			el.nombre=c.nombre
+			contenidos.append(el)
+	else:
+		pl=Planta.objects.get(nombre=planta)
+		cn=CentroNegocios.objects.filter(planta=pl)
+		for c in cn:
+			el=Listacn()
+			el.id=c.codigo
+			el.nombre=c.nombre
+			contenidos.append(el)				
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
 
 def listatrabajadores(request, cnegocios):
-	s = FlatJsonSerializer()
+	s = FlatJsonSerializer2()
 	contenidos=[]
 	cn=CentroNegocios.objects.get(codigo=cnegocios)
 	tr=Trabajador.objects.filter(centroNegocios=cn)
+	punto=None
+	
 	for t in tr:
 		el=Listatrabajadores()
+		if(Devices.objects.filter(id=t.gps_id).exists()):
+			dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
+			validos=Positions.objects.filter(valid=True)
+			punto = validos.filter(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
+			pto=validos.get(id=dev.positionid)
+			if(punto.exists()):		
+						
+				#el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
+				#try:
+				el.lat=pto.lat
+				#except ObjectDoesNotExist:
+				#        el.lat=None
+				#try:
+				el.lon=pto.lon
+				#except ObjectDoesNotExist:
+				#        el.lon=None
 		el.id=t.id
 		el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
 		contenidos.append(el)					
