@@ -3,12 +3,12 @@ from django.shortcuts import render
 
 from django.core import serializers
 from djgeojson.serializers import Serializer as GeoJSONSerializer
-
+from geojson import Point
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
-from est.lib import Tiempozona, Rangozona, Listacn , Listatrabajadores, Listaplantas
+from est.lib import Tiempozona, Rangozona, Listacn , Listatrabajadores, Listaplantas, Posicionestrabajador,Alertatrabajador, testzona
 from est.models import Planta, Zona, Trabajador, CentroNegocios,Empresa
-from gps.models import Positions, Devices, Posicionestrabajador
+from gps.models import Positions, Devices
 from itertools import chain
 from datetime import datetime
 from djgeojson.views import GeoJSONResponseMixin
@@ -24,7 +24,7 @@ class FlatJsonSerializer(Serializer):
         data = self._current
         if not self.selected_fields or 'id' in self.selected_fields:
             data['id'] = obj.id
-	    data['name'] = obj.nombre
+	    #data['name'] = obj.nombre
         return data
 
     def end_object(self, obj):
@@ -51,6 +51,9 @@ class FlatJsonSerializer2(Serializer):
 	    data['name'] = obj.nombre 
 	    data['lat']=obj.lat
 	    data['lon']=obj.lon
+	    data['apellidop']=obj.apellidop
+	    data['apellidon']=obj.apellidom
+	    
         return data
 
     def end_object(self, obj):
@@ -158,6 +161,46 @@ def centro(request, planta, centro):
 
     return HttpResponse(data)#, content_type='application/json')
 
+def centro2(request, planta, centro):
+    
+    tcn = Trabajador.objects.filter(centroNegocios__codigo = centro)
+    #s = FlatJsonSerializer()
+    contenidos = []
+    punto=None
+    for tr in tcn:
+        if tr.gps_id:
+#        t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
+            dev = Devices.objects.get(id=tr.gps_id) #Dispositivo correspondiente al trabajador
+            punto = Positions.objects.get(id = dev.positionid)
+	    auxiliar=Alertatrabajador()
+	    #auxiliar.geom='SRID=4326;POINT()'
+	    #auxiliar.lat=punto.lat	
+	    #auxiliar.lon=punto.lon
+	    #auxiliar.address=punto.address
+	    #auxiliar.fixtime=punto.fixtime
+       	    auxiliar.nombre=tr.primer_nombre+" "+tr.apellidop
+	    auxiliar.fono=tr.fono
+	    auxiliar.tipo_contacto=tr.tipo_contacto
+	    auxiliar.nombre_emergencia=tr.emergencia.nombre
+	    auxiliar.nro_emergencia=tr.emergencia.fono
+	    auxiliar.foto=tr.foto.url
+	    auxiliar.geom=punto.geom
+	    auxiliar.apellidop=tr.apellidop
+	    #auxiliar.apellidom=tr.apellidom
+	    #auxiliar.fecha_nac=tr.fecha_nac
+	    #auxiliar.estudios=t.estudios
+	    #auxiliar.rut=tr.rut
+	    auxiliar.nivel_riesgo=tr.nivel_riesgo
+	    auxiliar.telefono=tr.fono
+	    auxiliar.cargo=tr.cargo
+	    #auxiliar.direccion=tr.direccion
+	    #auxiliar.centroNegocios=t.centroNegocios
+	    #auxiliar.gps=t.gps
+	    contenidos.append(auxiliar)
+    #data = s.serialize(contenidos)
+    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=False, with_modelname=False)
+
+    return HttpResponse(data)#, content_type='application/json')
 
 
 def trabajador(request, trabajador):
@@ -450,7 +493,7 @@ def riesgotrabajador(request, planta, nro):
 				auxiliar.lon=punto.lon
 				auxiliar.address=punto.address
 				auxiliar.fixtime=punto.fixtime	
-	
+				auxiliar.fono=t.fono
 				auxiliar.nombre=t.primer_nombre
 				auxiliar.apellidop=t.apellidop
 				auxiliar.apellidom=t.apellidom
@@ -475,6 +518,58 @@ def curriculum(request, trabajador):
     context = {'data': data}
 
     return render(request,'cv/cv.html', context)
+
+def sms(request, trabajador):
+         
+    t = Trabajador.objects.get(estid=trabajador)   
+    el=Listatrabajadores()
+    if(Devices.objects.filter(id=t.gps_id).exists()):
+	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
+	validos=Positions.objects.filter(valid=True)
+	punto = validos.filter(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
+	pto=validos.get(id=dev.positionid)
+	if(punto.exists()):		
+			
+		#el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
+		#try:
+		el.lat=pto.lat
+		#except ObjectDoesNotExist:
+		#        el.lat=None
+		#try:
+		el.lon=pto.lon
+		#except ObjectDoesNotExist:
+		#        el.lon=None
+	el.id=t.id
+	el.nombre=t.primer_nombre+" "+t.apellidop
+	el.apellidop=t.apellidop
+	el.fono=t.fono
+	el.cargo=t.cargo
+	
+    return render(request,'gps/index.html', {'el': el})
+
+def trabajador_z_riesgo(request, planta):
+	s = FlatJsonSerializer()	
+	pl = Planta.objects.get(nombre = planta)
+	zonas = Zona.objects.filter(planta__nombre=planta)
+	empresa= Empresa.objects.get(planta=pl)
+	tr=Trabajador.objects.filter(empresa=empresa)
+	contenidos=[]
+
+	for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
+		for t in tr:
+			if(Devices.objects.filter(id=t.gps_id)):
+				dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador			
+				punto = Positions.objects.get(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
+				if(punto.valid):				
+					if(z.zona.contains(punto.geom)):
+						auxiliar=testzona()
+						auxiliar.nombre=t.primer_nombre+" "+t.apellidop
+						auxiliar.zona=z.nombre
+						contenidos.append(auxiliar)
+	data = s.serialize(contenidos)
+	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+	return HttpResponse(data)
+	
 
 #    return render(request, '../templates/curriculum/classic.html', {
 #        'resume': resume,
