@@ -194,7 +194,7 @@ def centro2(request, planta, centro):
     #s = FlatJsonSerializer()
     contenidos = []
     punto=None
-    for tr in tcn:
+    for i, tr in enumerate(tcn):
         if tr.gps_id:
 #        t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
             dev = Devices.objects.get(id=tr.gps_id) #Dispositivo correspondiente al trabajador
@@ -207,6 +207,7 @@ def centro2(request, planta, centro):
 	    #auxiliar.fixtime=punto.fixtime
        	    auxiliar.nombre=tr.primer_nombre+" "+tr.apellidop
 	    auxiliar.id=tr.id
+	    auxiliar.i=i
 	    if(tr.tipo_contacto):	    
 		auxiliar.tipo_contacto=tr.tipo_contacto
 	    else:

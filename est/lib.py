@@ -123,6 +123,7 @@ class Alertatrabajador(models.Model):
 	('PAREJA','Pareja'),
 	('POLOLO','Pololo(a)')
 	)
+	i=models.IntegerField(blank=True, null=True)
 	zona=models.CharField(max_length=128, blank=True, null=True)
 	nombre = models.CharField(max_length=128, blank=True, null=True)
 	#apellidop = models.CharField(max_length=128, blank=True, null=True)
