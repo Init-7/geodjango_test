@@ -350,8 +350,8 @@ def listaplantas(request):
 	s = FlatJsonSerializer3()
 	contenidos=[]
 	pl=Planta.objects.all()
-	for p in pl:
-		el=Listaplantas(p.id, p.nombre, p.nombre, p.geom.centroid.y)
+	for i, p in enumerate(pl):
+		el=Listaplantas(i, p.nombre, p.nombre, p.geom.centroid.y)
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
@@ -386,7 +386,7 @@ def listatrabajadores(request, cnegocios):
 	tr=Trabajador.objects.filter(centroNegocios=cn)
 	punto=None
 	
-	for t in tr:
+	for i, t in enumerate(tr):
 		el=Listatrabajadores()
 		if(Devices.objects.filter(id=t.gps_id).exists()):
 			dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
@@ -404,7 +404,8 @@ def listatrabajadores(request, cnegocios):
 				el.lon=pto.lon
 				#except ObjectDoesNotExist:
 				#        el.lon=None
-		el.id=t.id
+		el.id=i
+		#el.id=t.id
 		el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
 		contenidos.append(el)					
 	data = s.serialize(contenidos)

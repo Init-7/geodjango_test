@@ -32,6 +32,7 @@ class Listatrabajadores(models.Model):
 	self.apellidom=None
 	self.fono=None
 	self.cargo=None
+	self.i=None
 
 class Listaplantas(models.Model):
 
