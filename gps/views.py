@@ -98,6 +98,32 @@ class FlatJsonSerializer3(Serializer):
     def getvalue(self):
         return super(Serializer, self).getvalue()
 
+class FlatJsonSerializer4(Serializer):
+    def get_dump_object(self, obj):
+        data = self._current
+        if not self.selected_fields or 'id' in self.selected_fields:
+            data['id'] = obj.id
+	    data['name'] = obj.nombre
+	    data['lat'] = obj.lat
+	    data['lon'] = obj.lon
+        return data
+
+    def end_object(self, obj):
+        if not self.first:
+            self.stream.write(', ')
+        json.dump(self.get_dump_object(obj), self.stream,
+                  cls=DjangoJSONEncoder)
+        self._current = None
+
+    def start_serialization(self):
+        self.stream.write("[")
+
+    def end_serialization(self):
+        self.stream.write("]")
+
+    def getvalue(self):
+        return super(Serializer, self).getvalue()
+
 @ensure_csrf_cookie
 #Serialiser copy paste
 class MySerialiser(Serializer):
@@ -347,12 +373,22 @@ def trabajadoresplanta(request, nombreplanta):
 	return HttpResponse(data)
 
 def listaplantas(request):
-	s = FlatJsonSerializer3()
+	s = FlatJsonSerializer4()
 	contenidos=[]
 	pl=Planta.objects.all()
 	for i, p in enumerate(pl):
-		el=Listaplantas(i, p.nombre, p.nombre, p.geom.centroid.y)
-		contenidos.append(el)					
+		if(p.nombre=="Maule"):
+			el=Listaplantas(i, p.nombre, "-35.607","-71.588")
+			contenidos.append(el)	
+		else:
+			if(p.nombre=="ESTThno"):
+				el=Listaplantas(i, p.nombre, "-36.778224","-73.080980")
+				contenidos.append(el)
+			else:
+				if(p.nombre=="Todos"):
+					el=Listaplantas(i, p.nombre, "-36.3","-72.3")
+					contenidos.append(el)
+					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
