@@ -24,7 +24,7 @@ class FlatJsonSerializer(Serializer):
         data = self._current
         if not self.selected_fields or 'id' in self.selected_fields:
             data['id'] = obj.id
-	    #data['name'] = obj.nombre
+	    data['name'] = obj.nombre
         return data
 
     def end_object(self, obj):
@@ -54,6 +54,32 @@ class FlatJsonSerializer2(Serializer):
 	    data['apellidop']=obj.apellidop
 	    data['apellidon']=obj.apellidom
 	    
+        return data
+
+    def end_object(self, obj):
+        if not self.first:
+            self.stream.write(', ')
+        json.dump(self.get_dump_object(obj), self.stream,
+                  cls=DjangoJSONEncoder)
+        self._current = None
+
+    def start_serialization(self):
+        self.stream.write("[")
+
+    def end_serialization(self):
+        self.stream.write("]")
+
+    def getvalue(self):
+        return super(Serializer, self).getvalue()
+
+class FlatJsonSerializer3(Serializer):
+    def get_dump_object(self, obj):
+        data = self._current
+        if not self.selected_fields or 'id' in self.selected_fields:
+            data['id'] = obj.id
+	    data['name'] = obj.nombre
+	    #data['lat'] = obj.geom.centroid
+	    #data['lon'] = obj.geom.centroid
         return data
 
     def end_object(self, obj):
@@ -114,9 +140,10 @@ def planta(request, planta):
     contenidos = []
 
     for d in Devices.objects.all():
-        p = Positions.objects.get(id = d.positionid)
-        if(pl.geom.contains(p.geom)):
-            contenidos.append(p)
+	if(Positions.objects.filter(id = d.positionid).exists()):
+		p = Positions.objects.get(id = d.positionid)
+		if(pl.geom.contains(p.geom)):
+		    contenidos.append(p)
 
 
 #    for p in puntos:
@@ -181,9 +208,18 @@ def centro2(request, planta, centro):
        	    auxiliar.nombre=tr.primer_nombre+" "+tr.apellidop
 	    auxiliar.fono=tr.fono
 	    auxiliar.tipo_contacto=tr.tipo_contacto
-	    auxiliar.nombre_emergencia=tr.emergencia.nombre
-	    auxiliar.nro_emergencia=tr.emergencia.fono
-	    auxiliar.foto=tr.foto.url
+	    auxiliar.id=tr.id
+	    if(tr.emergencia):
+	    	auxiliar.nombre_emergencia=tr.emergencia.nombre
+	    	auxiliar.nro_emergencia=tr.emergencia.fono
+	    else:
+	    	auxiliar.nombre_emergencia="Sin Información"
+	    	auxiliar.nro_emergencia="Sin Información"
+	    if(tr.foto):
+	    	auxiliar.foto=tr.foto.url
+	    else:
+	    	auxiliar.foto="/media/avatar/defecto.png"
+	    #auxiliar.foto=tr.foto.url
 	    auxiliar.geom=punto.geom
 	    auxiliar.apellidop=tr.apellidop
 	    #auxiliar.apellidom=tr.apellidom
@@ -294,18 +330,19 @@ def trabajadoresplanta(request, nombreplanta):
         tr = Trabajador.objects.filter(empresa=emp) #Trabajadores con el id solicitado
 	for t in tr:
 		el=Listatrabajadores()
-		el.nombre=t.nombre+" "+t.apellidop+" "+t.apellidom
+		el.id=t.estid
+		el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
 
 def listaplantas(request):
-	s = FlatJsonSerializer()
+	s = FlatJsonSerializer3()
 	contenidos=[]
 	pl=Planta.objects.all()
 	for p in pl:
-		el=Listaplantas(p.id, p.nombre)
+		el=Listaplantas(p.id, p.nombre, p.nombre, p.geom.centroid.y)
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
@@ -560,6 +597,7 @@ def trabajador_z_riesgo(request, planta):
 			if(Devices.objects.filter(id=t.gps_id)):
 				dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador			
 				punto = Positions.objects.get(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
+
 				if(punto.valid):				
 					if(z.zona.contains(punto.geom)):
 						auxiliar=testzona()

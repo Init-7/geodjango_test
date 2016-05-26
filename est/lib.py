@@ -35,9 +35,11 @@ class Listatrabajadores(models.Model):
 
 class Listaplantas(models.Model):
 
-    def __init__(self, id, nombre):
+    def __init__(self, id, nombre,lat,lon):
 	self.id = id
 	self.nombre=nombre
+	self.lat=lat
+	self.lon=lon
 
 class Listacn(models.Model):
 
