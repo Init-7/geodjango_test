@@ -206,9 +206,11 @@ def centro2(request, planta, centro):
 	    #auxiliar.address=punto.address
 	    #auxiliar.fixtime=punto.fixtime
        	    auxiliar.nombre=tr.primer_nombre+" "+tr.apellidop
-	    auxiliar.fono=tr.fono
-	    auxiliar.tipo_contacto=tr.tipo_contacto
 	    auxiliar.id=tr.id
+	    if(tr.tipo_contacto):	    
+		auxiliar.tipo_contacto=tr.tipo_contacto
+	    else:
+	    	auxiliar.tipo_contacto="Sin Información"
 	    if(tr.emergencia):
 	    	auxiliar.nombre_emergencia=tr.emergencia.nombre
 	    	auxiliar.nro_emergencia=tr.emergencia.fono
@@ -227,8 +229,14 @@ def centro2(request, planta, centro):
 	    #auxiliar.estudios=t.estudios
 	    #auxiliar.rut=tr.rut
 	    auxiliar.nivel_riesgo=tr.nivel_riesgo
-	    auxiliar.telefono=tr.fono
-	    auxiliar.cargo=tr.cargo
+	    if(tr.fono):	    
+		auxiliar.fono=tr.fono
+	    else:
+	    	auxiliar.fono="Sin Información"
+	    if(tr.cargo):	    
+		auxiliar.cargo=tr.cargo
+	    else:
+	    	auxiliar.cargo="Sin Información"
 	    #auxiliar.direccion=tr.direccion
 	    #auxiliar.centroNegocios=t.centroNegocios
 	    #auxiliar.gps=t.gps
