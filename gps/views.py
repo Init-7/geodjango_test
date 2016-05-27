@@ -47,13 +47,13 @@ class FlatJsonSerializer2(Serializer):
     def get_dump_object(self, obj):
         data = self._current
         if not self.selected_fields or 'id' in self.selected_fields:
-            data['id'] = obj.id
+            data['id'] = obj.i
 	    data['name'] = obj.nombre 
 	    data['lat']=obj.lat
 	    data['lon']=obj.lon
 	    data['apellidop']=obj.apellidop
 	    data['apellidon']=obj.apellidom
-	    
+	    data['i']=obj.id
         return data
 
     def end_object(self, obj):
@@ -215,7 +215,7 @@ def centro(request, planta, centro):
     return HttpResponse(data)#, content_type='application/json')
 
 def centro2(request, planta, centro):
-    
+    #tcn = Trabajador.objects.all()
     tcn = Trabajador.objects.filter(centroNegocios__codigo = centro)
     #s = FlatJsonSerializer()
     contenidos = []
@@ -440,8 +440,8 @@ def listatrabajadores(request, cnegocios):
 				el.lon=pto.lon
 				#except ObjectDoesNotExist:
 				#        el.lon=None
-		el.id=i
-		#el.id=t.id
+		el.id=t.id
+		el.i=i
 		el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
 		contenidos.append(el)					
 	data = s.serialize(contenidos)
