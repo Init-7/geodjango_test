@@ -10,7 +10,7 @@ django-cors-headers==1.1.0
 django-extensions==1.6.1
 django-geojson==2.9.0
 django-leaflet==0.18.0
-functools32==3.2.3.post2
+#functools32==3.2.3.post2
 ipykernel==4.2.2
 ipython==4.1.1
 ipython-genutils==0.1.0

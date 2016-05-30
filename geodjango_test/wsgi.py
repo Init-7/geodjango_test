@@ -8,9 +8,13 @@ https://docs.djangoproject.com/en/1.9/howto/deployment/wsgi/
 """
 
 import os
+import sys
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geodjango_test.settings")
+sys.path.append('/home/lautaro/venvs/geodjango-app/lib/python2.7/site-packages')
+sys.path.append('/var/www/html/django-apps/geodjango_test')
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geodjango_test.settings-deploy")
 
 application = get_wsgi_application()
