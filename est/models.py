@@ -34,7 +34,7 @@ class Empresa (models.Model):
 class Planta(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     empresa = models.ForeignKey(Empresa, blank=True, null=True)
-    geom = models.MultiPolygonField(srid=4326)
+    geom = models.MultiPolygonField(srid=4326, blank=True, null=True)
 
     objects = models.GeoManager()
 

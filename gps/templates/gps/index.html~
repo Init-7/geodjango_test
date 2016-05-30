@@ -28,13 +28,13 @@
 
 	</head>
 	<body class="claro">
-			<input style="display:none" id="lat" name="lat" value={{ el.lat }} >
-			<input style="display:none" id="lon" name="lon" value={{ el.lon }} >
-			<input style="display:none" id="nombre" name="nombre" value={{ el.nombre }} >
-			<input style="display:none" id="apellidop" name="apellidop" value={{ el.apellidop }} >
-			<input style="display:none" id="nro" name="nro" value={{ el.fono }}>
-			<input style="display:none" id="cargo" name="cargo" value={{ el.cargo }}>
-			<input style="display:none" id="fonoem" name="fonoem" value={{ el.emergencia.fono }}>
+			<input style="display:none" id="lat" name="lat" value={{ el.lat }} ><br>
+			<input style="display:none" id="lon" name="lon" value={{ el.lon }} ><br>
+			<input style="display:none" id="nombre" name="nombre" value={{ el.nombre }} ><br>
+			<input style="display:none" id="apellidop" name="apellidop" value={{ el.apellidop }} ><br>
+			<input style="display:none" id="nro" name="nro" value={{ el.fono }}><br>
+			<input style="display:none" id="cargo" name="cargo" value={{ el.cargo }}><br>
+			<input style="display:none" id="fonoem" name="fonoem" value={{ el.emergencia.fono }}><br>
 	
 		<div id="mainWindow" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:false" style="width: 100%; height: 100%;">
 			<!--MAP-->
