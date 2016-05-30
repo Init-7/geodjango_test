@@ -18,6 +18,8 @@ json.dumps("{}", cls=DjangoJSONEncoder)
 from django.core.serializers.python import Serializer
 from datetime import timedelta
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django_twilio.decorators import twilio_view
+from twilio.twiml import Response
 
 class FlatJsonSerializer(Serializer):
     def get_dump_object(self, obj):
@@ -669,8 +671,7 @@ def curriculum(request, trabajador):
     return render(request,'cv/cv.html', context)
 
 def sms(request, trabajador):
-         
-    t = Trabajador.objects.get(estid=trabajador)   
+    t = Trabajador.objects.get(fono=trabajador)   
     el=Listatrabajadores()
     if(Devices.objects.filter(id=t.gps_id).exists()):
 	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
@@ -719,7 +720,15 @@ def trabajador_z_riesgo(request, planta):
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
-	
+
+ 
+@twilio_view
+def sms_twilio(request):
+    name = request.POST.get('from', '')
+    msg = 'Se ha recibido un mensaje SOS dirijase a http://cloud1.estchile.cl/sms/%s/ para ver las alertas' % (name)
+    r = Response()
+    r.message(msg)
+    return r
 
 #    return render(request, '../templates/curriculum/classic.html', {
 #        'resume': resume,

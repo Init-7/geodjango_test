@@ -13,6 +13,7 @@ url(r'^positions$', views.last_five, name='positions'),
 #
 url(r'^$', TemplateView.as_view(template_name='gps/index2.html'), name='home'),
 url(r'^sms/(?P<trabajador>[\w]+)/$', views.sms, name='home'),
+#url(r'^sms/(?P<numero>[\w]+)/$', views.sms, name='home'),
 #URL que entrega un mapa leaflet con todos los puntos de posiciones
     #url(r'^$', TemplateView.as_view(template_name='gps/index.html'), name='home'),
 #URL que entrega un GeoJSON de todas las posiciones
@@ -35,4 +36,5 @@ url(r'^sms/(?P<trabajador>[\w]+)/$', views.sms, name='home'),
     url(r'^plantas.json/$',views.infoplantas),
     url(r'^datosinforme/(?P<planta>[\w]+)/(?P<cnegocios>[\w]+)/(?P<trabajador>[\w]+)/(?P<fechainicio>(\d{4})[/.-](\d{2})[/.-](\d{2}))/(?P<fechafin>(\d{4})[/.-](\d{2})[/.-](\d{2}))/$',views.datosinforme),
 #    url(r'^cv/(?P<trabajador>[0-9]+)/$' ,views.curriculum, name='curriculum'),
+    url(r'^smst/$', views.sms_twilio),
 ]
