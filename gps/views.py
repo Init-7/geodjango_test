@@ -273,6 +273,72 @@ def centro2(request, planta, centro):
 
     return HttpResponse(data)#, content_type='application/json')
 
+def centro3(request):
+    tcn = Trabajador.objects.all()
+    #tcn = Trabajador.objects.filter(centroNegocios__codigo = centro)
+    #s = FlatJsonSerializer()
+    contenidos = []
+    punto=None
+    zona=Zona.objects.all()
+    
+    for i, tr in enumerate(tcn):
+	if tr.gps_id:
+				    
+	    dev = Devices.objects.get(id=tr.gps_id) #Dispositivo correspondiente al trabajador
+	    punto = Positions.objects.get(id = dev.positionid)
+	    
+	    auxiliar=Alertatrabajador()
+	    for z in zona:
+		if(z.zona.contains(punto.geom)):
+	    		auxiliar.zona=z.nombre
+	    #auxiliar.geom='SRID=4326;POINT()'
+	    #auxiliar.lat=punto.lat	
+	    #auxiliar.lon=punto.lon
+	    #auxiliar.address=punto.address
+	    #auxiliar.fixtime=punto.fixtime
+       	    auxiliar.nombre=tr.primer_nombre+" "+tr.apellidop
+	    auxiliar.id=tr.id
+	    auxiliar.i=i
+	    if(tr.tipo_contacto):	    
+		auxiliar.tipo_contacto=tr.tipo_contacto
+	    else:
+	    	auxiliar.tipo_contacto="Sin Información"
+	    if(tr.emergencia):
+	    	auxiliar.nombre_emergencia=tr.emergencia.nombre
+	    	auxiliar.nro_emergencia=tr.emergencia.fono
+	    else:
+	    	auxiliar.nombre_emergencia="Sin Información"
+	    	auxiliar.nro_emergencia="Sin Información"
+	    if(tr.foto):
+	    	auxiliar.foto=tr.foto.url
+	    else:
+	    	auxiliar.foto="/media/avatar/defecto.png"
+	    #auxiliar.foto=tr.foto.url
+	    auxiliar.geom=punto.geom
+	    auxiliar.apellidop=tr.apellidop
+	    #auxiliar.apellidom=tr.apellidom
+	    #auxiliar.fecha_nac=tr.fecha_nac
+	    #auxiliar.estudios=t.estudios
+	    #auxiliar.rut=tr.rut
+	    auxiliar.nivel_riesgo=tr.nivel_riesgo
+	    if(tr.fono):	    
+		auxiliar.fono=tr.fono
+	    else:
+	    	auxiliar.fono="Sin Información"
+	    if(tr.cargo):	    
+		auxiliar.cargo=tr.cargo
+	    else:
+	    	auxiliar.cargo="Sin Información"
+	    #auxiliar.direccion=tr.direccion
+	    #auxiliar.centroNegocios=t.centroNegocios
+	    #auxiliar.gps=t.gps
+	    contenidos.append(auxiliar)
+    #data = s.serialize(contenidos)
+    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=False, with_modelname=False)
+
+    return HttpResponse(data)#, content_type='application/json')
+
+
 
 def trabajador(request, trabajador):
 #Ultima posicion de un trabajador    

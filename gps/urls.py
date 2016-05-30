@@ -22,6 +22,7 @@ url(r'^sms/(?P<trabajador>[\w]+)/$', views.sms, name='home'),
     url(r'^(?P<planta>[\w]+)/puntos/$',views.planta, name='planta'),
     url(r'^(?P<planta>[\w]+)/(?P<centro>[\w]+)/puntos/$',views.centro, name='centro'),
     url(r'^(?P<planta>[\w]+)/(?P<centro>[\w]+)/puntos2/$',views.centro2, name='centro'),
+    url(r'^puntos3/$',views.centro3, name='centro'),
     url(r'^trabajador/(?P<trabajador>[0-9]+)/$',views.trabajador, name='trabajador'), # Se elimina la palabra "puntos" para evitar procesar consulta anterior
     url(r'^plantas/$',views.listaplantas, name='plantas'),
     url(r'^trabajadores/(?P<cnegocios>[\w]+)/$',views.listatrabajadores, name='trabajadores'),
