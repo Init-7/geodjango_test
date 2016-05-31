@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'qrcode',
     'corsheaders',
+    'django_twilio',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -144,11 +145,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT = '/var/www/html/django-apps/geodjango_test/geodjango_test/est/static/'
+#STATIC_ROOT = '/var/www/html/django-apps/geodjango_test/geodjango_test/est/static/'
+#STATIC_URL = '/static/'
+#
+#MEDIA_ROOT = '/var/www/html/django-apps/geodjango_test/geodjango_test/est/media/'
+#MEDIA_URL = '/media/'
+#
+STATIC_ROOT = '/var/www/html/django-apps/geodjango_test/static/'
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/var/www/html/django-apps/geodjango_test/geodjango_test/est/media/'
+MEDIA_ROOT = '/var/www/html/django-apps/geodjango_test/media/'
 MEDIA_URL = '/media/'
+
 
 #DATABASE_ROUTERS = ['gps.routers.GpsRouter']
 
@@ -192,3 +200,6 @@ CORS_EXPOSE_HEADERS = (
     )
 
 #APPEND_SLASH = False
+
+TWILIO_ACCOUNT_SID = 'AC5ce1f3a7a20af5546b71a31fe9b8f928'
+TWILIO_AUTH_TOKEN = '95144415af96d1c9f7522eeda44967e5'

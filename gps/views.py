@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 from django.core import serializers
 from djgeojson.serializers import Serializer as GeoJSONSerializer
-from geojson import Point
+#from geojson import Point
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from est.lib import Tiempozona, Rangozona, Listacn , Listatrabajadores, Listaplantas, Posicionestrabajador,Alertatrabajador, testzona
@@ -20,6 +20,11 @@ from datetime import timedelta
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django_twilio.decorators import twilio_view
 from twilio.twiml import Response
+from twilio.rest import TwilioRestClient
+
+TWILIO_ACCOUNT_SID = 'AC5ce1f3a7a20af5546b71a31fe9b8f928'
+TWILIO_AUTH_TOKEN = '95144415af96d1c9f7522eeda44967e5'
+
 
 class FlatJsonSerializer(Serializer):
     def get_dump_object(self, obj):
@@ -722,21 +727,27 @@ def trabajador_z_riesgo(request, planta):
 	return HttpResponse(data)
 
  
+#@twilio_view
+#def sms_twilio(request):
+#    name = request.POST.get('from', '')
+#    msg = 'Se ha recibido un mensaje SOS dirijase a http://cloud1.estchile.cl/sms/%s/ para ver las alertas' % (name)
+#    r = Response()
+#    r.message(msg)
+#
+#    return r
+
 @twilio_view
 def sms_twilio(request):
-    name = request.POST.get('from', '')
-    msg = 'Se ha recibido un mensaje SOS dirijase a http://cloud1.estchile.cl/sms/%s/ para ver las alertas' % (name)
-    r = Response()
-    r.message(msg)
-    return r
+#    from_number = request.POST.get('from', '')
+#    from_number = request.values.get('From', None)
+    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    for m in client.messages.list():
+        if(m.to == '+56964590925'):
+            from_n = m.from_
+            break
+    from_number = from_n.replace("+56", "")
+    msg = 'Se ha recibido un mensaje SOS dirijase a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (from_number)
+    m = client.messages.create(from_="+56964590925", to="+56966271072", body=msg)
 
-#    return render(request, '../templates/curriculum/classic.html', {
-#        'resume': resume,
-#        'skills': resume.skills.order_by('category', '-weight'),
-#        'projects': resume.projects.order_by('-weight'),
-#        'experiences': resume.experiences.order_by('-start_year'),
-#        'trainings': resume.trainings.order_by('-year', '-month'),
-#        'certifications': resume.certifications.order_by('-start_year', '-start_month')
-#    })
-#
-#
+    return m
+
