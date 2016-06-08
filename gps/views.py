@@ -22,8 +22,8 @@ from django_twilio.decorators import twilio_view
 from twilio.twiml import Response
 from twilio.rest import TwilioRestClient
 
-TWILIO_ACCOUNT_SID = 'AC5ce1f3a7a20af5546b71a31fe9b8f928'
-TWILIO_AUTH_TOKEN = '95144415af96d1c9f7522eeda44967e5'
+TWILIO_ACCOUNT_SID = 'AC1375f097eacacb0b9fde83e17272e28f'
+TWILIO_AUTH_TOKEN = '224d6ca587c66e7bd0592b1b809affa4'
 
 
 class FlatJsonSerializer(Serializer):
@@ -494,29 +494,32 @@ def listatrabajadores(request, cnegocios):
 	cn=CentroNegocios.objects.get(codigo=cnegocios)
 	tr=Trabajador.objects.filter(centroNegocios=cn)
 	punto=None
-	
+	j=0
 	for i, t in enumerate(tr):
 		el=Listatrabajadores()
 		if(Devices.objects.filter(id=t.gps_id).exists()):
+
 			dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
-			validos=Positions.objects.filter(valid=True)
-			punto = validos.filter(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
-			pto=validos.get(id=dev.positionid)
-			if(punto.exists()):		
-						
-				#el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
-				#try:
-				el.lat=pto.lat
-				#except ObjectDoesNotExist:
-				#        el.lat=None
-				#try:
-				el.lon=pto.lon
-				#except ObjectDoesNotExist:
-				#        el.lon=None
-		el.id=t.id
-		el.i=i
-		el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
-		contenidos.append(el)					
+                        if(Positions.objects.get(id=dev.positionid).valid):
+                            validos=Positions.objects.filter(valid=True)
+			    punto = validos.filter(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
+#			pto=validos.get(id=dev.positionid)
+#			if(punto.exists()):		
+                            pto=Positions.objects.get(id=dev.positionid)		
+                            #el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
+                            #try:
+                            el.lat=pto.lat
+                            #except ObjectDoesNotExist:
+                            #        el.lat=None
+                            #try:
+                            el.lon=pto.lon
+                            #except ObjectDoesNotExist:
+                            #        el.lon=None
+                            el.id=t.id
+                            el.i=j
+                            el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
+                            contenidos.append(el)					
+                            j=j+1
 	data = s.serialize(contenidos)
 	#data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 	return HttpResponse(data)
@@ -742,12 +745,12 @@ def sms_twilio(request):
 #    from_number = request.values.get('From', None)
     client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
     for m in client.messages.list():
-        if(m.to == '+56964590925'):
+        if(m.to == '+56964590932'):
             from_n = m.from_
             break
     from_number = from_n.replace("+56", "")
     msg = 'Se ha recibido un mensaje SOS dirijase a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (from_number)
-    m = client.messages.create(from_="+56964590925", to="+56966271072", body=msg)
+    m = client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
 
     return m
 

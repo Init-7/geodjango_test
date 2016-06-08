@@ -195,7 +195,7 @@ class Trabajador(models.Model):
             box_size=6,
             border=0,
         )
-        qr.add_data(self.get_absolute_url())
+        qr.add_data(self.get_est_url())
 #        qr.add_data(self.get_est_url())
         qr.make(fit=True)
 
