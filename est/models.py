@@ -34,7 +34,7 @@ class Empresa (models.Model):
 class Planta(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     empresa = models.ForeignKey(Empresa, blank=True, null=True)
-    geom = models.MultiPolygonField(srid=4326)
+    geom = models.MultiPolygonField(srid=4326, blank=True, null=True)
 
     objects = models.GeoManager()
 
@@ -195,8 +195,10 @@ class Trabajador(models.Model):
             box_size=6,
             border=0,
         )
-#        qr.add_data(self.get_absolute_url())
+
         qr.add_data(self.get_est_url())
+#        qr.add_data(self.get_absolute_url())
+
         qr.make(fit=True)
 
         img = qr.make_image()

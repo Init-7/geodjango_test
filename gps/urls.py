@@ -9,14 +9,21 @@ from .models import Positions
 
 urlpatterns = [
 #URL que entrega las ultimas 5 posiciones en Json normal
-    url(r'^positions$', views.last_five, name='positions'),
+url(r'^positions$', views.last_five, name='positions'),
+#
+url(r'^$', TemplateView.as_view(template_name='gps/index2.html'), name='home'),
+url(r'^sms/(?P<trabajador>[\w]+)/$', views.sms, name='home'),
+#url(r'^sms/(?P<numero>[\w]+)/$', views.sms, name='home'),
 #URL que entrega un mapa leaflet con todos los puntos de posiciones
-    url(r'^$', TemplateView.as_view(template_name='gps/index.html'), name='home'),
+    #url(r'^$', TemplateView.as_view(template_name='gps/index.html'), name='home'),
 #URL que entrega un GeoJSON de todas las posiciones
     url(r'^data.geojson$', GeoJSONLayerView.as_view(model=Positions), name='data'),
 #    url(r'^positions.leaftlet$', views.positions, name='positions')
+    url(r'^testzonariesgo/(?P<planta>[\w]+)/$',views.trabajador_z_riesgo, name='planta'),
     url(r'^(?P<planta>[\w]+)/puntos/$',views.planta, name='planta'),
-    url(r'^(?P<planta>[\w]+)/(?P<centro>[0-9]+)/puntos/$',views.centro, name='centro'),
+    url(r'^(?P<planta>[\w]+)/(?P<centro>[\w]+)/puntos/$',views.centro, name='centro'),
+    url(r'^(?P<planta>[\w]+)/(?P<centro>[\w]+)/puntos2/$',views.centro2, name='centro'),
+    url(r'^puntos3/$',views.centro3, name='centro'),
     url(r'^trabajador/(?P<trabajador>[0-9]+)/$',views.trabajador, name='trabajador'), # Se elimina la palabra "puntos" para evitar procesar consulta anterior
     url(r'^plantas/$',views.listaplantas, name='plantas'),
     url(r'^trabajadores/(?P<cnegocios>[\w]+)/$',views.listatrabajadores, name='trabajadores'),
@@ -29,4 +36,5 @@ urlpatterns = [
     url(r'^plantas.json/$',views.infoplantas),
     url(r'^datosinforme/(?P<planta>[\w]+)/(?P<cnegocios>[\w]+)/(?P<trabajador>[\w]+)/(?P<fechainicio>(\d{4})[/.-](\d{2})[/.-](\d{2}))/(?P<fechafin>(\d{4})[/.-](\d{2})[/.-](\d{2}))/$',views.datosinforme),
 #    url(r'^cv/(?P<trabajador>[0-9]+)/$' ,views.curriculum, name='curriculum'),
+    url(r'^smst/$', views.sms_twilio),
 ]

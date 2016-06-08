@@ -45,12 +45,14 @@ INSTALLED_APPS = [
     'django_extensions',
     'qrcode',
     'corsheaders',
+    'django_twilio',
+
 ]
 
 MIDDLEWARE_CLASSES = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+#    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -192,3 +194,6 @@ CORS_EXPOSE_HEADERS = (
     )
 
 #APPEND_SLASH = False
+
+TWILIO_ACCOUNT_SID = 'AC5ce1f3a7a20af5546b71a31fe9b8f928'
+TWILIO_AUTH_TOKEN = '95144415af96d1c9f7522eeda44967e5'
