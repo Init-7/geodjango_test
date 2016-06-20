@@ -1,7 +1,7 @@
 from django.contrib.gis import admin
 from leaflet.admin import LeafletGeoAdmin
 
-from .models import Planta, CentroNegocios, Trabajador, Riesgo, Zona, Rol, Empresa, Contacto, Salud, Estudios, Capacitacion
+from .models import Planta, CentroNegocios, Trabajador, Riesgo, Zona, Rol, Empresa, Contacto, Salud, Estudios, Capacitacion, TrabajadorDevice, TrabajadorEstudios, TrabajadorCapacitacion
 
 class GpsAdmin(LeafletGeoAdmin):
     settings_overrides = {
@@ -9,14 +9,34 @@ class GpsAdmin(LeafletGeoAdmin):
         'DEFAULT_ZOOM': 4,
     }
 
+class CapacitacionInline(admin.TabularInline):
+    model = TrabajadorCapacitacion
+    extra = 1
+
+class EstudiosInline(admin.TabularInline):
+    model = TrabajadorEstudios
+    extra = 1
+
+class DevicesInline(admin.TabularInline):
+    model = TrabajadorDevice
+    extra = 1
+
+class TrabajadorAdmin(admin.ModelAdmin):
+    inlines = (CapacitacionInline,EstudiosInline, DevicesInline,)
+    ordering = ('-estid',)
+
+
 admin.site.register(Planta, GpsAdmin)
 admin.site.register(CentroNegocios, GpsAdmin)
 admin.site.register(Riesgo, GpsAdmin)
 admin.site.register(Zona, GpsAdmin)
-admin.site.register(Rol, GpsAdmin)
-admin.site.register(Trabajador, GpsAdmin)
-admin.site.register(Empresa, GpsAdmin)
-admin.site.register(Contacto, GpsAdmin)
-admin.site.register(Salud, GpsAdmin)
-admin.site.register(Estudios, GpsAdmin)
-admin.site.register(Capacitacion, GpsAdmin)
+admin.site.register(Rol)
+admin.site.register(Trabajador, TrabajadorAdmin)
+admin.site.register(Empresa)
+admin.site.register(Contacto)
+admin.site.register(Salud)
+admin.site.register(Estudios)
+admin.site.register(Capacitacion)
+admin.site.register(TrabajadorDevice)
+admin.site.register(TrabajadorEstudios)
+admin.site.register(TrabajadorCapacitacion)

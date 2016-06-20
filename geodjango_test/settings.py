@@ -101,10 +101,10 @@ DATABASES = {
 #    },
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'gps',
-        'HOST': '104.196.13.123',
+        'NAME': 'gpsdev',
+        'HOST': 'localhost',
         'USER': 'postgres',
-        'PASSWORD': 'est.postgres',
+#        'PASSWORD': 'est.postgres',
         'PORT': '5432',
     }
 }

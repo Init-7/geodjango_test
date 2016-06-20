@@ -77,7 +77,7 @@ class Rol(models.Model):
     zonas_permitidas = models.ManyToManyField(Zona, blank=True, null=True)
 
     def __unicode__(self):
-        return u"%s %s" % (self.id, self.nombre)
+        return u"%s" % (self.nombre)
 
 
 class Salud(models.Model):
@@ -95,7 +95,7 @@ class Salud(models.Model):
     )
 
     tipo = models.CharField(max_length=128, blank=True, null=True, choices=SALUD_CHOICES)
-    detalle = models.CharField(max_length=128, blank=True, null=True, choices=DETALLE_CHOICES)
+    detalle = models.CharField(max_length=128, blank=True, null=True)#, choices=DETALLE_CHOICES)
     observacion = models.CharField(max_length=2048, blank=True, null=True)
 
     def __unicode__(self):
@@ -104,8 +104,8 @@ class Salud(models.Model):
 class Estudios(models.Model):
     nombre = models.CharField(max_length=512, blank=True, null=True)
     establecimiento = models.CharField(max_length=512, blank=True, null=True)
-    fecha = models.DateField(blank=True, null=True)
-    observacion = models.CharField(max_length=4096, blank=True, null=True)
+#    fecha = models.DateField(blank=True, null=True)
+#    observacion = models.CharField(max_length=4096, blank=True, null=True)
    
     def __unicode__(self):
         return u"%s %s" % (self.nombre, self.establecimiento)
@@ -119,8 +119,8 @@ class Capacitacion(models.Model):
 
     nombre = models.CharField(max_length=512, blank=True, null=True)
     establecimiento = models.CharField(max_length=512, blank=True, null=True)
-    fecha = models.DateField(blank=True, null=True)
-    observacion = models.CharField(max_length=4096, blank=True, null=True)
+#    fecha = models.DateField(blank=True, null=True)
+#    observacion = models.CharField(max_length=4096, blank=True, null=True)
     modalidad = models.CharField(max_length=128, blank=True, null=True, choices=MODALIDAD_CHOICES)
     horas = models.IntegerField(blank=True, null=True)
     
@@ -159,11 +159,13 @@ class Trabajador(models.Model):
     cargo = models.CharField(max_length=128, blank=True, null=True)
     rol = models.ManyToManyField(Rol, blank=True, null=True)
     gps = models.ForeignKey(Devices, blank=True, null=True)
+    gps = models.ManyToManyField(Devices, blank=True, null=True, through='TrabajadorDevice')
+    fono_gps = models.IntegerField(blank=True, null=True)
     supervisor = models.ForeignKey('Trabajador', blank=True, null=True)
     empresa = models.ForeignKey(Empresa, blank=True, null=True)
     salud = models.ManyToManyField(Salud, blank=True, null=True)
-    estudios = models.ManyToManyField(Estudios, blank=True, null=True)      
-    capacitacion = models.ManyToManyField(Capacitacion, blank=True, null=True)
+    estudios = models.ManyToManyField(Estudios, blank=True, null=True, through='TrabajadorEstudios')      
+    capacitacion = models.ManyToManyField(Capacitacion, blank=True, null=True, through='TrabajadorCapacitacion')
     nivel_riesgo = models.IntegerField(blank=True, null=True)
     nota = models.CharField(max_length=256, blank=True, null=True)
     nota2 = models.CharField(max_length=256, blank=True, null=True)
@@ -179,7 +181,7 @@ class Trabajador(models.Model):
 #
 
     def __unicode__(self):
-        return u"%s %s %s %s %s" % (self.id, self.primer_nombre, self.apellidop, self.apellidom, self.centroNegocios)
+        return u"%s %s %s %s %s" % (self.estid, self.primer_nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
     def get_est_url(self):
         self.qrtext = "http://www.estchile.cl/cv/"+str(self.estid)
@@ -209,5 +211,39 @@ class Trabajador(models.Model):
         filebuffer = InMemoryUploadedFile(
             buffer, None, filename, 'image/png', buffer.len, None)
         self.qrimg.save(filename, filebuffer)
+
+
+class TrabajadorDevice(models.Model):
+    trabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
+    device = models.ForeignKey(Devices, on_delete=models.CASCADE)
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
+
+    def __unicode__(self):
+        return u"%s %s %s %s" % (self.trabajador, self.device, self.fecha_inicio, self.fecha_fin)
+
+
+class TrabajadorEstudios(models.Model):
+    trabajador = models.ForeignKey(Trabajador, blank=True, null=True, on_delete=models.CASCADE)
+    estudio = models.ForeignKey(Estudios, blank=True, null=True, on_delete=models.CASCADE)
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
+    observacion = models.CharField(max_length=4096, blank=True, null=True)
+    certificado = models.ImageField(upload_to='estudios/', blank=True, null=True)
+
+    def __unicode__(self):
+        return u"%s %s %s %s" % (self.trabajador, self.estudio, self.fecha_inicio, self.fecha_fin)
+
+
+class TrabajadorCapacitacion(models.Model):
+    trabajador = models.ForeignKey(Trabajador, blank=True, null=True, on_delete=models.CASCADE,)
+    capacitacion = models.ForeignKey(Capacitacion, blank=True, null=True, on_delete=models.CASCADE)
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField()
+    observacion = models.CharField(max_length=4096, blank=True, null=True)
+    certificado = models.ImageField(upload_to='capacitacion/', blank=True, null=True)
+
+    def __unicode__(self):
+        return u"%s %s %s %s" % (self.trabajador, self.capacitacion, self.fecha_inicio, self.fecha_fin)
 
 
