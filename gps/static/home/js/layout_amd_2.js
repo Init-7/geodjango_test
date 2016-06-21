@@ -544,9 +544,11 @@ require([
 
     var showcluster=false;
     var urlRealTime = defaultUrl+"/gps/puntos3/";    
-    var example= "example.geojson";
+    //var urlEdificios= "../../static/home/edificio.json";
+    var example= "../../static/home/examples.json";
     realtime = L.realtime({
             url: example,
+            //url: "../../static/home/examples.json",
             crossOrigin: true,
             type: 'json'
         },
@@ -597,7 +599,7 @@ require([
 */
 
     //var urlGeoserverEdificios= defaultUrlGeoServer+"/geoserver/est40516/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=est40516:est_zona&maxFeatures=50&outputFormat=application%2Fjson";
-    var urlEdificios= "edificio.json";
+    var urlEdificios= "../../static/home/edificio.json";
     
 
     var jsonTest = new L.GeoJSON.AJAX([urlEdificios/*,"counties.geojson"*/],{style: style, onEachFeature:popUpEdificios});
