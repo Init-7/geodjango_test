@@ -19,12 +19,24 @@
 
 		<!-- Load externo -->
 
+		<!--En caso de fallar la web de leaflet <script src="js/leaflet.js"></script>-->
 		<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+		<!-- Load externo GeoJson Leaflet-->
+		<script type="text/javascript" src="{% static 'home/dist/leaflet.ajax.js' %}"></script>
+
+		<script src="{% static 'home/js/leaflet-heat.js' %}"></script>
+		
+		<script src="{% static 'home/js/pruneCluster/PruneCluster.js' %}"></script>
+		<script src="{% static 'home/js/leaflet-realtime.js' %}"></script>
+		<script src="{% static 'home/js/spin.js' %}"></script>
+		<script src="{% static 'home/js/leaflet.spin.js' %}"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.10.4/dojo/dojo.js" data-dojo-config="async: true, parseOnLoad: true"></script>
 		<script src="http://maps.google.com/maps/api/js?v=3"></script>
 		<script src="{% static 'home/js/Bing.js' %}"></script>
 		<script src="{% static 'home/js/Google.js' %}"></script>
 		<script src="{% static 'home/js/layout_amd_2.js' %}"></script>
+
+		<link rel="stylesheet" href="{% static 'home/examples.css' %}"/>
 
 	</head>
 	<body class="claro">
@@ -38,6 +50,7 @@
 	
 		<div id="mainWindow" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:false" style="width: 100%; height: 100%;">
 			<!--MAP-->
+
 			<div id="map" class="roundedCorners shadow" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
 				<!--CABECERA-->
 				<div id="header" class="roundedCorners shadow" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="minSize:800,region:'top'">
@@ -86,31 +99,14 @@
 						<div id="divInfoWMS">&nbsp;</div>
 					</div>
 					<!--query-->
-					<div id="query" class="fields" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Consultas e Informes'" >
-						<div id="slider">
-							<!--Planta-->
-							<div id="SliderLabel">Planta:</div>
-							<div id="plantaQuery"></div>
-							<div id="slider">&nbsp;</div>
-							<button id="BtnHeatmap" type="button"></button>
-							<button id="BtnCluster" type="button"></button>
-							<div id="slider">
-								<p>Trabajadores:</p>
-								<img id="jobHM" src="{% static 'home/images/punto.png' %}">
-								<p>Areas:</p>
-								<img id="workHM" src="{% static 'home/images/punto.png' %}">
-							</div>
-							<div id="resultHeatmap"></div>
-							<div id="slider">&nbsp;</div>
-						</div>
-						<div id="slider" >
+					<div id="query" class="fields" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="title:'Consultas e Informes'" >		
 							<H4 style="align:center">Informes Estadisticos</H4>
-							<!--Centro de Negocio-->
-							<div id="SliderLabel">Centro de Negocio:</div>
-							<div id="centroQuery"></div>
-							<!--trabajador-->
-							<div id="SliderLabel">Trabajador:</div>
-							<div id="trabajadorQuery"></div>
+							<div id="slider321">
+								<label id="labelPlanta2" for="planta2">Plantas:</label>
+								<input id="planta2" />
+								<label id="CN2" for="negocio2">Centros:</label>
+								<label id="TB2" for="trabajador2">Trabajadores:</label>
+							</div>
 							<!--rango de fechas-->
 							<div id="SliderLabel">Rango Fecha:</div>
 							<div id="divFecha" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'right'" > 
@@ -129,17 +125,9 @@
 							    required="true" 
 							    data-dojo-id="toDate" 
 							    onChange="fromDate.constraints.max = arguments[0];" />
-								<button type="button"  id="qwerty">Mostrar Información </button>
-							</div>
-							<div id="slider">&nbsp;</div>
-							<div id="slider">&nbsp;</div>
-							<div id="resultJob"></div>
-							<div id="divInforme">&nbsp;
-			
-				</div>							
-						</div>
+								<button type="button" id="qwerty">Mostrar Información </button>
+							</div>	
 					</div>
-				</div>
 			</div>
 			<!--FIN PANEL DERECHO-->			
 		</div>
