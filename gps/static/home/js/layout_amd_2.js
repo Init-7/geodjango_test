@@ -37,17 +37,7 @@ require([
 
 	var map = new L.Map('map', {center: coord.CENTRAL, zoom: 2});
 
-    var coord = [];
-        coord.EST = [-36.778224,-73.080980];
-        coord.ENAP = [-36.780,-73.125];
-        coord.MAULE = [-35.607,-71.588];
-    var lat=document.getElementById("lat").value;
-    var lon=document.getElementById("lon").value;
-    var nro=document.getElementById("nro").value;
-    var nombre=document.getElementById("nombre").value;
-    var apellidop=document.getElementById("apellidop").value;
-    var cargo=document.getElementById("cargo").value;
-    coord.CENTRAL = [lat,lon];
+
 
     //TEST MOSTRAR OCULTAR
     var togglerInfoT = new Toggler({
