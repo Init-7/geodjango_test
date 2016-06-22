@@ -31,7 +31,6 @@ require([
     var defaultUrl ="http://cloud1.estchile.cl";
     //var defaultUrl = "localhost:8000";//local
     var defaultUrlGeoServer ="http://104.196.40.15:8080";
-
     var urlRealTime;
 
     var map = new L.Map('map', {center: coord.CENTRAL, zoom: 18});   
@@ -39,12 +38,7 @@ require([
 bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<br><b>Teléfono: </b>"+nro+ "</p>").addTo(map);
  
 
-/****TODO MAPA*****/
-
-    PruneCluster.Cluster.ENABLE_MARKERS_LIST = true;
-    var leafletView = new PruneClusterForLeaflet();
-
-   
+/****TODO MAPA*****/   
 
     var osm = new L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 22,
@@ -59,9 +53,7 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
         attribution: 'OpenStreetMap'
         });
 
-    var zonas = new L.LayerGroup();
-    var alertaL = new L.LayerGroup();    
-    
+    var zonas = new L.LayerGroup();    
 
      var ggl = new L.Google('SATELLITE', {
             mapOptions: {
@@ -105,16 +97,7 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
 
 
     function popUpPersona(f,l){//Consulta por cada uno de los objetos     
-        //console.log(f.geometry.coordinates);//
-        //console.log(l);
 
-        //var tempLatLng =l.getLatLng();    
-        //map.setView([tempLatLng.lat,tempLatLng.lng], 18);
-/*test popUp boton setView
-        l.bindPopup("<button type='button' id='otroButton'>Mostrar Información </button><div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>"); 
-*/
-        //l.bindPopup("<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>"); 
-        
         var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
         l.bindPopup(leyenda);
         //l.setIcon(hombreNormal);
@@ -126,9 +109,7 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
         if(tempRiesgo >= 5 ){
             //l.setIcon(hombreRojo);    
             out2.push( "<p>"+f.properties["nombre"]+"</p>");
-            tempIcon = hombre5;
-            //leafletView.RegisterMarker(new PruneCluster.Marker(tempLatLng.lat, tempLatLng.lng, {title: leyenda, icono: hombreRojo}));
- 
+            tempIcon = hombre5; 
         }
         else if(tempRiesgo == 4 ){
             tempIcon = hombre4;
@@ -144,12 +125,6 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
         }       
         
         l.setIcon(tempIcon);
-        var m = new PruneCluster.Marker(tempLatLng.lat, tempLatLng.lng, {title: leyenda,  icono: tempIcon},tempRiesgo);
-        
-
-        leafletView.RegisterMarker(m);
-        
-
 
         l.on('dblclick', onClick);
         l.addTo(trabajadores);
@@ -158,7 +133,6 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
     function onClick(e) {
         var tempLatLng =this.getLatLng();    
         map.setView([tempLatLng.lat,tempLatLng.lng], 18);
-        //map.removeControl();
     }   
 
     function popUpEdificios(f,l){
@@ -193,14 +167,12 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
     var showcluster=false;
     var urlRealTime = defaultUrl+"/gps/puntos3/";    
     //var urlEdificios= "../../static/home/edificio.json";
-    var urlEdificios= "/static/edificios.json";
-    
+    var urlEdificios= "/static/edificios.json";    
 
     var jsonTest = new L.GeoJSON.AJAX([urlEdificios/*,"counties.geojson"*/],{style: style, onEachFeature:popUpEdificios});
 
     map.on('zoomend', function () {
-        if (map.getZoom() > 21 && map.hasLayer(osm))
-        {
+        if (map.getZoom() > 21 && map.hasLayer(osm))        {
             map.removeLayer(osm);
             map.addLayer(ctb);
         }
@@ -208,7 +180,6 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
             map.removeLayer(ggl);
             map.addLayer(osm);
         }
-
        
         if (map.getZoom() < 19 && map.hasLayer(ctb)|| map.getZoom() < 19 && map.hasLayer(osm)) 
         {
