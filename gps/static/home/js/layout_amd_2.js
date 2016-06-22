@@ -462,11 +462,11 @@ require([
         //var tempLatLng =l.getLatLng();    
         //map.setView([tempLatLng.lat,tempLatLng.lng], 18);
 /*test popUp boton setView
-        l.bindPopup("<button type='button' id='otroButton'>Mostrar Información </button><div id='wrapperCard'><img id='logoEstCard' src='./images/estchile.png' ><img id='imgQRCard' src='./images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>"); 
+        l.bindPopup("<button type='button' id='otroButton'>Mostrar Información </button><div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>"); 
 */
-        //l.bindPopup("<div id='wrapperCard'><img id='logoEstCard' src='./images/estchile.png' ><img id='imgQRCard' src='./images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>"); 
+        //l.bindPopup("<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>"); 
         
-        var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='./images/estchile.png' ><img id='imgQRCard' src='./images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
+        var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
         l.bindPopup(leyenda);
         //l.setIcon(hombreNormal);
         var tempRiesgo = f.properties["nivel_riesgo"];
@@ -527,7 +527,7 @@ require([
     /********ICONOS PERSONALIZADO***************/
     var LeafIcon = L.Icon.extend({
                 options: {
-                    //shadowUrl: './images/leaf-shadow.png',
+                    //shadowUrl: '/static/images/leaf-shadow.png',
                     iconSize:     [25, 50],
                     //shadowSize:   [50, 64],
                     iconAnchor:   [12, 50],
@@ -536,11 +536,11 @@ require([
                 }
             });
 
-    var hombre1 = new LeafIcon({iconUrl: './images/ico/marker-1.png'}),
-        hombre2 = new LeafIcon({iconUrl: './images/ico/marker-2.png'}),
-        hombre3 = new LeafIcon({iconUrl: './images/ico/marker-3.png'}),
-        hombre5 = new LeafIcon({iconUrl: './images/ico/marker-5.png'}),
-        hombre4 = new LeafIcon({iconUrl: './images/ico/marker-4.png'});
+    var hombre1 = new LeafIcon({iconUrl: '/static/images/ico/marker-1.png'}),
+        hombre2 = new LeafIcon({iconUrl: '/static/images/ico/marker-2.png'}),
+        hombre3 = new LeafIcon({iconUrl: '/static/images/ico/marker-3.png'}),
+        hombre5 = new LeafIcon({iconUrl: '/static/images/ico/marker-5.png'}),
+        hombre4 = new LeafIcon({iconUrl: '/static/images/ico/marker-4.png'});
 
     var showcluster=false;
     var urlRealTime = defaultUrl+"/gps/puntos3/";    
@@ -575,7 +575,7 @@ require([
 
         leafletView.Cluster._markers = []; 
         if(out2.length>0 && activarAlerta == true) {
-            document.getElementById("divALERTAS").innerHTML = "<div id='aviso'><img id='alertaImg' src='./images/ico/aviso.png'><h2>¡¡ALERTA!!</h1>"+out2+"</div> ";
+            document.getElementById("divALERTAS").innerHTML = "<div id='aviso'><img id='alertaImg' src='/static/images/ico/aviso.png'><h2>¡¡ALERTA!!</h1>"+out2+"</div> ";
             statusOk();
         }
         else{
@@ -622,7 +622,7 @@ require([
         else if (eo.name === 'Activar Alerta') {
             activarAlerta=true;
             if(out2.length>0) {
-                document.getElementById("divALERTAS").innerHTML = "<div id='aviso'><img id='alertaImg' src='./images/ico/aviso.png'><h2>¡¡ALERTA!!</h1>"+out2+"</div> ";
+                document.getElementById("divALERTAS").innerHTML = "<div id='aviso'><img id='alertaImg' src='/static/images/ico/aviso.png'><h2>¡¡ALERTA!!</h1>"+out2+"</div> ";
                 statusOk();
             }   
         }
