@@ -7,7 +7,7 @@ from djgeojson.serializers import Serializer as GeoJSONSerializer
 from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from est.lib import Tiempozona, Rangozona, Listacn , Listatrabajadores, Listaplantas, Posicionestrabajador,Alertatrabajador, testzona
-from est.models import Planta, Zona, Trabajador, CentroNegocios,Empresa
+from est.models import Planta, Zona, Trabajador, CentroNegocios,Empresa, TrabajadorDevice
 from gps.models import Positions, Devices
 from itertools import chain
 from datetime import datetime
@@ -679,10 +679,12 @@ def curriculum(request, trabajador):
     return render(request,'cv/cv.html', context)
 
 def sms(request, trabajador):
-    t = Trabajador.objects.get(fono=trabajador)   
+    td = TrabajadorDevice.objects.get(fono_gps=994772531)
+    t = Trabajador.objects.get(id=td.trabajador_id)
+#    t = Trabajador.objects.get(fono=trabajador)
     el=Listatrabajadores()
-    if(Devices.objects.filter(id=t.gps_id).exists()):
-	dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
+    if(Devices.objects.filter(id=td.device_id).exists()):
+	dev = Devices.objects.get(id=td.device_id) #Dispositivo correspondiente al trabajador
 	validos=Positions.objects.filter(valid=True)
 	punto = validos.filter(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
 	pto=validos.get(id=dev.positionid)
