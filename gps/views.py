@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 from est.lib import Tiempozona, Rangozona, Listacn , Listatrabajadores, Listaplantas, Posicionestrabajador,Alertatrabajador, testzona
 from est.models import Planta, Zona, Trabajador, CentroNegocios,Empresa, TrabajadorDevice
-from gps.models import Positions, Devices
+from gps.models import PositionsTraccar, Devices
 from itertools import chain
 from datetime import datetime
 from djgeojson.views import GeoJSONResponseMixin
@@ -679,8 +679,11 @@ def curriculum(request, trabajador):
     return render(request,'cv/cv.html', context)
 
 def sms(request, trabajador):
-    td = TrabajadorDevice.objects.get(fono_gps=994772531)
+    td = TrabajadorDevice.objects.get(fono_gps=trabajador)
     t = Trabajador.objects.get(id=td.trabajador_id)
+    d = Devices.objects.get(id=td.device_id)
+    p = PositionsTraccar.objects.get(id=d.positionid)
+
 #    t = Trabajador.objects.get(fono=trabajador)
     el=Listatrabajadores()
     if(Devices.objects.filter(id=td.device_id).exists()):
