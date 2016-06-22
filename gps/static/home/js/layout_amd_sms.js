@@ -20,10 +20,6 @@ require([
     "dojo/domReady!"
 ], function(on, mouse,BorderContainer,Toggler, coreFx, request, Memory, registry,ContentPane, DateTextBox,dom,domAttr,AccordionContainer,DataGrid,Button,ObjectStore, domConstruct, FilteringSelect){
     var coord = [];
-        coord.EST = [-36.778224,-73.080980];
-        coord.ENAP = [-36.780,-73.125];
-        coord.MAULE = [-35.607,-71.588];
-
     var lat=document.getElementById("lat").value;
     var lon=document.getElementById("lon").value;
     var nro=document.getElementById("nro").value;
@@ -40,7 +36,8 @@ require([
 
     var map = new L.Map('map', {center: coord.CENTRAL, zoom: 18});   
     var marker = L.marker(coord.CENTRAL).
-bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<br><b>Teléfono: </b>"+nro+ "</p>").addTo(map); 
+bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<br><b>Teléfono: </b>"+nro+ "</p>").addTo(map);
+ 
 
 /****TODO MAPA*****/
 
@@ -106,6 +103,7 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
         };
     }
 
+
     function popUpPersona(f,l){//Consulta por cada uno de los objetos     
         //console.log(f.geometry.coordinates);//
         //console.log(l);
@@ -145,8 +143,14 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
             tempIcon = hombre1;
         }       
         
-        l.setIcon(tempIcon);       
+        l.setIcon(tempIcon);
+        var m = new PruneCluster.Marker(tempLatLng.lat, tempLatLng.lng, {title: leyenda,  icono: tempIcon},tempRiesgo);
         
+
+        leafletView.RegisterMarker(m);
+        
+
+
         l.on('dblclick', onClick);
         l.addTo(trabajadores);
 
