@@ -8,17 +8,9 @@ from djgeojson.views import GeoJSONLayerView
 from .models import Positions
 
 urlpatterns = [
-#URL que entrega las ultimas 5 posiciones en Json normal
-url(r'^positions$', views.last_five, name='positions'),
-#
-url(r'^$', TemplateView.as_view(template_name='gps/index2.html'), name='home'),
-url(r'^sms/(?P<trabajador>[\w]+)/$', views.sms, name='home'),
+    url(r'^$', TemplateView.as_view(template_name='gps/index2.html'), name='home'),
+    url(r'^sms/(?P<trabajador>[\w]+)/$', views.sms, name='home'),
 #url(r'^sms/(?P<numero>[\w]+)/$', views.sms, name='home'),
-#URL que entrega un mapa leaflet con todos los puntos de posiciones
-    #url(r'^$', TemplateView.as_view(template_name='gps/index.html'), name='home'),
-#URL que entrega un GeoJSON de todas las posiciones
-    url(r'^data.geojson$', GeoJSONLayerView.as_view(model=Positions), name='data'),
-#    url(r'^positions.leaftlet$', views.positions, name='positions')
     url(r'^testzonariesgo/(?P<planta>[\w]+)/$',views.trabajador_z_riesgo, name='planta'),
     url(r'^(?P<planta>[\w]+)/puntos/$',views.planta, name='planta'),
     url(r'^(?P<planta>[\w]+)/(?P<centro>[\w]+)/puntos/$',views.centro, name='centro'),
