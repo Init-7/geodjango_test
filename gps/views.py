@@ -694,6 +694,8 @@ def sms(request, trabajador):
 	el.apellidop=t.apellidop
 	el.fono=t.fono
 	el.cargo=t.cargo
+	#el.nivel_riesgo=t.nivel_riesgo
+	print t.nivel_riesgo
 	
     return render(request,'gps/index.html', {'el': el})
 

@@ -25,45 +25,27 @@ require([
     var htLayer;
     //coordenadas de interes...
     var coord = [];
-    coord.CENTRAL = [-36.3,-72.3];
+    coord.CENTRAL = [-36.3,-72.3]; //Posicion inicial para centrar el mapa
 
-    var out2 = [];
+    var out2 = [];//Cadena para concatenar la informacion de los trabajadores en riesgo
 
-    var defaultUrl ="http://cloud1.estchile.cl";
+    var defaultUrl ="http://cloud1.estchile.cl"; //URL con la que se va a trabajar
     //var defaultUrl = "localhost:8000";//local
-    var defaultUrlGeoServer ="http://104.196.40.15:8080";
+    
 
-    var urlRealTime;
+    var urlRealTime; // Url de la direccion del Json con la informaicon de todos los trabajadores
 
-	var map = new L.Map('map', {center: coord.CENTRAL, zoom: 2});
+	var map = new L.Map('map', {center: coord.CENTRAL, zoom: 2}); //inicializacion del mapa
 
 
 
-    //TEST MOSTRAR OCULTAR
-    var togglerInfoT = new Toggler({
-        node: "infoTrabajador",
-        showFunc: coreFx.wipeIn,
-        hideFunc: coreFx.wipeOut
-    });
-
-    var togglerAlerta = new Toggler({
-        node: "divALERTAS",
-        showFunc: coreFx.wipeIn,
-        hideFunc: coreFx.wipeOut
-    });
-
+    // MOSTRAR OCULTAR
 
     var togglerRightPanel = new Toggler({
         node: "rightPanel",
         showFunc: coreFx.wipeIn,
         hideFunc: coreFx.wipeOut
     });
-
-    var togglerInfoEdificacion = new Toggler({
-        node: "infoEdificacion",
-        showFunc: coreFx.wipeIn,
-        hideFunc: coreFx.wipeOut
-        });
 
     on(dom.byId("hideButton"), "click", function(e){
         togglerRightPanel.hide();  
@@ -74,7 +56,7 @@ require([
 
     });
 
-    statusOk = function(){
+    statusOk = function(){ //Funcion para alternar el color del mensaje de aviso
       dojo.animateProperty({
         node: dojo.byId("aviso"), duration: 2000,
         properties: {
@@ -87,28 +69,6 @@ require([
         }
       }).play();
     }
-
-/********************************************/
-
-        //var url = {};
-        //url.wmsroot = 'http://104.196.40.15:8080/geoserver/est40516/wms';
-
-        //generamos url de servicios de mapas, desde el servidor...
-        /*var ParamLydPMaule_edificacion = L.Util.extend({
-            request:'GetLegendGraphic',
-            version:'1.1.0',
-            format:'image/png',
-            width:'20',
-            height:'20',
-            legend_options:'forceLabels:on',
-            layer:'est40516:Edificacion',
-            opacity:'0.3',
-            style:'PMaule'
-            });
-        url.leyendaPMaule_edificacion = url.wmsroot + L.Util.getParamString(ParamLydPMaule_edificacion);
-    */
-    /********************************************/
-
     /*Lista de Desplegables*/	
     /* Lectura archivo Json Plantas*/
     request.get(defaultUrl+ "/gps/plantas/", {
@@ -384,19 +344,6 @@ require([
     var markerTrabajador = new L.LayerGroup();
     var trabajadores = new L.LayerGroup();    
 
-//Primera Forma de mostrar los edificios
-    //var tempUrl= defaultUrlGeoServer+ 
-    var edificios = new L.tileLayer.wms(defaultUrlGeoServer+'/geoserver/wms?', {
-        layers: 'est40516:Edificacion',
-        transparent: true,
-        format: 'image/png',
-        //styles: 'PMaule',
-        //attribution: 'Edificacion',
-        crs:L.CRS.EPSG4326,
-        opacity: 0.7
-        }
-    );
-
     var ggl = new L.Google('SATELLITE', {
             mapOptions: {
             //styles: styles
@@ -406,7 +353,6 @@ require([
             "Trabajadores": trabajadores,
             "Cluster": markerTrabajador,
             "Zonas": zonas,
-            "Construcciones": edificios,
             "Heat Map": heatMap,
             "Activar Alerta": alertaL
         };
@@ -434,7 +380,7 @@ require([
                         '#FFEDA0';
     }
 
-    function style(feature) { //asigna el estilo con el color de relleno de acuerdo a su densidad
+    function style(feature) { //asigna el estilo con el color de relleno de acuerdo a su nivel de riesgo
         return {
             weight: 2,
             opacity: 1,
@@ -463,10 +409,13 @@ require([
         var tempLatLng =l.getLatLng(); //PARA HEATMAP
         heat_points.push(tempLatLng);  
         var tempIcon;
-
+        console.log(f.properties["zona"]);
         if(tempRiesgo >= 5 ){
             //l.setIcon(hombreRojo);    
-            out2.push( "<p>"+f.properties["nombre"]+"</p>");
+            if(f.properties["zona"])
+                {out2.push( "<p>"+f.properties["nombre"]+" - "+f.properties["zona"]+"</p>");}
+            else
+                {out2.push( "<p>"+f.properties["nombre"]+"</p>");}
             tempIcon = hombre5;
             //leafletView.RegisterMarker(new PruneCluster.Marker(tempLatLng.lat, tempLatLng.lng, {title: leyenda, icono: hombreRojo}));
  
@@ -542,7 +491,7 @@ require([
             type: 'json'
         },
         {
-            interval: 2000* 1000
+            interval: 20* 1000
             //,
             //onEachFeature:popUpPersona
         }
@@ -792,7 +741,7 @@ require([
     };
 
     function getColor2(d) { //retorna un color de acuerdo al valor de la variable d (density) ojo tambien se usa para el color de la leyenda
-        return d == 5 ? colors[5] : 
+        return d >= 5 ? colors[5] : 
                d == 4  ?  colors[4] :
                d == 3   ?  colors[3] :
                d == 2   ?  colors[2] :

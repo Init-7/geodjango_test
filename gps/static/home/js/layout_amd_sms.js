@@ -34,9 +34,7 @@ require([
     var urlRealTime;
 
     var map = new L.Map('map', {center: coord.CENTRAL, zoom: 18});   
-    var marker = L.marker(coord.CENTRAL).
-bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<br><b>Teléfono: </b>"+nro+ "</p>").addTo(map);
- 
+
 
 /****TODO MAPA*****/   
 
@@ -95,41 +93,45 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
         };
     }
 
+    //var marker = L.marker(coord.CENTRAL).bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<br><b>Teléfono: </b>"+nro+ "</p>").addTo(map);
+    //var marker = L.marker(coord.CENTRAL);
+    //var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
+    //l.bindPopup(leyenda);
+    //var leyenda= document.getElementById("nivel_riesgo").value;
+    var leyenda= "HOLI";
 
-    function popUpPersona(f,l){//Consulta por cada uno de los objetos     
+    var tempIcon;
 
-        var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
-        l.bindPopup(leyenda);
-        //l.setIcon(hombreNormal);
-        var tempRiesgo = f.properties["nivel_riesgo"];
-        var tempLatLng =l.getLatLng(); //PARA HEATMAP
-        heat_points.push(tempLatLng);  
-        var tempIcon;
-
-        if(tempRiesgo >= 5 ){
-            //l.setIcon(hombreRojo);    
-            out2.push( "<p>"+f.properties["nombre"]+"</p>");
-            tempIcon = hombre5; 
-        }
-        else if(tempRiesgo == 4 ){
-            tempIcon = hombre4;
-        }
-        else if(tempRiesgo == 3 ){
-            tempIcon = hombre3;
-        }
-        else if(tempRiesgo == 2 ){
-            tempIcon = hombre2;
-        }
-        else {
-            tempIcon = hombre1;
-        }       
-        
-        l.setIcon(tempIcon);
-
-        l.on('dblclick', onClick);
-        l.addTo(trabajadores);
-
+    if(nro >= 5 ){
+        //l.setIcon(hombreRojo);    
+        //out2.push( "<p>"+f.properties["nombre"]+"</p>");
+        tempIcon = hombre5; 
     }
+    else if(nro == 4 ){
+        tempIcon = hombre4;
+    }
+    else if(nro == 3 ){
+        tempIcon = hombre3;
+    }
+    else if(nro == 2 ){
+        tempIcon = hombre2;
+    }
+    else {
+        tempIcon = hombre1;
+    }       
+    
+    //l.setIcon(tempIcon);
+
+    
+    //l.addTo(trabajadores);
+
+   
+    //l.on('dblclick', onClick);
+
+
+
+
+
     function onClick(e) {
         var tempLatLng =this.getLatLng();    
         map.setView([tempLatLng.lat,tempLatLng.lng], 18);
@@ -188,5 +190,7 @@ bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<
             map.addLayer(ggl);
         }
 
+
     });  
+     L.marker(coord.CENTRAL, {icon: hombre1}).addTo(map).bindPopup(leyenda);
 });
