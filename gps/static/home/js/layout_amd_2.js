@@ -401,9 +401,7 @@ require([
         l.bindPopup("<button type='button' id='otroButton'>Mostrar Información </button><div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>"); 
 */
         //l.bindPopup("<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>"); 
-        
-        var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
-        l.bindPopup(leyenda);
+             
         //l.setIcon(hombreNormal);
         var tempRiesgo = f.properties["nivel_riesgo"];
         var tempLatLng =l.getLatLng(); //PARA HEATMAP
@@ -411,11 +409,19 @@ require([
         var tempIcon;
         console.log(f.properties["zona"]);
         if(tempRiesgo >= 5 ){
+            tempRiesgo = 5;
             //l.setIcon(hombreRojo);    
             if(f.properties["zona"])
-                {out2.push( "<p>"+f.properties["nombre"]+" - "+f.properties["zona"]+"</p>");}
+                
+                {
+                    var tempZona= f.properties["zona"];
+                    out2.push( "<p>"+f.properties["nombre"]+" - "+f.properties["zona"]+"</p>");
+                }
             else
-                {out2.push( "<p>"+f.properties["nombre"]+"</p>");}
+                {
+                out2.push( "<p>"+f.properties["nombre"]+"</p>");
+                var tempZona= "Sin Información";
+            }
             tempIcon = hombre5;
             //leafletView.RegisterMarker(new PruneCluster.Marker(tempLatLng.lat, tempLatLng.lng, {title: leyenda, icono: hombreRojo}));
  
@@ -433,6 +439,10 @@ require([
             tempIcon = hombre1;
         }       
         
+        var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br><b>Zona : </b>"+tempZona+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
+        l.bindPopup(leyenda);
+
+
         l.setIcon(tempIcon);
         var m = new PruneCluster.Marker(tempLatLng.lat, tempLatLng.lng, {title: leyenda,  icono: tempIcon},tempRiesgo);
         
@@ -543,7 +553,7 @@ require([
     var jsonTest = new L.GeoJSON.AJAX([urlEdificios/*,"counties.geojson"*/],{style: style, onEachFeature:popUpEdificios});
 
     map.on('overlayadd', function(eo) {
-        console.log("Activado "+ eo.name);
+        //console.log("Activado "+ eo.name);
         if (eo.name === 'Cluster') {
             setTimeout(function(){map.addLayer(leafletView)}, 10);
             leafletView.ProcessView();
@@ -580,7 +590,7 @@ require([
     });
 
      map.on('overlayremove', function(eo) {
-        console.log("Quitado "+eo.name);
+        //console.log("Quitado "+eo.name);
         if (eo.name === 'Cluster') {
             setTimeout(function(){map.removeLayer(markerTrabajador)}, 10);  
             //leafletView.Cluster._markers = [];
