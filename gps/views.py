@@ -670,13 +670,13 @@ def riesgotrabajador(request, planta, nro):
 	return HttpResponse(data)
 
 
-def curriculum(request, trabajador):
-    s = FlatJsonSerializer()
-    data = Trabajador.objects.get(id=trabajador)
-
-    context = {'data': data}
-
-    return render(request,'cv/cv.html', context)
+#def curriculum(request, trabajador):
+#    s = FlatJsonSerializer()
+#    data = Trabajador.objects.get(id=trabajador)
+#
+#    context = {'data': data}
+#
+#    return render(request,'cv/cv.html', context)
 
 def sms(request, trabajador):
     td = TrabajadorDevice.objects.get(fono_gps=trabajador)
@@ -685,30 +685,39 @@ def sms(request, trabajador):
     p = PositionsTraccar.objects.get(id=d.positionid)
 
 #    t = Trabajador.objects.get(fono=trabajador)
-    el=Listatrabajadores()
-    if(Devices.objects.filter(id=td.device_id).exists()):
-	dev = Devices.objects.get(id=td.device_id) #Dispositivo correspondiente al trabajador
-	validos=Positions.objects.filter(valid=True)
-	punto = validos.filter(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
-	pto=validos.get(id=dev.positionid)
-	if(punto.exists()):		
+#    el=Listatrabajadores()
+#    if(Devices.objects.filter(id=td.device_id).exists()):
+#	dev = Devices.objects.get(id=td.device_id) #Dispositivo correspondiente al trabajador
+#	validos=Positions.objects.filter(valid=True)
+#	punto = validos.filter(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
+#	pto=validos.get(id=dev.positionid)
+#	if(punto.exists()):		
 			
 		#el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
 		#try:
-		el.lat=pto.lat
+#		el.lat=pto.lat
 		#except ObjectDoesNotExist:
 		#        el.lat=None
 		#try:
-		el.lon=pto.lon
+#		el.lon=pto.lon
 		#except ObjectDoesNotExist:
 		#        el.lon=None
-	el.id=t.id
-	el.nombre=t.primer_nombre+" "+t.apellidop
-	el.apellidop=t.apellidop
-	el.fono=t.fono
-	el.cargo=t.cargo
+#	el.id=t.id
+#	el.nombre=t.primer_nombre+" "+t.apellidop
+#	el.apellidop=t.apellidop
+#	el.fono=t.fono
+#	el.cargo=t.cargo
 	
-    return render(request,'gps/index.html', {'el': el})
+#    return render(request,'gps/index.html', {'el': el})
+
+    return render(request,'gps/index.html',{
+        'nombre':t.primer_nombre + t.apellidop + t.apellidom,
+        'lat':p.latitude,
+        'lon':p.longitude,
+        'id':t.id,
+        'fono':t.fono,
+        'cargo':t.cargo,
+    })
 
 def trabajador_z_riesgo(request, planta):
 	s = FlatJsonSerializer()	
