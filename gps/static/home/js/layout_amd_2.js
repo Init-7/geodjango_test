@@ -449,8 +449,6 @@ require([
 
         leafletView.RegisterMarker(m);
         
-
-
         l.on('dblclick', onClick);
         l.addTo(trabajadores);
 
