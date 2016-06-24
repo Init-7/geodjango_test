@@ -739,12 +739,14 @@ require([
 
 
     leafletView.PrepareLeafletMarker = function (marker, data, category) {
-        /*if (marker.getPopup()) {
-            marker.setPopupContent(data.title + " - " + category);
+        if (marker.getPopup()) {
+            //marker.setPopupContent(data.title + " - " + category);
+            marker.setPopupContent(data.title);
         } else {
-            marker.bindPopup(data.title + " - " + category);
+            //marker.bindPopup(data.title + " - " + category);
+            marker.bindPopup(data.title);
         }
-        marker.setIcon(data.icono);*/
+        marker.setIcon(data.icono);
         //marker.weight = 100;
 
     };
