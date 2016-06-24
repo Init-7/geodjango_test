@@ -107,7 +107,7 @@ require([
                 /* Lectura archivo Json Negocios*/
                 var cn= dijit.byId('planta').get('displayedValue');
 
-                urlRealTime = defaultUrl+"/gps/trabajadores/"+cn+"/puntos2/";
+                //urlRealTime = defaultUrl+"/gps/trabajadores/"+cn+"/puntos2/";
 
                 request.get(defaultUrl+ "/gps/centrosdenegocio/"+cn+"/", {
                         handleAs: "json"
@@ -407,20 +407,21 @@ require([
         var tempLatLng =l.getLatLng(); //PARA HEATMAP
         heat_points.push(tempLatLng);  
         var tempIcon;
-        console.log(f.properties["zona"]);
+        //console.log(f.properties["zona"]);
         if(tempRiesgo >= 5 ){
             tempRiesgo = 5;
             //l.setIcon(hombreRojo);    
             if(f.properties["zona"])
-                
                 {
                     var tempZona= f.properties["zona"];
-                    out2.push( "<p>"+f.properties["nombre"]+" - "+f.properties["zona"]+"</p>");
+                    
+                    //+"/gps/sms/"+f.properties["fono"]
+                    out2.push( "<a href='"+defaultUrl+"/gps/sms/"+f.properties["fono"]+"' target='_blank'><p>"+f.properties["nombre"]+" - "+f.properties["zona"]+"</p></a>");
                 }
             else
                 {
-                out2.push( "<p>"+f.properties["nombre"]+"</p>");
-                var tempZona= "Sin Información";
+                    out2.push( "<a href='"+defaultUrl+"/gps/sms/"+f.properties["fono"]+"' target='_blank'><p>"+f.properties["nombre"]+"</p></a>");
+                    var tempZona= "Sin Información";
             }
             tempIcon = hombre5;
             //leafletView.RegisterMarker(new PruneCluster.Marker(tempLatLng.lat, tempLatLng.lng, {title: leyenda, icono: hombreRojo}));
@@ -738,12 +739,12 @@ require([
 
 
     leafletView.PrepareLeafletMarker = function (marker, data, category) {
-        if (marker.getPopup()) {
+        /*if (marker.getPopup()) {
             marker.setPopupContent(data.title + " - " + category);
         } else {
             marker.bindPopup(data.title + " - " + category);
         }
-        marker.setIcon(data.icono);
+        marker.setIcon(data.icono);*/
         //marker.weight = 100;
 
     };
