@@ -340,6 +340,8 @@ require([
     var zonas = new L.LayerGroup();
     var alertaL = new L.LayerGroup();    
     var heatMap = new L.LayerGroup();
+    var etiquetasL = new L.LayerGroup();
+    var etiquetas = []; 
 
     var markerTrabajador = new L.LayerGroup();
     var trabajadores = new L.LayerGroup();    
@@ -354,7 +356,9 @@ require([
             "Cluster": markerTrabajador,
             "Zonas": zonas,
             "Heat Map": heatMap,
-            "Activar Alerta": alertaL
+            "Activar Alerta": alertaL,
+            "Activar Etiquetas": etiquetasL
+            
         };
 
     //map.addLayer(alertaL)
@@ -469,8 +473,21 @@ require([
             }
             l.bindPopup(out.join("<br />"));
         }
+        
+        var label = new L.Label();
+        label.setContent(f.properties["nombre"]);
+        //console.log(f.properties["nombre"]);
+        label.setLatLng(l.getBounds().getCenter());
+        
+        //map.showLabel(label);
         l.addTo(zonas);
+        //map.hideLabel(label);
+
+        etiquetas.push(label);
+
+
     }
+
 
     /********ICONOS PERSONALIZADO***************/
     var LeafIcon = L.Icon.extend({
@@ -553,12 +570,16 @@ require([
 
     map.on('overlayadd', function(eo) {
         //console.log("Activado "+ eo.name);
+
+        var tempLabel = new L.Label();
         if (eo.name === 'Cluster') {
             setTimeout(function(){map.addLayer(leafletView)}, 10);
             leafletView.ProcessView();
             setTimeout(function(){map.removeLayer(trabajadores)}, 10);
             showcluster= true;
             legend.addTo(map);
+
+
 
         } 
         else if (eo.name === 'Trabajadores') {
@@ -585,7 +606,14 @@ require([
 */
             /*********Fin HEATMAP*******/   
         }
-
+        else if (eo.name === 'Activar Etiquetas') {  
+                    //console.log(etiquetas);
+            for (var i = 0, l = etiquetas.length; i < l; ++i) {
+                //console.log(etiquetas[i]);
+                //tempLabel = etiquetas[i];
+                map.showLabel(etiquetas[i]);            
+            }
+        }
     });
 
      map.on('overlayremove', function(eo) {
@@ -606,6 +634,14 @@ require([
         }
         else if (eo.name === 'Heat Map') {
             location.reload();//solucion preliminar desactivar heatmap
+        }
+        else if (eo.name === 'Activar Etiquetas') {  
+                    //console.log(etiquetas);
+            for (var i = 0, l = etiquetas.length; i < l; ++i) {
+                //console.log(etiquetas[i]);
+                //tempLabel = etiquetas[i];
+                map.removeLayer(etiquetas[i]);            
+            }
         }
 
     });
@@ -628,6 +664,18 @@ require([
             map.removeLayer(osm);
             map.addLayer(ggl);
         }
+        if (map.getZoom() < 15 && map.hasLayer(etiquetasL)) {  
+            map.removeLayer(etiquetasL);
+                    //console.log(etiquetas);
+            for (var i = 0, l = etiquetas.length; i < l; ++i) {
+                //console.log(etiquetas[i]);
+                //tempLabel = etiquetas[i];
+                map.removeLayer(etiquetas[i]);            
+            }
+        }
+
+
+
 
     }); 
   var colors = ['#2c9223', '#2c9223', '#0096e4', '#999900', '#ffa200', '#ff0000', '#ff0000', '#ff0000'];
