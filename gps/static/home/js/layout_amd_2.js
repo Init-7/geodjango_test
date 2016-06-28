@@ -20,9 +20,6 @@ require([
     "dojo/domReady!"
 ], function(on, mouse,BorderContainer,Toggler, coreFx, request, Memory, registry,ContentPane, DateTextBox,dom,domAttr,AccordionContainer,DataGrid,Button,ObjectStore, domConstruct, FilteringSelect){
     var heat_points = []; 
-    var clusterLayer;
-    var heat = L.heatLayer();
-    var htLayer;
     //coordenadas de interes...
     var coord = [];
     coord.CENTRAL = [-36.3,-72.3]; //Posicion inicial para centrar el mapa
@@ -517,7 +514,7 @@ require([
             type: 'json'
         },
         {
-            interval: 20* 1000
+            interval: 200* 1000
             //,
             //onEachFeature:popUpPersona
         }
@@ -586,7 +583,8 @@ require([
             setTimeout(function(){map.removeLayer(markerTrabajador)}, 10);  
             //leafletView.Cluster._markers = [];
             setTimeout(function(){map.removeLayer(leafletView)}, 10);         
-            showcluster=false;      
+            showcluster=false;
+            legend.addTo(map);      
         }
         else if (eo.name === 'Activar Alerta') {
             activarAlerta=true;
@@ -627,6 +625,7 @@ require([
         } 
         else if (eo.name === 'Trabajadores') {     
             showcluster=true;      
+            map.removeControl(legend);
         }
         else if (eo.name === 'Activar Alerta') {            
             activarAlerta=false;
@@ -664,18 +663,9 @@ require([
             map.removeLayer(osm);
             map.addLayer(ggl);
         }
-        if (map.getZoom() < 15 && map.hasLayer(etiquetasL)) {  
+        if (map.getZoom() < 14 && map.hasLayer(etiquetasL)) {  
             map.removeLayer(etiquetasL);
-                    //console.log(etiquetas);
-            for (var i = 0, l = etiquetas.length; i < l; ++i) {
-                //console.log(etiquetas[i]);
-                //tempLabel = etiquetas[i];
-                map.removeLayer(etiquetas[i]);            
-            }
         }
-
-
-
 
     }); 
   var colors = ['#2c9223', '#2c9223', '#0096e4', '#999900', '#ffa200', '#ff0000', '#ff0000', '#ff0000'];

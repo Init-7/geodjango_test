@@ -23,6 +23,9 @@ color: blue;
     background-color:#999;
     background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#C0C0C0));
     background: -moz-linear-gradient(top,  #fff,  #C0C0C0);
+                -webkit-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    -moz-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
 }
 .leaflet-popup-close-button{
     margin-top: 70px !important;
@@ -44,6 +47,7 @@ color: blue;
     width: 100px;
     //margin-left: 5px;
     //margin-top: 5px;
+
 }
 
 #imgTrabajadorCard{
@@ -51,6 +55,11 @@ color: blue;
     height: 120px;
     //margin-left: 10px;
     width: 90px;
+        -webkit-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    -moz-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    border-radius: 4px; 
+
 }
 #imgQRCard{
     opacity: 0;
@@ -62,14 +71,22 @@ color: blue;
 
 }
 #datosTrabajadorCard{
-
-    color: #0167b4;
+    //background: red;
+    padding-left: 5px;
+    padding-top: 5px;
+    background: #cccbca;
     float: right;
     font-family: Verdana;
     font-size: 9pt;
-    height: 165px;
-    margin-top: 30px;
-    width: 170px;
+    height: 140px;
+    margin-top: 15px;
+    width: 200px;
+    border-radius: 4px; 
+    margin-right: 20px;
+
+    -webkit-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    -moz-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
 }
 
 /*Fin Card*/
@@ -173,12 +190,18 @@ body {
     right: 28px;    
     width: 287px;
     height: 30px;
+    -webkit-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    -moz-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
     
 
 }
 #hideButton{
     width: 287px;
     height: 30px;
+    -webkit-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    -moz-box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
+    box-shadow: 0px 0px 19px 5px rgba(0,0,0,0.23);
 
 }
 
