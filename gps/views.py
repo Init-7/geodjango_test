@@ -22,6 +22,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django_twilio.decorators import twilio_view
 from twilio.twiml import Response
 from twilio.rest import TwilioRestClient
+from django.http import JsonResponse
+
 
 import sys
 
@@ -29,150 +31,152 @@ TWILIO_ACCOUNT_SID = 'AC1375f097eacacb0b9fde83e17272e28f'
 TWILIO_AUTH_TOKEN = '224d6ca587c66e7bd0592b1b809affa4'
 
 
-class FlatJsonSerializer(Serializer):
-    def get_dump_object(self, obj):
-        data = self._current
-        if not self.selected_fields or 'id' in self.selected_fields:
-            data['id'] = obj.id
-        data['name'] = obj.nombre
-        return data
+#class FlatJsonSerializer(Serializer):
+#    def get_dump_object(self, obj):
+#        data = self._current
+#        if not self.selected_fields or 'id' in self.selected_fields:
+#            data['id'] = obj.id
+#        data['name'] = obj.nombre
+#        return data
+#
+#    def end_object(self, obj):
+#        if not self.first:
+#            self.stream.write(', ')
+#        json.dump(self.get_dump_object(obj), self.stream,
+#                  cls=DjangoJSONEncoder)
+#        self._current = None
+#
+#    def start_serialization(self):
+#        self.stream.write("[")
+#
+#    def end_serialization(self):
+#        self.stream.write("]")
+#
+#    def getvalue(self):
+#        return super(Serializer, self).getvalue()
+#
+#class FlatJsonSerializer2(Serializer):
+#    def get_dump_object(self, obj):
+#        data = self._current
+#        if not self.selected_fields or 'id' in self.selected_fields:
+#            data['id'] = obj.i
+#        data['name'] = obj.nombre 
+#        data['lat']=obj.lat
+#        data['lon']=obj.lon
+#        data['apellidop']=obj.apellidop
+#        data['apellidon']=obj.apellidom
+#        data['i']=obj.id
+#        return data
+#
+#    def end_object(self, obj):
+#        if not self.first:
+#            self.stream.write(', ')
+#        json.dump(self.get_dump_object(obj), self.stream,
+#                  cls=DjangoJSONEncoder)
+#        self._current = None
+#
+#    def start_serialization(self):
+#        self.stream.write("[")
+#
+#    def end_serialization(self):
+#        self.stream.write("]")
+#
+#    def getvalue(self):
+#        return super(Serializer, self).getvalue()
+#
+#class FlatJsonSerializer3(Serializer):
+#    def get_dump_object(self, obj):
+#        data = self._current
+#        if not self.selected_fields or 'id' in self.selected_fields:
+#            data['id'] = obj.id
+#        data['name'] = obj.nombre
+#        #data['lat'] = obj.geom.centroid
+#        #data['lon'] = obj.geom.centroid
+#        return data
+#
+#    def end_object(self, obj):
+#        if not self.first:
+#            self.stream.write(', ')
+#        json.dump(self.get_dump_object(obj), self.stream,
+#                  cls=DjangoJSONEncoder)
+#        self._current = None
+#
+#    def start_serialization(self):
+#        self.stream.write("[")
+#
+#    def end_serialization(self):
+#        self.stream.write("]")
+#
+#    def getvalue(self):
+#        return super(Serializer, self).getvalue()
+#
+#class FlatJsonSerializer4(Serializer):
+#    def get_dump_object(self, obj):
+#        data = self._current
+#        if not self.selected_fields or 'id' in self.selected_fields:
+#            data['id'] = obj.id
+#        data['name'] = obj.nombre
+#        data['lat'] = obj.lat
+#        data['lon'] = obj.lon
+#        return data
+#
+#    def end_object(self, obj):
+#        if not self.first:
+#            self.stream.write(', ')
+#        json.dump(self.get_dump_object(obj), self.stream,
+#                  cls=DjangoJSONEncoder)
+#        self._current = None
+#
+#    def start_serialization(self):
+#        self.stream.write("[")
+#
+#    def end_serialization(self):
+#        self.stream.write("]")
+#
+#    def getvalue(self):
+#        return super(Serializer, self).getvalue()
+#
+#@ensure_csrf_cookie
+##Serialiser copy paste
+#class MySerialiser(Serializer):
+#    def end_object( self, obj ):
+#        self._current['id'] = obj._get_pk_val()
+#        self.objects.append( self._current )
+#    
+#
+#
+#def last_five(request):
+##Ultimas 5 posiciones registradas
+#    last_five = Positions.objects.order_by('-id')[:5]
+#    #serializer = MySerialiser()
+#    s = FlatJsonSerializer()
+#    #s.serialize(MyModel.objects.all())
+#    #data = s.serialize(Positions.objects.order_by('-id')[:5])
+#    data = s.serialize(last_five)
+#    #data=serializers.serialize('json', last_five, fields=('deviceid','fixtime'))
+#    return HttpResponse(data, content_type='application/json')
+#
+#@ensure_csrf_cookie
 
-    def end_object(self, obj):
-        if not self.first:
-            self.stream.write(', ')
-        json.dump(self.get_dump_object(obj), self.stream,
-                  cls=DjangoJSONEncoder)
-        self._current = None
-
-    def start_serialization(self):
-        self.stream.write("[")
-
-    def end_serialization(self):
-        self.stream.write("]")
-
-    def getvalue(self):
-        return super(Serializer, self).getvalue()
-
-class FlatJsonSerializer2(Serializer):
-    def get_dump_object(self, obj):
-        data = self._current
-        if not self.selected_fields or 'id' in self.selected_fields:
-            data['id'] = obj.i
-        data['name'] = obj.nombre 
-        data['lat']=obj.lat
-        data['lon']=obj.lon
-        data['apellidop']=obj.apellidop
-        data['apellidon']=obj.apellidom
-        data['i']=obj.id
-        return data
-
-    def end_object(self, obj):
-        if not self.first:
-            self.stream.write(', ')
-        json.dump(self.get_dump_object(obj), self.stream,
-                  cls=DjangoJSONEncoder)
-        self._current = None
-
-    def start_serialization(self):
-        self.stream.write("[")
-
-    def end_serialization(self):
-        self.stream.write("]")
-
-    def getvalue(self):
-        return super(Serializer, self).getvalue()
-
-class FlatJsonSerializer3(Serializer):
-    def get_dump_object(self, obj):
-        data = self._current
-        if not self.selected_fields or 'id' in self.selected_fields:
-            data['id'] = obj.id
-        data['name'] = obj.nombre
-        #data['lat'] = obj.geom.centroid
-        #data['lon'] = obj.geom.centroid
-        return data
-
-    def end_object(self, obj):
-        if not self.first:
-            self.stream.write(', ')
-        json.dump(self.get_dump_object(obj), self.stream,
-                  cls=DjangoJSONEncoder)
-        self._current = None
-
-    def start_serialization(self):
-        self.stream.write("[")
-
-    def end_serialization(self):
-        self.stream.write("]")
-
-    def getvalue(self):
-        return super(Serializer, self).getvalue()
-
-class FlatJsonSerializer4(Serializer):
-    def get_dump_object(self, obj):
-        data = self._current
-        if not self.selected_fields or 'id' in self.selected_fields:
-            data['id'] = obj.id
-        data['name'] = obj.nombre
-        data['lat'] = obj.lat
-        data['lon'] = obj.lon
-        return data
-
-    def end_object(self, obj):
-        if not self.first:
-            self.stream.write(', ')
-        json.dump(self.get_dump_object(obj), self.stream,
-                  cls=DjangoJSONEncoder)
-        self._current = None
-
-    def start_serialization(self):
-        self.stream.write("[")
-
-    def end_serialization(self):
-        self.stream.write("]")
-
-    def getvalue(self):
-        return super(Serializer, self).getvalue()
-
-@ensure_csrf_cookie
-#Serialiser copy paste
-class MySerialiser(Serializer):
-    def end_object( self, obj ):
-        self._current['id'] = obj._get_pk_val()
-        self.objects.append( self._current )
-    
-
-
-def last_five(request):
-#Ultimas 5 posiciones registradas
-    last_five = Positions.objects.order_by('-id')[:5]
-    #serializer = MySerialiser()
-    s = FlatJsonSerializer()
-    #s.serialize(MyModel.objects.all())
-    #data = s.serialize(Positions.objects.order_by('-id')[:5])
-    data = s.serialize(last_five)
-    #data=serializers.serialize('json', last_five, fields=('deviceid','fixtime'))
-    return HttpResponse(data, content_type='application/json')
-
-@ensure_csrf_cookie
 def infoplantas(request):
     pl= Planta.objects.all()
     contenidos=[]
-    s = FlatJsonSerializer()
+#    s = FlatJsonSerializer()
     for p in pl:
         print p.nombre
         contenidos.append(p)
         data = serializers.serialize('json', contenidos)
 #       data = serializer.serialize(contenidos)
-    data = s.serialize(contenidos)
-    return HttpResponse(data, content_type='application/json')
+#    data = s.serialize(contenidos)
+#    return HttpResponse(data, content_type='application/json')
+    return JsonResponse(contenidos,safe=False)
 
 
 
 def planta(request, planta):
 #Posiciones registradas dentro de una determinada planta    
     pl = Planta.objects.get(nombre = planta)
-    s = FlatJsonSerializer()
+#    s = FlatJsonSerializer()
     contenidos = []
 
     for d in Devices.objects.all():
@@ -194,7 +198,7 @@ def planta(request, planta):
 def centro(request, planta, centro):
     
     tcn = Trabajador.objects.filter(centroNegocios__codigo = centro)
-    s = FlatJsonSerializer()
+#    s = FlatJsonSerializer()
     contenidos = []
     punto=None
     for tr in tcn:
@@ -219,10 +223,11 @@ def centro(request, planta, centro):
         #auxiliar.centroNegocios=t.centroNegocios
         #auxiliar.gps=t.gps
         contenidos.append(auxiliar)
-    data = s.serialize(contenidos)
+#    data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 
-    return HttpResponse(data)#, content_type='application/json')
+#    return HttpResponse(data)#, content_type='application/json')
+    return JsonResponse(contenidos, safe=False)
 
 def centro2(request, planta, centro):
     #tcn = Trabajador.objects.all()
@@ -333,46 +338,61 @@ def centro3(request):
 
 
 
-
 def trabajador(request, trabajador):
 #Ultima posicion de un trabajador    
-    s = FlatJsonSerializer() 
-    t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
-    dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
-    validos=Positions.objects.filter(valid=True)
-    punto = validos.get(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
-        
     contenidos = []
+#    s = FlatJsonSerializer() 
 
-    #puntos = Positions.objects.raw('SELECT * FROM Devices as d join Positions as p on p."deviceId"=d.id join "Trabajador" as t on d.id=t.gps_id where t.id=%s ', [trabajador])
-    
-    #for p in puntos:    
-    auxiliar=Posicionestrabajador()    
-    auxiliar.lat=punto.lat    
-    auxiliar.lon=punto.lon
-    auxiliar.address=punto.address
-    auxiliar.fixtime=punto.fixtime
-    auxiliar.valid=punto.valid    
-    
-    auxiliar.nombre=t.primer_nombre
-    auxiliar.apellidop=t.apellidop
-    auxiliar.apellidom=t.apellidom
-    auxiliar.fecha_nac=t.fecha_nac
-    #auxiliar.estudios=t.estudios
-    auxiliar.rut=t.rut
-    auxiliar.nivel_riesgo=t.nivel_riesgo
-    auxiliar.direccion=t.direccion
-    #auxiliar.centroNegocios=t.centroNegocios
-    #auxiliar.gps=t.gps
-    contenidos.append(auxiliar)
-    data = s.serialize(contenidos)    
-    #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+    t = Trabajador.objects.get(estid=trabajador) #Trabajadores con el id solicitado
+    td = TrabajadorDevice.objects.get(trabajador=t.id)
+    dev = Devices.objects.get(id=td.device_id) #Dispositivo correspondiente al trabajador
+    validos=PositionsTraccar.objects.filter(valid=True)
+    punto = validos.get(id=dev.positionid)
+    tp = Point(punto.longitude, punto.latitude)
 
+    contenidos.append({ 'geom': tp,
+                        'lat': punto.latitude,
+                        'lon': punto.longitude,
+                        'address': punto.address,
+                        'fixtime': punto.fixtime,
+                        'valid': punto.valid,
+                        'primer_nombre': t.primer_nombre,
+                        'segundo_nombre': t.segundo_nombre,
+                        'apellidop': t.apellidop,
+                        'apellidom': t.apellidom,
+                        'fecha_nac': t.fecha_nac,
+                        'rut': t.rut,
+                        'nivel_riesgo': t.nivel_riesgo,
+                        'direccion': t.direccion,
+                        'deviceid': dev.id,
+                        'attributes': punto.attributes,
+                        'fono': t.fono,
+                        'e_mail': t.e_mail,
+                        'emergencia': t.emergencia.nombre,
+                        'tipo_contacto': t.tipo_contacto,
+                        'centroNegocios': t.centroNegocios.nombre,
+                        'cargo': t.cargo,
+                        'rol': t.rol.first().nombre,
+                        'gps': td.device.name,
+                        'supervisor': t.supervisor.primer_nombre+" "+t.supervisor.segundo_nombre,
+                        'empresa': t.empresa.nombre,
+                        'salud': t.salud.first().detalle,
+                        'estudios': t.estudios.last().nombre,
+                        'capacitacion': t.capacitacion.last().nombre,
+                        'nota': t.nota,
+                        'nota2': t.nota2,
+                        'id': t.estid,
+                       }
+                      )
+
+#    contenidos.append(auxiliar)
+#    data = s.serialize(contenidos)    
+    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=False, with_modelname=False)
     return HttpResponse(data)#, content_type='application/json')
 
 def tiempoplanta(request, planta, fechainicio, fechafin):
 #Posiciones registradas en una determinada planta, durante un rango de tiempo (fecha)
-    s = FlatJsonSerializer()    
+#    s = FlatJsonSerializer()    
     pl = Planta.objects.get(nombre = planta)
 
     posiciones = Positions.objects.filter(fixtime__range=[fechainicio,fechafin])
@@ -380,9 +400,10 @@ def tiempoplanta(request, planta, fechainicio, fechafin):
     for p in posiciones:
         if(pl.geom.contains(p.geom)):
             contenidos.append(p)            
-    data = s.serialize(contenidos)
+#    data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
-    return HttpResponse(data)
+#    return HttpResponse(data)
+    return JsonResponse(contenidos, safe=False)
 
 def tiempoplantaconhoras(request, planta, fechainicio, fechafin):
 #Posiciones registradas en una determinada planta, durante un rango de tiempo (fecha,hora)
@@ -434,6 +455,7 @@ def trabajadoresplanta(request, nombreplanta):
 
 
 def listaplantas(request):
+#JSON con la lista de las plantas
     s = FlatJsonSerializer4()
     contenidos=[]
     pl=Planta.objects.all()
@@ -447,6 +469,7 @@ def listaplantas(request):
 
 
 def listacentronegocios(request, planta):
+#JSON con los centros de negocios de una planta
     s = FlatJsonSerializer()
     contenidos=[]
     if(planta=="Todos"):
@@ -466,45 +489,35 @@ def listacentronegocios(request, planta):
             contenidos.append(el)                
     data = s.serialize(contenidos)
     #data = dos.append(el)
-    GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+    #GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
     return HttpResponse(data)
 
+#modificar serializer a normal no json
 def listatrabajadores(request, cnegocios):
-    s = FlatJsonSerializer2()
+#JSON con los trabajadores de un centro de negocios
+#    s = FlatJsonSerializer2()
     contenidos=[]
-    cn=CentroNegocios.objects.get(codigo=cnegocios)
-    tr=Trabajador.objects.filter(centroNegocios=cn)
-    punto=None
-    j=0
-    for i, t in enumerate(tr):
-        el=Listatrabajadores()
-        if(Devices.objects.filter(id=t.gps_id).exists()):
+    i=0
+    for t in Trabajador.objects.filter(centroNegocios__codigo = cnegocios):
+        if (TrabajadorDevice.objects.filter(trabajador_id=t.id).exists()):
+            td = TrabajadorDevice.objects.filter(trabajador_id=t.id).last()
+            d = Devices.objects.filter(id=td.device_id).last()
+            p = PositionsTraccar.objects.get(id=d.positionid)
+            tp = Point(p.longitude, p.latitude)
+            contenidos.append({ 'nombre': t.primer_nombre+" "+t.segundo_nombre+" "+t.apellidop+" "+t.apellidom,
+                                'i': i,
+                                'id': t.id,
+#                                'geom': tp,
+                              }
+                             )
+            i=i+1
 
-            dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
-            if(Positions.objects.get(id=dev.positionid).valid):
-                validos=Positions.objects.filter(valid=True)
-                punto = validos.filter(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
-#            pto=validos.get(id=dev.positionid)
-#            if(punto.exists()):        
-                pto=Positions.objects.get(id=dev.positionid)        
-                #el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
-                #try:
-                el.lat=pto.lat
-                #except ObjectDoesNotExist:
-                #        el.lat=None
-                #try:
-                el.lon=pto.lon
-                #except ObjectDoesNotExist:
-                #        el.lon=None
-                el.id=t.id
-                el.i=j
-                el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
-                contenidos.append(el)                    
-                j=j+1
-    data = s.serialize(contenidos)
-    #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
-    return HttpResponse(data)
+    #data = s.serialize(contenidos)
+#    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
+#    return HttpResponse(data)
+    return JsonResponse(contenidos, safe=False)
 
+#modificar
 def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 #Posiciones de un trabajador de la planta en un rango de tiempo
     s = FlatJsonSerializer()
@@ -616,7 +629,7 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 
 def riesgotrabajador(request, planta, nro):
 #Posiciones de trabajadores con mayor riesgo
-    s = FlatJsonSerializer()
+#    s = FlatJsonSerializer()
     pl = Planta.objects.get(nombre = planta)
     empresa= Empresa.objects.get(planta=pl)
     trabs=Trabajador.objects.filter(empresa=empresa)
@@ -646,9 +659,10 @@ def riesgotrabajador(request, planta, nro):
                 #auxiliar.gps=t.gps
                 contenidos.append(auxiliar)                                    
     
-    data = s.serialize(contenidos)
+#    data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
-    return HttpResponse(data)
+#    return HttpResponse(data)
+    return JsonResponse(contenidos,safe=True)
 
 
 #def curriculum(request, trabajador):
@@ -675,7 +689,7 @@ def sms(request, trabajador):
     })
 
 def trabajador_z_riesgo(request, planta):
-    s = FlatJsonSerializer()    
+#    s = FlatJsonSerializer()    
     pl = Planta.objects.get(nombre = planta)
     zonas = Zona.objects.filter(planta__nombre=planta)
     empresa= Empresa.objects.get(planta=pl)
@@ -694,9 +708,10 @@ def trabajador_z_riesgo(request, planta):
                         auxiliar.nombre=t.primer_nombre+" "+t.apellidop
                         auxiliar.zona=z.nombre
                         contenidos.append(auxiliar)
-    data = s.serialize(contenidos)
+#    data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
-    return HttpResponse(data)
+#    return HttpResponse(data)
+    return JsonResponse(contenidos)
 
  
 #@twilio_view
