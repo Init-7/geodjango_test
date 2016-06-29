@@ -35,7 +35,7 @@ require([
     var defaultUrlGeoServer ="http://104.196.40.15:8080";
     var urlRealTime;
 
-    var map = new L.Map('map', {center: coord.CENTRAL, zoom: 18});   
+    var map = new L.Map('map', {center: coord.CENTRAL, zoom: 20});   
 
 
 /****TODO MAPA*****/   
@@ -103,7 +103,7 @@ require([
                 "</br><b>Fono : </b>"+
                 nro+               
                 "</br><b>Fono Emergencia : </b>"+
-                nro+
+                "<a href='tel:"+nro+"'>"+nro+"</a>"+
                 "</br><b>Contacto : </b>"+
                 nombre+ "</div>";//+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
     //l.bindPopup(leyenda);
