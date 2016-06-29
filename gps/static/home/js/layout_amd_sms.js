@@ -98,12 +98,12 @@ require([
     //var marker = L.marker(coord.CENTRAL).bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<br><b>Teléfono: </b>"+nro+ "</p>").addTo(map);
     //var marker = L.marker(coord.CENTRAL);
     var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+
-                nombre+"</br><b>Cargo : </b>"+
+                nombre+" "+apellidop +"</br><b>Cargo : </b>"+
                 cargo+
                 "</br><b>Fono : </b>"+
-                nro+               
-                "</br><b>Fono Emergencia : </b>"+
                 "<a href='tel:"+nro+"'>"+nro+"</a>"+
+                "</br><b>Fono Emergencia : </b>"+
+                "<a href='tel:"+fonoem+"'>"+fonoem+"</a>"+
                 "</br><b>Contacto : </b>"+
                 nombre+ "</div>";//+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
     //l.bindPopup(leyenda);
