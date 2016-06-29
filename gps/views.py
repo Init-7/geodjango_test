@@ -15,7 +15,7 @@ from datetime import datetime
 from djgeojson.views import GeoJSONResponseMixin
 import json
 from django.core.serializers.json import DjangoJSONEncoder
-json.dumps("{}", cls=DjangoJSONEncoder)
+#json.dumps("{}", cls=DjangoJSONEncoder)
 from django.core.serializers.python import Serializer
 from datetime import timedelta
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -31,29 +31,29 @@ TWILIO_ACCOUNT_SID = 'AC1375f097eacacb0b9fde83e17272e28f'
 TWILIO_AUTH_TOKEN = '224d6ca587c66e7bd0592b1b809affa4'
 
 
-#class FlatJsonSerializer(Serializer):
-#    def get_dump_object(self, obj):
-#        data = self._current
-#        if not self.selected_fields or 'id' in self.selected_fields:
-#            data['id'] = obj.id
-#        data['name'] = obj.nombre
-#        return data
-#
-#    def end_object(self, obj):
-#        if not self.first:
-#            self.stream.write(', ')
-#        json.dump(self.get_dump_object(obj), self.stream,
-#                  cls=DjangoJSONEncoder)
-#        self._current = None
-#
-#    def start_serialization(self):
-#        self.stream.write("[")
-#
-#    def end_serialization(self):
-#        self.stream.write("]")
-#
-#    def getvalue(self):
-#        return super(Serializer, self).getvalue()
+class FlatJsonSerializer(Serializer):
+    def get_dump_object(self, obj):
+        data = self._current
+        if not self.selected_fields or 'id' in self.selected_fields:
+            data['id'] = obj.id
+        data['name'] = obj.nombre
+        return data
+
+    def end_object(self, obj):
+        if not self.first:
+            self.stream.write(', ')
+        json.dump(self.get_dump_object(obj), self.stream,
+                  cls=DjangoJSONEncoder)
+        self._current = None
+
+    def start_serialization(self):
+        self.stream.write("[")
+
+    def end_serialization(self):
+        self.stream.write("]")
+
+    def getvalue(self):
+        return super(Serializer, self).getvalue()
 #
 #class FlatJsonSerializer2(Serializer):
 #    def get_dump_object(self, obj):
@@ -300,6 +300,10 @@ def centro3(request):
             tp = Point(p.longitude, p.latitude)
             if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
                 z =Zona.objects.get(zona__bbcontains=tp)
+#modificar
+#                if (z.nombre != t.last_z):
+                    #Si la zona en la que esta el punto es distinta a la ultima envia un SMS de alerta
+
                 contenidos.append({ 'nombre': t.primer_nombre+" "+t.segundo_nombre+" "+t.apellidop+" "+t.apellidom,
                                     'geom': tp,
                                     'fono': t.fono,
@@ -456,7 +460,7 @@ def trabajadoresplanta(request, nombreplanta):
 
 def listaplantas(request):
 #JSON con la lista de las plantas
-    s = FlatJsonSerializer4()
+#    s = FlatJsonSerializer4()
     contenidos=[]
     pl=Planta.objects.all()
 
@@ -464,8 +468,9 @@ def listaplantas(request):
         el=Listaplantas(i,p.nombre, p.geom.centroid.get_y() , p.geom.centroid.get_x())
         contenidos.append(el)
 
-    data = s.serialize(contenidos)
-    return HttpResponse(data)
+#    data = s.serialize(contenidos)
+#    return HttpResponse(data)
+    return JsonResponse(contenidos, safe=False)
 
 
 def listacentronegocios(request, planta):
@@ -492,7 +497,7 @@ def listacentronegocios(request, planta):
     #GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
     return HttpResponse(data)
 
-#modificar serializer a normal no json
+#Revisar que nuevo JSON funciona igual
 def listatrabajadores(request, cnegocios):
 #JSON con los trabajadores de un centro de negocios
 #    s = FlatJsonSerializer2()
@@ -525,11 +530,13 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
     fechaf = datetime.strptime(fechafin, '%Y-%m-%d')
     pl = Planta.objects.get(nombre = planta)
     zonas = Zona.objects.filter(planta__nombre=planta)
-    
-    t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
-    dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
+
+    t = Trabajador.objects.get(estid=trabajador) #Trabajadores con el id solicitado
+    td = TrabajadorDevice.objects.filter(trabajador = t).last()
+    dev = Devices.objects.get(id=td.device_id)
+#    dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
     #posiciones = Positions.objects.filter(fixtime__range=[fechai,fechaf])
-    posiciones = Positions.objects.filter(deviceid=dev)
+    posiciones = PositionsTraccar.objects.filter(deviceid=dev)
     contenidos = []
 
     rango=None
@@ -540,12 +547,12 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
     for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
         
         contenidozona=[]
-        tiempozona=Tiempozona(None,None,None,None,None,None,None,None)
-        tiempozona.dif=timedelta(microseconds=0)    
+#        tiempozona=Tiempozona(None,None,None,None,None,None,None,None)
+#        tiempozona.dif=timedelta(microseconds=0)    
         for p in posiciones: #Para cada una de las posiciones            
             if((p.fixtime>=fechai)&(p.fixtime<=fechaf) & (p.valid)):
                 
-                if(z.zona.contains(p.geom)): #Si la posicion se encuentra en una zona
+                if(z.zona.contains(Point(p.latitude, p.longitude))): #Si la posicion se encuentra en una zona
                     #contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
                     if not(rango):
 
@@ -626,6 +633,7 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
     data = s.serialize(contenidos)
     #data = serializers.serialize('json', contenidos)
     return HttpResponse(data, content_type='application/json')
+#    return JsonResponse(contenidos, safe=False)
 
 def riesgotrabajador(request, planta, nro):
 #Posiciones de trabajadores con mayor riesgo
@@ -680,12 +688,15 @@ def sms(request, trabajador):
     p = PositionsTraccar.objects.get(id=d.positionid)
 
     return render(request,'gps/index.html',{
-        'nombre':t.primer_nombre + t.apellidop + t.apellidom,
+        'nombre':t.primer_nombre + " " + t.apellidop + " " + t.apellidom,
         'lat':p.latitude,
         'lon':p.longitude,
         'id':t.id,
         'fono':t.fono,
         'cargo':t.cargo,
+        'supervisor':t.supervisor.primer_nombre + " " + t.supervisor.apellidop,
+        'fono_super': t.supervisor.fono,
+        'foto': t.foto.url,
     })
 
 def trabajador_z_riesgo(request, planta):
@@ -733,7 +744,18 @@ def sms_twilio(request):
             from_n = m.from_
             break
     from_number = from_n.replace("+56", "")
-    msg = 'Se ha recibido un mensaje SOS dirijase a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (from_number)
+    td = TrabajadorDevice.objects.get(fono_gps=from_number)
+    t = Trabajador.objects.filter(id=td.trabajador_id).last()
+    d = Devices.objects.filter(id=td.device_id).last()
+    p = PositionsTraccar.objects.get(id=d.positionid)
+    tp = Point(p.longitude, p.latitude)
+    if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
+        zona =Zona.objects.get(zona__bbcontains=tp).nombre
+    else:
+        zona = "Sin Informacion"
+
+
+    msg = 'El trabajador %s %s a enviado un mensaje SOS desde la zona %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.apellidom,from_number)
     m = client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
 
     return m

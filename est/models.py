@@ -170,7 +170,9 @@ class Trabajador(models.Model):
     nota2 = models.CharField(max_length=256, blank=True, null=True)
     qrtext = models.CharField(max_length=256, blank=True, null=True)
     qrimg = models.ImageField(upload_to='qr/', blank=True, null=True)
- 
+    last_z = models.CharField(max_length=128, blank=True, null=True)
+
+
 #    def save(self, *args, **kwargs):
 #        self.qrtext = "http://www.estchile.cl/cv/"+str(self.id)
 #        qrimg = qrcode.make(self.qrtext)
