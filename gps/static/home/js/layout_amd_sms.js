@@ -95,10 +95,16 @@ require([
 
     //var marker = L.marker(coord.CENTRAL).bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<br><b>Teléfono: </b>"+nro+ "</p>").addTo(map);
     //var marker = L.marker(coord.CENTRAL);
-    //var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
+    var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+
+                nombre+"</br><b>Cargo : </b>"+
+                cargo+
+                "</br><b>Fono : </b>"+
+                nro+               
+                "</br><b>Fono Emergencia : </b>"+
+                nro+
+                "</br><b>Contacto : </b>"+
+                nombre+ "</div>";//+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
     //l.bindPopup(leyenda);
-    //var leyenda= document.getElementById("nivel_riesgo").value;
-    var leyenda= "HOLI";
 
     var tempIcon;
 
@@ -124,18 +130,6 @@ require([
 
     
     //l.addTo(trabajadores);
-
-   
-    //l.on('dblclick', onClick);
-
-
-
-
-
-    function onClick(e) {
-        var tempLatLng =this.getLatLng();    
-        map.setView([tempLatLng.lat,tempLatLng.lng], 18);
-    }   
 
     function popUpEdificios(f,l){
         var out = [];
@@ -192,5 +186,5 @@ require([
 
 
     });  
-     L.marker(coord.CENTRAL, {icon: hombre1}).addTo(map).bindPopup(leyenda);
+     L.marker(coord.CENTRAL, {icon: hombre1}).addTo(map).bindPopup(leyenda).openPopup();
 });
