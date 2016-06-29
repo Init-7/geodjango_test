@@ -28,6 +28,8 @@ require([
     var cargo=document.getElementById("cargo").value;
     coord.CENTRAL = [lat,lon];
 
+    var etiquetas = []; 
+
     var defaultUrl ="http://cloud1.estchile.cl";
     //var defaultUrl = "localhost:8000";//local
     var defaultUrlGeoServer ="http://104.196.40.15:8080";
@@ -140,6 +142,14 @@ require([
             l.bindPopup(out.join("<br />"));
         }
         l.addTo(zonas);
+
+                var label = new L.Label();
+        label.setContent(f.properties["nombre"]);
+        //console.log(f.properties["nombre"]);
+        label.setLatLng(l.getBounds().getCenter());      
+
+
+        etiquetas.push(label);
     }
 
     /********ICONOS PERSONALIZADO***************/
@@ -166,6 +176,21 @@ require([
     var urlEdificios= "/static/edificios.json";    
 
     var jsonTest = new L.GeoJSON.AJAX([urlEdificios/*,"counties.geojson"*/],{style: style, onEachFeature:popUpEdificios});
+    
+    map.on('overlayadd', function(eo) {
+        //console.log("Activado "+ eo.name);
+        if (eo.name === 'Zonas') {  
+                    //console.log(etiquetas);
+            for (var i = 0, l = etiquetas.length; i < l; ++i) {
+                //console.log(etiquetas[i]);
+                //tempLabel = etiquetas[i];
+                map.showLabel(etiquetas[i]);            
+            }
+        }
+    });
+
+
+
 
     map.on('zoomend', function () {
         if (map.getZoom() > 21 && map.hasLayer(osm))        {
