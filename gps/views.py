@@ -698,6 +698,7 @@ def sms(request, trabajador):
         'supervisor':t.supervisor.primer_nombre + " " + t.supervisor.apellidop,
         'fono_super': t.supervisor.fono,
         'foto': t.foto.url,
+        'hora': p.fixtime
     })
 
 def trabajador_z_riesgo(request, planta):

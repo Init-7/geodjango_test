@@ -134,7 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Santiago'
 
 USE_I18N = True
 
@@ -146,10 +146,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT = '/home/lautaro/development/geiodjango_test/est/static/'
+STATIC_ROOT = '/home/jhonny/geodjango_test/est/static/'
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/home/lautaro/development/geodjango_test/est/media/'
+MEDIA_ROOT = '/home/jhonny/geodjango_test/est/media/'
 MEDIA_URL = '/media/'
 
 #DATABASE_ROUTERS = ['gps.routers.GpsRouter']
