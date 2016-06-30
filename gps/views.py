@@ -300,9 +300,10 @@ def centro3(request):
             tp = Point(p.longitude, p.latitude)
             if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
                 z =Zona.objects.get(zona__bbcontains=tp)
-#modificar
-#                if (z.nombre != t.last_z):
+                if (z.nombre != t.last_z):
                     #Si la zona en la que esta el punto es distinta a la ultima envia un SMS de alerta
+                    m = "El trabajador %s %s ha ingresado a la zona %s con nivel de riesgo %s. Para monitorear a este trabajador ingresar a http://www.cloud1.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z.nombre, z.nivel_riesgo, td.fono_gps)
+                    sms_twilio_z(m)
 
                 contenidos.append({ 'nombre': t.primer_nombre+" "+t.segundo_nombre+" "+t.apellidop+" "+t.apellidom,
                                     'geom': tp,
@@ -759,4 +760,9 @@ def sms_twilio(request):
     m = client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
 
     return m
+
+
+def sms_twilio_z(m):
+    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
 
