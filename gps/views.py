@@ -355,6 +355,24 @@ def trabajador(request, trabajador):
     punto = validos.get(id=dev.positionid)
     tp = Point(punto.longitude, punto.latitude)
 
+    if( t.salud.exists()):
+        salud = t.salud.last().nombre
+    else:
+        salud = "Sin Informacion"
+
+    if( t.estudios.exists()):
+        estudios = t.estudios.last().nombre
+    else:
+        estudios = "Sin Informacion"
+
+    if( t.capacitacion.exists()):
+        capacitacion = t.capacitacion.last().nombre,
+
+    else:
+        capacitacion = "Sin Informacion"
+
+
+
     contenidos.append({ 'geom': tp,
                         'lat': punto.latitude,
                         'lon': punto.longitude,
@@ -381,9 +399,9 @@ def trabajador(request, trabajador):
                         'gps': td.device.name,
                         'supervisor': t.supervisor.primer_nombre+" "+t.supervisor.segundo_nombre,
                         'empresa': t.empresa.nombre,
-                        'salud': t.salud.first().detalle,
-                        'estudios': t.estudios.last().nombre,
-                        'capacitacion': t.capacitacion.last().nombre,
+                        'salud': salud,
+                        'estudios': estudios,
+                        'capacitacion': capacitacion,
                         'nota': t.nota,
                         'nota2': t.nota2,
                         'id': t.estid,
@@ -517,10 +535,12 @@ def listatrabajadores(request, cnegocios):
             td = TrabajadorDevice.objects.filter(trabajador_id=t.id).last()
             d = Devices.objects.filter(id=td.device_id).last()
             p = PositionsTraccar.objects.get(id=d.positionid)
-            tp = Point(p.longitude, p.latitude)
-            contenidos.append({ 'nombre': t.primer_nombre+" "+t.segundo_nombre+" "+t.apellidop+" "+t.apellidom,
-                                'i': i,
-                                'id': t.id,
+            #tp = Point(p.longitude, p.latitude)
+            contenidos.append({ 'name': t.primer_nombre+" "+t.segundo_nombre+" "+t.apellidop+" "+t.apellidom,
+                                'i': t.estid,
+                                'id': i,
+                                'lon': p.longitude,
+                                'lat': p.latitude,
 #                                'geom': tp,
                               }
                              )
