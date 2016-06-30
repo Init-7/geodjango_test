@@ -465,9 +465,17 @@ def listaplantas(request):
     contenidos=[]
     pl=Planta.objects.all()
 
+#    for i, p in enumerate(pl):
+#        el=Listaplantas(i,p.nombre, p.geom.centroid.get_y() , p.geom.centroid.get_x())
+#        contenidos.append(el)
+
     for i, p in enumerate(pl):
-        el=Listaplantas(i,p.nombre, p.geom.centroid.get_y() , p.geom.centroid.get_x())
-        contenidos.append(el)
+        contenidos.append({ 'name': p.nombre,
+                            'id': i,
+                            'lon':p.geom.centroid.get_x(),
+                            'lat':p.geom.centroid.get_y()
+                          }
+                         )
 
 #    data = s.serialize(contenidos)
 #    return HttpResponse(data)
