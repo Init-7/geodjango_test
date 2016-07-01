@@ -146,7 +146,8 @@ require([
                                 request.get(url2, {
                                     handleAs: "json"
                                 }).then(function(data){
-                                    console.log(data[0]);
+
+
                                     new dijit.form.FilteringSelect({
                                         id: "trabajador",
                                         store: new Memory({idProperty: "id", data: data }),
@@ -154,6 +155,16 @@ require([
                                         style: "width: 165px; margin-top: 5px;", 
                                         //value: data[0].id,                                   
                                         onChange: function(trabajador){
+  /*                                          console.log(data[0]);
+                                            //console null validar 
+                                            if(data[0]!){
+
+                                            }
+                                            else{
+                                                data = '[{'i': 1, 'lat': -36.198815, 'lon': -71.8265844444444, 'name':' sin trabajador', 'id': 0}]';                                            
+}
+
+*/
 
 
                                             var posicion = dijit.byId('trabajador').get('value');
