@@ -146,7 +146,8 @@ require([
                                 request.get(url2, {
                                     handleAs: "json"
                                 }).then(function(data){
-                                
+
+
                                     new dijit.form.FilteringSelect({
                                         id: "trabajador",
                                         store: new Memory({idProperty: "id", data: data }),
@@ -154,6 +155,16 @@ require([
                                         style: "width: 165px; margin-top: 5px;", 
                                         //value: data[0].id,                                   
                                         onChange: function(trabajador){
+  /*                                          console.log(data[0]);
+                                            //console null validar 
+                                            if(data[0]!){
+
+                                            }
+                                            else{
+                                                data = '[{'i': 1, 'lat': -36.198815, 'lon': -71.8265844444444, 'name':' sin trabajador', 'id': 0}]';                                            
+}
+
+*/
 
 
                                             var posicion = dijit.byId('trabajador').get('value');
@@ -165,15 +176,18 @@ require([
                                             //console.log(url3);
                                             request.get(url3, {
                                                     handleAs: "json"
-                                                }).then(function(data2){    
-                                                        //console.log(data[0].lat);
-                                                        map.setView([data2[0].lat,data2[0].lon], 18);
+                                                }).then(function(data2){   
+                                                        //console.log(data2) 
+                                                        //console.log(data2.features);
+                                                        //console.log(data2.features[0].properties.lat);
+                                                        map.setView([data2.features[0].properties.lat,data2.features[0].properties.lon], 18);
                                             });
 
                                             /**********************/
                                             //.openPopup()
 
                                             // Mediante un ciclo buscar el marcador con la propiedad nombre igual a la de arriba para desplegar su popUp
+                                        
                                         }
                                     }, "trabajador").startup();
                             });
