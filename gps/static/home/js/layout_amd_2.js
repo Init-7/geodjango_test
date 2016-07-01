@@ -146,7 +146,7 @@ require([
                                 request.get(url2, {
                                     handleAs: "json"
                                 }).then(function(data){
-                                
+                                    console.log(data[0]);
                                     new dijit.form.FilteringSelect({
                                         id: "trabajador",
                                         store: new Memory({idProperty: "id", data: data }),
@@ -165,15 +165,18 @@ require([
                                             //console.log(url3);
                                             request.get(url3, {
                                                     handleAs: "json"
-                                                }).then(function(data2){    
-                                                        //console.log(data[0].lat);
-                                                        map.setView([data2[0].lat,data2[0].lon], 18);
+                                                }).then(function(data2){   
+                                                        //console.log(data2) 
+                                                        //console.log(data2.features);
+                                                        //console.log(data2.features[0].properties.lat);
+                                                        map.setView([data2.features[0].properties.lat,data2.features[0].properties.lon], 18);
                                             });
 
                                             /**********************/
                                             //.openPopup()
 
                                             // Mediante un ciclo buscar el marcador con la propiedad nombre igual a la de arriba para desplegar su popUp
+                                        
                                         }
                                     }, "trabajador").startup();
                             });
