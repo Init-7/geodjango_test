@@ -588,17 +588,19 @@ require([
             leafletView.ProcessView();
             setTimeout(function(){map.removeLayer(trabajadores)}, 10);
             showcluster= true;
-            legend.addTo(map);
+
+            setTimeout(function(){legend.addTo(map)}, 10); 
 
 
 
         } 
         else if (eo.name === 'Trabajadores') {
+
             setTimeout(function(){map.removeLayer(markerTrabajador)}, 10);  
             //leafletView.Cluster._markers = [];
             setTimeout(function(){map.removeLayer(leafletView)}, 10);         
             showcluster=false;
-            legend.addTo(map);      
+            setTimeout(function(){legend.addTo(map)}, 10);      
         }
         else if (eo.name === 'Activar Alerta') {
             activarAlerta=true;
@@ -635,11 +637,15 @@ require([
             //leafletView.Cluster._markers = [];
             setTimeout(function(){map.removeLayer(leafletView)}, 10); 
             showcluster= false;
-            map.removeControl(legend);
+            if (legend != undefined) {
+                legend.removeFrom(map);
+            }
         } 
         else if (eo.name === 'Trabajadores') {     
-            showcluster=true;      
-            map.removeControl(legend);
+            showcluster=true;  
+            if (legend != undefined) {
+                legend.removeFrom(map);
+            } 
         }
         else if (eo.name === 'Activar Alerta') {            
             activarAlerta=false;
@@ -835,8 +841,6 @@ require([
         div.innerHTML = labels.join('<br>');
         return div;
     };
-//map.addLayer(leafletView);
-
 
 
 });
