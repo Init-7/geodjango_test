@@ -78,8 +78,8 @@ color: blue;
     float: right;
     font-family: Verdana;
     font-size: 9pt;
-    height: 140px;
-    margin-top: 15px;
+    height: 156px;
+    margin-top: 0px;
     width: 200px;
     border-radius: 4px; 
     margin-right: 20px;
@@ -394,8 +394,8 @@ h6{
     position:relative;
     //right:300px;
     padding: 5px;
-    //height: 170px;
-    width: 230px;
+    height: 170px;
+    //width: 230px;
     z-index:1000;
     /*bottom: 30px;
     //background: #3e647d;
@@ -415,6 +415,17 @@ h6{
 
     height: 0px;
 }
+
+#query{
+
+    margin-bottom: 160px;
+    width: 255px;
+
+
+}
+
+
+
 #infoT img{
     border:none;
     max-height: 50px;

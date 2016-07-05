@@ -34,9 +34,7 @@ require([
 
 	var map = new L.Map('map', {center: coord.CENTRAL, zoom: 2}); //inicializacion del mapa
 
-
-
-    // MOSTRAR OCULTAR
+    // MOSTRAR OCULTAR PANEL LATERAL
 
     var togglerRightPanel = new Toggler({
         node: "rightPanel",
@@ -78,33 +76,17 @@ require([
             //value: data[0].id,          
             style: "width: 165px; margin-top: 5px;",
             onChange: function(planta){ 
-                                
-                
                 var posicion = dijit.byId('planta').get('value');
                 var zoom;
                 if(data[posicion].name=== "Todos"){zoom=5;}
                 else {zoom= 17;}
 
-                /*if(data[posicion].name=== "Maule"){
-                    domAttr.set(dom.byId('work'), "src", url.leyendaPMaule_edificacion);
-                    domAttr.set(dom.byId('infoEdificacion'), "src", url.leyendaPMaule_edificacion);
-                    //togglerInfoEdificacion.show();
-                }
-                else {  
-                    domAttr.set(dom.byId('infoEdificacion'), "src","" );
-                    
-                    //togglerInfoEdificacion.hide();            
-                }*/
-
-                //map.addLayer(edificios);
                 map.setView([data[posicion].lat,data[posicion].lon], zoom);
                 //alert(dijit.byId('planta').get('value'));
                 //alert(dijit.byId('planta').get('displayedValue'));  
 
                 /* Lectura archivo Json Negocios*/
                 var cn= dijit.byId('planta').get('displayedValue');
-
-                //urlRealTime = defaultUrl+"/gps/trabajadores/"+cn+"/puntos2/";
 
                 request.get(defaultUrl+ "/gps/centrosdenegocio/"+cn+"/", {
                         handleAs: "json"
@@ -147,7 +129,16 @@ require([
                                     handleAs: "json"
                                 }).then(function(data){
 
-
+                                console.log(data[0]);
+                                //console null validar 
+                                if(data[0]){
+                                    console.log("NO VACIO");
+                                }
+                                else{
+                                    //console.log("VACIO");
+                                    data = [{'i': 0, 'lat': -36.198815, 'lon': -71.8265844444444, 'name':' sin trabajador', 'id': 0}];
+                                }
+                                console.log(data);
                                     new dijit.form.FilteringSelect({
                                         id: "trabajador",
                                         store: new Memory({idProperty: "id", data: data }),
@@ -155,16 +146,16 @@ require([
                                         style: "width: 165px; margin-top: 5px;", 
                                         //value: data[0].id,                                   
                                         onChange: function(trabajador){
-  /*                                          console.log(data[0]);
+                                            /*console.log(data[0]);
                                             //console null validar 
-                                            if(data[0]!){
+                                            if(data[0]){
+                                                console.log("NO VACIO");
 
                                             }
                                             else{
-                                                data = '[{'i': 1, 'lat': -36.198815, 'lon': -71.8265844444444, 'name':' sin trabajador', 'id': 0}]';                                            
-}
-
-*/
+                                                console.log("VACIO");
+                                                //data = "[{'i': 1, 'lat': -36.198815, 'lon': -71.8265844444444, 'name':' sin trabajador', 'id': 0}]";
+                                            }*/
 
 
                                             var posicion = dijit.byId('trabajador').get('value');
@@ -272,7 +263,8 @@ require([
                                                     handleAs: "json"
                                                 }).then(function(data2){    
                                                         //console.log(data[0].lat);
-                                                        map.setView([data2[0].lat,data2[0].lon], 18);
+                                                         map.setView([data2.features[0].properties.lat,data2.features[0].properties.lon], 18);
+                                           
                                             });
 
                                             /**********************/ 
@@ -366,7 +358,7 @@ require([
             "Trabajadores": trabajadores,
             "Cluster": markerTrabajador,
             "Zonas": zonas,
-            "Heat Map": heatMap,
+            //"Heat Map": heatMap,
             "Activar Alerta": alertaL,
             "Activar Etiquetas": etiquetasL
             
@@ -402,7 +394,7 @@ require([
             color: 'white',
             dashArray: '3',
             fillOpacity: 0.7,
-            fillColor: getColor(feature.properties.nivel_riesgo)
+            fillColor: getColor2(feature.properties.nivel_riesgo)
         };
     }
 
@@ -455,7 +447,7 @@ require([
             tempIcon = hombre1;
         }       
         
-        var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["nro_emergencia"]+"</br><b>Contacto : </b>"+f.properties["tipo_contacto"]+"</br><b>Zona : </b>"+tempZona+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
+        var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+f.properties["nombre"]+"</br><b>Cargo : </b>"+f.properties["cargo"]+"</br><b>Fono : </b>"+f.properties["fono"]+"</br><b>Riesgo : </b>"+f.properties["nivel_riesgo"]+"</br><b>Fono Emergencia : </b>"+f.properties["super_fono"]+"</br><b>Supervisor : </b>"+f.properties["supervisor"]+"</br><b>Zona : </b>"+tempZona+"</br><b>Actualizado : </b>"+f.properties["fixtime"]+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
         l.bindPopup(leyenda);
 
 
@@ -841,6 +833,4 @@ require([
         div.innerHTML = labels.join('<br>');
         return div;
     };
-
-
 });
