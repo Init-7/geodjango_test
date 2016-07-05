@@ -42,13 +42,19 @@
 
 	</head>
 	<body class="claro">
-			<input style="display:none" id="lat" name="lat" value={{ lat }} >
-			<input style="display:none" id="lon" name="lon" value={{ lon }} >
-			<input style="display:none" id="nombre" name="nombre" value={{ nombre }} >
-			<input style="display:none" id="apellidop" name="apellidop" value={{ apellido }} >
-			<input style="display:none" id="nro" name="nro" value={{ fono }}>
-			<input style="display:none" id="cargo" name="cargo" value={{ cargo }}>
-			<input style="display:none" id="fonoem" name="fonoem" value={{ emergencia.fono }}>
+			<input style="display: none" id="lat" name="lat" value={{ lat }} >
+			<input style="display: none" id="lon" name="lon" value={{ lon }} >
+			<input style="display: none" id="nombre" name="nombre" value={{ nombre }} >
+			<input style="display: none"  id="apellidop" name="apellidop" value={{ apellidop }} >
+			<input style="display: none"  id="apellidom" name="apellidom" value={{ apellidom }} >
+			<input style="display: none"  id="nro" name="nro" value={{ fono }}>
+			<input style="display: none"  id="cargo" name="cargo" value={{ cargo }}>
+			<input style="display: none"  id="nivel_riesgo" name="nivel_riesgo" value={{ nivel_riesgo }}>
+			<input style="display: none"  id="foto" name="foto" value={{ foto }}>			
+			<input style="display: none"  id="fono_s" name="fono_s" value={{ fono_super }}>
+			<input style="display: none"  id="superv" name="superv" value={{ supervisor }}>			
+			<input style="display: none"  id="supervp" name="supervp" value={{ supervisorp }}>				
+			<input style="display: none" id="hora" value={{ hora.day}}-{{ hora.month}}-{{ hora.year }}/{{ hora.hour}}:{{ hora.minute}}>			
 	
 		<div id="mainWindow" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:false" style="width: 100%; height: 100%;">
 			<!--MAP-->

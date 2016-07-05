@@ -308,7 +308,7 @@ def centro3(request):
                     msg = "Pico pal que lee"
                     sms_twilio_z(msg)
 
-                contenidos.append({ 'nombre': t.primer_nombre+" "+t.segundo_nombre+" "+t.apellidop+" "+t.apellidom,
+                contenidos.append({ 'nombre': t.primer_nombre+" "+t.apellidop+" "+t.apellidom,
                                     'geom': tp,
                                     'fono': t.fono,
                                     'cargo': t.cargo,
@@ -325,7 +325,7 @@ def centro3(request):
                                   }
                                 )
             else:
-                contenidos.append({ 'nombre': t.primer_nombre+" "+t.segundo_nombre+" "+t.apellidop+" "+t.apellidom,
+                contenidos.append({ 'nombre': t.primer_nombre+" "+t.apellidop+" "+t.apellidom,
                                     'geom': tp,
                                     'fono': t.fono,
                                     'cargo': t.cargo,
@@ -541,7 +541,7 @@ def listatrabajadores(request, cnegocios):
             d = Devices.objects.filter(id=td.device_id).last()
             p = PositionsTraccar.objects.get(id=d.positionid)
             #tp = Point(p.longitude, p.latitude)
-            contenidos.append({ 'name': t.primer_nombre+" "+t.segundo_nombre+" "+t.apellidop+" "+t.apellidom,
+            contenidos.append({ 'name': t.primer_nombre+" "+t.apellidop+" "+t.apellidom,
                                 'i': t.estid,
                                 'id': i,
                                 'lon': p.longitude,
@@ -740,15 +740,17 @@ def sms(request, trabajador):
     t = Trabajador.objects.get(id=td.trabajador_id)
     d = Devices.objects.get(id=td.device_id)
     p = PositionsTraccar.objects.get(id=d.positionid)
-
     return render(request,'gps/index.html',{
-        'nombre':t.primer_nombre + " " + t.apellidop + " " + t.apellidom,
+        'nombre':t.primer_nombre,
+        'apellidop':t.apellidop,
+        'apellidom':t.apellidom,
         'lat':p.latitude,
         'lon':p.longitude,
         'id':t.id,
         'fono':t.fono,
         'cargo':t.cargo,
-        'supervisor':t.supervisor.primer_nombre + " " + t.supervisor.apellidop,
+        'supervisor':t.supervisor.primer_nombre,
+        'supervisorp':t.supervisor.apellidop,
         'fono_super': t.supervisor.fono,
         'foto': t.foto.url,
         'hora': p.fixtime,

@@ -91,22 +91,22 @@ DATABASES = {
 #        'ENGINE': 'django.contrib.gis.db.backends.spatialite',
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    },
-#    'default':{
+    'default':{
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'gps',
+        'HOST': '104.196.13.123',
+        'USER': 'postgres',
+        'PASSWORD': 'est.postgres',
+        'PORT': '5432',
+    },
+#    'default': {
 #        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-#        'NAME': 'test',
-#        'HOST': '104.196.13.123',
+#        'NAME': 'gpsdev',
+#        'HOST': 'localhost',
 #        'USER': 'postgres',
 #        'PASSWORD': 'est.postgres',
 #        'PORT': '5432',
-#    },
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'gpsdev',
-        'HOST': 'localhost',
-        'USER': 'postgres',
-#        'PASSWORD': 'est.postgres',
-        'PORT': '5432',
-    }
+#    }
 }
 
 
@@ -156,7 +156,7 @@ MEDIA_URL = '/media/'
 
 #Custom GDAL PATH
 
-GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
+#GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
 
 TASTYPIE_DEFAULT_FORMATS = ['json', 'xml', 'yaml', 'plist', 'jsonp']
 

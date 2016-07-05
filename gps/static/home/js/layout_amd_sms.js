@@ -25,7 +25,16 @@ require([
     var nro=document.getElementById("nro").value;
     var nombre=document.getElementById("nombre").value;
     var apellidop=document.getElementById("apellidop").value;
+    var apellidom=document.getElementById("apellidom").value;
+    var fono_s=document.getElementById("fono_s").value;
     var cargo=document.getElementById("cargo").value;
+    var supervisor=document.getElementById("superv").value;
+    var supervisorp=document.getElementById("supervp").value;
+    var nivel_riesgo=document.getElementById("nivel_riesgo").value;
+    var foto=document.getElementById("foto").value;    
+    var hora=document.getElementById("hora").value;
+
+
     coord.CENTRAL = [lat,lon];
 
     var etiquetas = []; 
@@ -35,7 +44,7 @@ require([
     var defaultUrlGeoServer ="http://104.196.40.15:8080";
     var urlRealTime;
 
-    var map = new L.Map('map', {center: coord.CENTRAL, zoom: 20});   
+    var map = new L.Map('map', {center: coord.CENTRAL, zoom: 18});   
 
 
 /****TODO MAPA*****/   
@@ -73,15 +82,15 @@ require([
     lcontrol = L.control.layers({ 
         'Google':ggl
     }, overlays).addTo(map);
-
+    var colors = ['#2c9223', '#2c9223', '#0096e4', '#999900', '#ffa200', '#ff0000', '#ff0000', '#ff0000'];
     /**********************************/
     function getColor(d) { //retorna un color de acuerdo al valor de la variable d (density) ojo tambien se usa para el color de la leyenda
         //console.log(d);
-        return d > 5 ? '#800026' : 
-               d > 4  ? '#E31A1C' :
-               d > 3  ? '#FC4E2A' :
-               d > 1   ? '#FED976' :
-                        '#FFEDA0';
+        return d >= 5 ? colors[5] : 
+               d == 4  ?  colors[4] :
+               d == 3   ?  colors[3] :
+               d == 2   ?  colors[2] :
+                            colors[1];
     }
 
     function style(feature) { //asigna el estilo con el color de relleno de acuerdo a su densidad
@@ -98,40 +107,16 @@ require([
     //var marker = L.marker(coord.CENTRAL).bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<br><b>Teléfono: </b>"+nro+ "</p>").addTo(map);
     //var marker = L.marker(coord.CENTRAL);
     var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+
-                nombre+" "+apellidop +"</br><b>Cargo : </b>"+
+                nombre+" "+apellidop+" "+apellidom +"</br><b>Cargo : </b>"+
                 cargo+
                 "</br><b>Fono : </b>"+
                 "<a href='tel:"+nro+"'>"+nro+"</a>"+
                 "</br><b>Fono Emergencia : </b>"+
-                "<a href='tel:"+fonoem+"'>"+fonoem+"</a>"+
+                "<a href='tel:"+fono_s+"'>"+fono_s+"</a>"+
                 "</br><b>Contacto : </b>"+
-                nombre+ "</div>";//+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
-    //l.bindPopup(leyenda);
-
-    var tempIcon;
-
-    if(nro >= 5 ){
-        //l.setIcon(hombreRojo);    
-        //out2.push( "<p>"+f.properties["nombre"]+"</p>");
-        tempIcon = hombre5; 
-    }
-    else if(nro == 4 ){
-        tempIcon = hombre4;
-    }
-    else if(nro == 3 ){
-        tempIcon = hombre3;
-    }
-    else if(nro == 2 ){
-        tempIcon = hombre2;
-    }
-    else {
-        tempIcon = hombre1;
-    }       
-    
-    //l.setIcon(tempIcon);
-
-    
-    //l.addTo(trabajadores);
+                supervisor+" "+supervisorp+
+                "</br><b>Fecha/hora : </b>"+
+                hora+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+foto+"></div>";
 
     function popUpEdificios(f,l){
         var out = [];
@@ -171,7 +156,6 @@ require([
         hombre4 = new LeafIcon({iconUrl: '/static/images/ico/marker-4.png'});
 
     var showcluster=false;
-    var urlRealTime = defaultUrl+"/gps/puntos3/";    
     //var urlEdificios= "../../static/home/edificio.json";
     var urlEdificios= "/static/edificios.json";    
 
@@ -190,8 +174,6 @@ require([
     });
 
 
-
-
     map.on('zoomend', function () {
         if (map.getZoom() > 21 && map.hasLayer(osm))        {
             map.removeLayer(osm);
@@ -208,8 +190,34 @@ require([
             map.removeLayer(osm);
             map.addLayer(ggl);
         }
-
-
     });  
-     L.marker(coord.CENTRAL, {icon: hombre1}).addTo(map).bindPopup(leyenda).openPopup();
+
+
+    //var tempIcon;
+
+    if(nivel_riesgo >= 5 ){
+        //l.setIcon(hombreRojo);    
+        //out2.push( "<p>"+f.properties["nombre"]+"</p>");
+
+        L.marker(coord.CENTRAL, {icon: hombre5}).addTo(map).bindPopup(leyenda).openPopup();
+        //tempIcon = hombre5; 
+    }
+    else if(nivel_riesgo == 4 ){
+        //tempIcon = hombre4;
+        L.marker(coord.CENTRAL, {icon: hombre4}).addTo(map).bindPopup(leyenda).openPopup();
+    }
+    else if(nivel_riesgo == 3 ){
+        //tempIcon = hombre3;        
+        L.marker(coord.CENTRAL, {icon: hombre3}).addTo(map).bindPopup(leyenda).openPopup();
+    }
+    else if(nivel_riesgo == 2 ){
+        //tempIcon = hombre2;
+        L.marker(coord.CENTRAL, {icon: hombre2}).addTo(map).bindPopup(leyenda).openPopup();
+    }
+    else {
+        //tempIcon = hombre1;       
+        L.marker(coord.CENTRAL, {icon: hombre1}).addTo(map).bindPopup(leyenda).openPopup();
+    }
+
+
 });
