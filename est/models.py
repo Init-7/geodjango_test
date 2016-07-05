@@ -189,7 +189,9 @@ class Trabajador(models.Model):
         return self.qrtext
 
     def get_absolute_url(self):
-        return reverse('est.views.card', args=[str(self.id)])
+#        return reverse('est.views.card', args=[str(self.id)])
+        self.qrtext = "http://www.estchile.cl/cv/"+str(self.estid)
+        return self.qrtext
 
     def generate_qrimg(self):
         qr = qrcode.QRCode(

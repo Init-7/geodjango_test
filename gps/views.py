@@ -298,18 +298,21 @@ def centro3(request):
             d = Devices.objects.get(id=td.device_id)
             p = PositionsTraccar.objects.get(id=d.positionid)
             tp = Point(p.longitude, p.latitude)
-            if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
-                z =Zona.objects.get(zona__bbcontains=tp)
-                if (z.nombre != t.last_z):
-                    #Si la zona en la que esta el punto es distinta a la ultima envia un SMS de alerta
-                    m = "El trabajador %s %s ha ingresado a la zona %s con nivel de riesgo %s. Para monitorear a este trabajador ingresar a http://www.cloud1.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z.nombre, z.nivel_riesgo, td.fono_gps)
-                    sms_twilio_z(m)
+            if(Zona.objects.filter(zona__bbcontains=tp).exists()):
+                z =Zona.objects.filter(zona__bbcontains=tp).last().nombre
+                if (z != t.last_z):
+                    msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.cloud1.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
+                    #sms_twilio_z(msg)
+                    t.last_z = z
+                else:
+                    msg = "Pico pal que lee"
+                    sms_twilio_z(msg)
 
                 contenidos.append({ 'nombre': t.primer_nombre+" "+t.segundo_nombre+" "+t.apellidop+" "+t.apellidom,
                                     'geom': tp,
                                     'fono': t.fono,
                                     'cargo': t.cargo,
-                                    'zona': z.nombre,
+                                    'zona': z,
                                     'foto': t.foto.url,
                                     'nombre_emergencia': t.emergencia.nombre,
                                     'nro_emergencia': t.emergencia.fono,
@@ -317,7 +320,8 @@ def centro3(request):
                                     'id': t.id,
                                     'estid': t.estid,
                                     'supervisor': t.supervisor.primer_nombre+" "+t.supervisor.apellidop,
-                                    'super_fono': t.supervisor.fono
+                                    'super_fono': t.supervisor.fono,
+                                    'fixtime': p.fixtime,
                                   }
                                 )
             else:
@@ -333,7 +337,8 @@ def centro3(request):
                                     'id': t.id,
                                     'estid': t.estid,
                                     'supervisor': t.supervisor.primer_nombre+" "+t.supervisor.apellidop,
-                                    'super_fono': t.supervisor.fono
+                                    'super_fono': t.supervisor.fono,
+                                    'fixtime': p.fixtime,
                                   }
                                 )
 
@@ -551,6 +556,26 @@ def listatrabajadores(request, cnegocios):
 #    return HttpResponse(data)
     return JsonResponse(contenidos, safe=False)
 
+def zonaplanta(request, planta):
+    zonas = Zona.objects.filter(planta__nombre = planta)
+    contenidos = []
+    for z in zonas:
+        contenidos.append({'nombre': z.nombre,'uso': z.uso, 'planta': z.planta.nombre, 'riesgo': z.riesgo, 'geom': z.zona, 'riesgo': z.nivel_riesgo,})
+
+    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=False, with_modelname=False)
+    return HttpResponse(data)
+
+def zonas(request):
+    zonas = Zona.objects.all()
+    contenidos = []
+    for z in zonas:
+        contenidos.append({'nombre': z.nombre,'uso': z.uso, 'planta': z.planta.nombre, 'riesgo': z.riesgo, 'geom': z.zona, 'riesgo': z.nivel_riesgo,})
+
+    data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=False, with_modelname=False)
+    return HttpResponse(data)
+
+
+
 #modificar
 def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
 #Posiciones de un trabajador de la planta en un rango de tiempo
@@ -726,7 +751,8 @@ def sms(request, trabajador):
         'supervisor':t.supervisor.primer_nombre + " " + t.supervisor.apellidop,
         'fono_super': t.supervisor.fono,
         'foto': t.foto.url,
-        'hora': p.fixtime
+        'hora': p.fixtime,
+        'nivel_riesgo': t.nivel_riesgo,
     })
 
 def trabajador_z_riesgo(request, planta):
@@ -785,13 +811,17 @@ def sms_twilio(request):
         zona = "Sin Informacion"
 
 
-    msg = 'El trabajador %s %s a enviado un mensaje SOS desde la zona %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.apellidom,from_number)
-    m = client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
+    msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
+#    m = client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
+    m2 = client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
 
     return m
 
-
-def sms_twilio_z(m):
+#@twilio_view
+def sms_twilio_z(msg):
     client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
+#    client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
+    client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
+   
+#    return m
 
