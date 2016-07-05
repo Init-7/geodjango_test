@@ -1,3 +1,5 @@
+//version 05/07/16 15.17 hrs
+
 require([
     "dojo/on", //Captura eventos en objetos ejemplo onChange: function(planta){
     "dojo/mouse", // Captura eventos desde el mouse

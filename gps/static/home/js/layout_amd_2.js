@@ -1,3 +1,4 @@
+//version 05/07/16 15.17 hrs
 require([
 	"dojo/on", //Captura eventos en objetos ejemplo onChange: function(planta){
 	"dojo/mouse", // Captura eventos desde el mouse
@@ -128,7 +129,8 @@ require([
                                 request.get(url2, {
                                     handleAs: "json"
                                 }).then(function(data){
-
+                                /*
+                                //Validación de Datos Vacios
                                 console.log(data[0]);
                                 //console null validar 
                                 if(data[0]){
@@ -139,6 +141,7 @@ require([
                                     data = [{'i': 0, 'lat': -36.198815, 'lon': -71.8265844444444, 'name':' sin trabajador', 'id': 0}];
                                 }
                                 console.log(data);
+                                */
                                     new dijit.form.FilteringSelect({
                                         id: "trabajador",
                                         store: new Memory({idProperty: "id", data: data }),
@@ -423,11 +426,11 @@ require([
                     var tempZona= f.properties["zona"];
                     
                     //+"/gps/sms/"+f.properties["fono"]
-                    out2.push( "<a href='"+defaultUrl+"/gps/sms/"+f.properties["fono"]+"' target='_blank'><p>"+f.properties["nombre"]+" - "+f.properties["zona"]+"</p></a>");
+                    out2.push( "<a href='"+defaultUrl+"/gps/sms/"+f.properties["fono"]+"' target='_self'><p>"+f.properties["nombre"]+" - "+f.properties["zona"]+"</p></a>");
                 }
             else
                 {
-                    out2.push( "<a href='"+defaultUrl+"/gps/sms/"+f.properties["fono"]+"' target='_blank'><p>"+f.properties["nombre"]+"</p></a>");
+                    out2.push( "<a href='"+defaultUrl+"/gps/sms/"+f.properties["fono"]+"' target='_self'><p>"+f.properties["nombre"]+"</p></a>");
                     var tempZona= "Sin Información";
             }
             tempIcon = hombre5;

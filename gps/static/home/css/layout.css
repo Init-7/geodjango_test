@@ -1,4 +1,4 @@
-//version 01/07/16 10.54 hrs
+//version 05/07/16 15.17 hrs
  a {
 color: white;
 
@@ -68,17 +68,17 @@ color: blue;
     //margin-top: 20px;
     padding-right: 20px;
     width: 10px;
-
 }
+
 #datosTrabajadorCard{
     //background: red;
     padding-left: 5px;
-    padding-top: 5px;
+    padding-top: 0px;
     background: #cccbca;
     float: right;
     font-family: Verdana;
     font-size: 9pt;
-    height: 156px;
+    height: 170px;
     margin-top: 0px;
     width: 200px;
     border-radius: 4px; 
