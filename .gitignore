@@ -1,7 +1,4 @@
 *.pyc
 *.py~
 gps/data
-gps/migrations
 est/data
-est/migrations
-

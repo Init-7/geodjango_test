@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 MIDDLEWARE_CLASSES = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+#    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -101,10 +101,10 @@ DATABASES = {
 #    },
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'gps',
-        'HOST': '104.196.13.123',
+        'NAME': 'gpsdev',
+        'HOST': 'localhost',
         'USER': 'postgres',
-        'PASSWORD': 'est.postgres',
+#        'PASSWORD': 'est.postgres',
         'PORT': '5432',
     }
 }
@@ -156,13 +156,13 @@ MEDIA_URL = '/media/'
 
 #Custom GDAL PATH
 
-#GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
+GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
 
 TASTYPIE_DEFAULT_FORMATS = ['json', 'xml', 'yaml', 'plist', 'jsonp']
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-#CORS_ORIGIN_WHITELIST = ('/hoime/lautaro/development/gps_tracking/Test/DojoJson/', 'localhost','127.0.0.1','localhost:8000','127.0.0.1:8000')
+#CORS_ORIGIN_WHITELIST = ('/home/lautaro/development/gps_tracking/Test/DojoJson/', 'localhost','127.0.0.1','localhost:8000','127.0.0.1:8000')
 
 CORS_ALLOW_CREDENTIALS = True
 
