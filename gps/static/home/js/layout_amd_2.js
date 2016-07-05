@@ -523,7 +523,7 @@ require([
             type: 'json'
         },
         {
-            interval: 200* 1000
+            interval: 30 * 1000
             //,
             //onEachFeature:popUpPersona
         }
