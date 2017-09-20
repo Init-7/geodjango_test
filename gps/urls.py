@@ -1,4 +1,4 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from . import views
@@ -28,5 +28,5 @@ urlpatterns = [
     url(r'^plantas.json/$',views.infoplantas),
     url(r'^datosinforme/(?P<planta>[\w]+)/(?P<cnegocios>[\w]+)/(?P<trabajador>[\w]+)/(?P<fechainicio>(\d{4})[/.-](\d{2})[/.-](\d{2}))/(?P<fechafin>(\d{4})[/.-](\d{2})[/.-](\d{2}))/$',views.datosinforme),
 #    url(r'^cv/(?P<trabajador>[0-9]+)/$' ,views.curriculum, name='curriculum'),
-    url(r'^smst/$', views.sms_twilio),
+#    url(r'^smst/$', views.sms_twilio),
 ]

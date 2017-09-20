@@ -2,8 +2,6 @@ from __future__ import unicode_literals
 
 from django.contrib.gis.db import models
 
-from gps.models import Devices
-
 import qrcode
 import StringIO
 
@@ -159,7 +157,7 @@ class Trabajador(models.Model):
     cargo = models.CharField(max_length=128, blank=True, null=True)
     rol = models.ManyToManyField(Rol, blank=True, null=True)
 #    gps = models.ForeignKey(Devices, blank=True, null=True)
-    gps = models.ManyToManyField(Devices, blank=True, null=True, through='TrabajadorDevice')
+#    gps = models.ManyToManyField(Devices, blank=True, null=True, through='TrabajadorDevice')
     supervisor = models.ForeignKey('Trabajador', blank=True, null=True)
     empresa = models.ForeignKey(Empresa, blank=True, null=True)
     salud = models.ManyToManyField(Salud, blank=True, null=True)
@@ -216,7 +214,7 @@ class Trabajador(models.Model):
 
 class TrabajadorDevice(models.Model):
     trabajador = models.ForeignKey(Trabajador, on_delete=models.CASCADE)
-    device = models.ForeignKey(Devices, on_delete=models.CASCADE)
+#    device = models.ForeignKey(Devices, on_delete=models.CASCADE)
     fono_gps = models.IntegerField(blank=True, null=True)
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()

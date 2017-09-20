@@ -37,15 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis',
-    'gps',
+#    'django.contrib.gis',
+#    'gps',
     'est',
-    'djgeojson',
-    'leaflet',
+#    'djgeojson',
+#    'leaflet',
     'django_extensions',
     'qrcode',
-    'corsheaders',
-    'django_twilio',
+#    'corsheaders',
+#    'django_twilio',
 
 ]
 
@@ -101,7 +101,7 @@ DATABASES = {
 #    },
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'gpsdev',
+        'NAME': 'gps',
         'HOST': 'localhost',
         'USER': 'postgres',
 #        'PASSWORD': 'est.postgres',
@@ -146,17 +146,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT = '/home/jhonny/geodjango_test/est/static/'
+STATIC_ROOT = '/home/lautaro/development/geodjango_test/static/'
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/home/jhonny/geodjango_test/est/media/'
+MEDIA_ROOT = '/home/lautaro/development/geodjango_test/media/'
 MEDIA_URL = '/media/'
 
 #DATABASE_ROUTERS = ['gps.routers.GpsRouter']
 
 #Custom GDAL PATH
 
-GDAL_LIBRARY_PATH = '/usr/local/lib64/libgdal.so.1'
+GDAL_LIBRARY_PATH = '/usr/lib64/libgdal.so.20'
 
 TASTYPIE_DEFAULT_FORMATS = ['json', 'xml', 'yaml', 'plist', 'jsonp']
 

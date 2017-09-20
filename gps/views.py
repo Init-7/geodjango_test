@@ -19,9 +19,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core.serializers.python import Serializer
 from datetime import timedelta
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django_twilio.decorators import twilio_view
-from twilio.twiml import Response
-from twilio.rest import TwilioRestClient
+#from django_twilio.decorators import twilio_view
+#from twilio.twiml import Response
+#from twilio.rest import TwilioRestClient
 from django.http import JsonResponse
 
 
@@ -736,34 +736,34 @@ def trabajador_z_riesgo(request, planta):
 #
 #    return r
 
-@twilio_view
-def sms_twilio(request):
-#    from_number = request.POST.get('from', '')
-#    from_number = request.values.get('From', None)
-    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    for m in client.messages.list():
-        if(m.to == '+56964590932'):
-            from_n = m.from_
-            break
-    from_number = from_n.replace("+56", "")
-    td = TrabajadorDevice.objects.get(fono_gps=from_number)
-    t = Trabajador.objects.filter(id=td.trabajador_id).last()
-    d = Devices.objects.filter(id=td.device_id).last()
-    p = PositionsTraccar.objects.get(id=d.positionid)
-    tp = Point(p.longitude, p.latitude)
-    if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
-        zona =Zona.objects.get(zona__bbcontains=tp).nombre
-    else:
-        zona = "Sin Informacion"
-
-
-    msg = 'El trabajador %s %s a enviado un mensaje SOS desde la zona %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.apellidom,from_number)
-    m = client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
-
-    return m
-
-
-def sms_twilio_z(m):
-    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
+#@twilio_view
+#def sms_twilio(request):
+##    from_number = request.POST.get('from', '')
+##    from_number = request.values.get('From', None)
+#    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+#    for m in client.messages.list():
+#        if(m.to == '+56964590932'):
+#            from_n = m.from_
+#            break
+#    from_number = from_n.replace("+56", "")
+#    td = TrabajadorDevice.objects.get(fono_gps=from_number)
+#    t = Trabajador.objects.filter(id=td.trabajador_id).last()
+#    d = Devices.objects.filter(id=td.device_id).last()
+#    p = PositionsTraccar.objects.get(id=d.positionid)
+#    tp = Point(p.longitude, p.latitude)
+#    if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
+#        zona =Zona.objects.get(zona__bbcontains=tp).nombre
+#    else:
+#        zona = "Sin Informacion"
+#
+#
+#    msg = 'El trabajador %s %s a enviado un mensaje SOS desde la zona %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.apellidom,from_number)
+#    m = client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
+#
+#    return m
+#
+#
+#def sms_twilio_z(m):
+#    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+#    client.messages.create(from_="+56964590932", to="+56966271072", body=msg)
 
