@@ -12,8 +12,8 @@ import sys
 
 from django.core.wsgi import get_wsgi_application
 
-sys.path.append('/home/lautaro/venvs/geodjango-app/lib/python2.7/site-packages')
-sys.path.append('/var/www/html/django-apps/geodjango_test')
+sys.path.append('/home/ec2-user/env-staff/lib/python2.7/site-packages')
+sys.path.append('/var/www/html/staff_est')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geodjango_test.settings-deploy")
 

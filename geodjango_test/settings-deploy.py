@@ -37,15 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.gis',
-    'gps',
     'est',
     'djgeojson',
-    'leaflet',
     'django_extensions',
     'qrcode',
     'corsheaders',
-    'django_twilio',
 ]
 
 MIDDLEWARE_CLASSES = [

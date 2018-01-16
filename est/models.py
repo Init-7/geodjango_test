@@ -32,7 +32,7 @@ class Empresa (models.Model):
 class Planta(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     empresa = models.ForeignKey(Empresa, blank=True, null=True)
-    geom = models.MultiPolygonField(srid=4326, blank=True, null=True)
+#    geom = models.MultiPolygonField(srid=4326, blank=True, null=True)
 
     objects = models.GeoManager()
 
@@ -53,7 +53,7 @@ class Zona(models.Model):
     uso = models.CharField(max_length=128, blank=True, null=True)
     planta = models.ForeignKey(Planta, blank=True, null=True)
     riesgo = models.ManyToManyField(Riesgo, blank=True, null=True)
-    zona = models.MultiPolygonField(srid=4326)
+#    zona = models.MultiPolygonField(srid=4326)
     nivel_riesgo = models.IntegerField(blank=True, null=True)
 
     def __unicode__(self):
@@ -64,7 +64,7 @@ class CentroNegocios(models.Model):
     nombre = models.CharField(max_length=128, blank=True, null=True)
     planta = models.ForeignKey(Planta, blank=True, null=True)
     codigo = models.CharField(max_length=24, blank=True, null=True)
-    zonas = models.ManyToManyField(Zona, blank=True, null=True)
+#    zonas = models.ManyToManyField(Zona, blank=True, null=True)
     
     def __unicode__(self):
         return u"%s %s" % (self.codigo, self.nombre)
@@ -138,7 +138,7 @@ class Trabajador(models.Model):
         ('POLOLO','Pololo(a)')
     )
     
-    estid = models.IntegerField(blank=True, null=True)
+    tra_id = models.IntegerField(blank=True, null=True)
     primer_nombre = models.CharField(max_length=128, blank=True, null=True)
     segundo_nombre = models.CharField(max_length=128, blank=True, null=True)
     apellidop = models.CharField(max_length=128, blank=True, null=True)
@@ -168,7 +168,7 @@ class Trabajador(models.Model):
     nota2 = models.CharField(max_length=256, blank=True, null=True)
     qrtext = models.CharField(max_length=256, blank=True, null=True)
     qrimg = models.ImageField(upload_to='qr/', blank=True, null=True)
-    last_z = models.CharField(max_length=128, blank=True, null=True)
+#    last_z = models.CharField(max_length=128, blank=True, null=True)
 
 
 #    def save(self, *args, **kwargs):
@@ -180,14 +180,14 @@ class Trabajador(models.Model):
 #
 
     def __unicode__(self):
-        return u"%s %s %s %s %s" % (self.estid, self.primer_nombre, self.apellidop, self.apellidom, self.centroNegocios)
+        return u"%s %s %s %s %s" % (self.tra_id, self.primer_nombre, self.apellidop, self.apellidom, self.centroNegocios)
 
     def get_est_url(self):
-        self.qrtext = "http://www.estchile.cl/cv/"+str(self.estid)
+        self.qrtext = "http://staff.qualitatcorp.cl/cv/"+str(self.tra_id)
         return self.qrtext
 
     def get_absolute_url(self):
-        return reverse('est.views.card', args=[str(self.id)])
+        return reverse('est.views.card', args=[str(self.tra_id)])
 
     def generate_qrimg(self):
         qr = qrcode.QRCode(

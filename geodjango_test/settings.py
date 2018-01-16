@@ -100,9 +100,9 @@ DATABASES = {
 #        'PORT': '5432',
 #    },
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'gps',
-        'HOST': 'localhost',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'staff',
+        'HOST': '127.0.0.1',
         'USER': 'postgres',
 #        'PASSWORD': 'est.postgres',
         'PORT': '5432',
@@ -146,17 +146,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT = '/home/lautaro/development/geodjango_test/static/'
+STATIC_ROOT = '/home/ec2-user/static/'
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/home/lautaro/development/geodjango_test/media/'
+MEDIA_ROOT = '/home/ec2-user/media/'
 MEDIA_URL = '/media/'
 
 #DATABASE_ROUTERS = ['gps.routers.GpsRouter']
 
 #Custom GDAL PATH
 
-GDAL_LIBRARY_PATH = '/usr/lib64/libgdal.so.20'
+#GDAL_LIBRARY_PATH = '/usr/lib64/libgdal.so.20'
 
 TASTYPIE_DEFAULT_FORMATS = ['json', 'xml', 'yaml', 'plist', 'jsonp']
 

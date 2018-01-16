@@ -1,13 +1,7 @@
 from django.contrib.gis import admin
-from leaflet.admin import LeafletGeoAdmin
 
 from .models import Planta, CentroNegocios, Trabajador, Riesgo, Zona, Rol, Empresa, Contacto, Salud, Estudios, Capacitacion, TrabajadorDevice, TrabajadorEstudios, TrabajadorCapacitacion
 
-class GpsAdmin(LeafletGeoAdmin):
-    settings_overrides = {
-        'DEFAULT_CENTER': (-36.8282, -73.0514),
-        'DEFAULT_ZOOM': 4,
-    }
 
 class CapacitacionInline(admin.TabularInline):
     model = TrabajadorCapacitacion
@@ -23,13 +17,13 @@ class DevicesInline(admin.TabularInline):
 
 class TrabajadorAdmin(admin.ModelAdmin):
     inlines = (CapacitacionInline,EstudiosInline, DevicesInline,)
-    ordering = ('-estid',)
+    ordering = ('-tra_id',)
 
 
-admin.site.register(Planta, GpsAdmin)
-admin.site.register(CentroNegocios, GpsAdmin)
-admin.site.register(Riesgo, GpsAdmin)
-admin.site.register(Zona, GpsAdmin)
+admin.site.register(Planta)
+admin.site.register(CentroNegocios)
+admin.site.register(Riesgo)
+admin.site.register(Zona)
 admin.site.register(Rol)
 admin.site.register(Trabajador, TrabajadorAdmin)
 admin.site.register(Empresa)
