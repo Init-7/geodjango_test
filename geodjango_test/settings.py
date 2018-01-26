@@ -100,11 +100,11 @@ DATABASES = {
 #        'PORT': '5432',
 #    },
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'staff',
         'HOST': '127.0.0.1',
         'USER': 'postgres',
-#        'PASSWORD': 'est.postgres',
+        'PASSWORD': '',
         'PORT': '5432',
     }
 }
