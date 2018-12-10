@@ -10,26 +10,54 @@ from __future__ import unicode_literals
 
 from django.contrib.gis.db import models
 
+class Attributes(models.Model):
+    description = models.CharField(max_length=4000)
+    type = models.CharField(max_length=128)
+    attribute = models.CharField(max_length=128)
+    expression = models.CharField(max_length=4000)
 
-#class Databasechangelog(models.Model):
-#    id = models.CharField(max_length=255)
-#    author = models.CharField(max_length=255)
-#    filename = models.CharField(max_length=255)
-#    dateexecuted = models.DateTimeField()
-#    orderexecuted = models.IntegerField()
-#    exectype = models.CharField(max_length=10)
-#    md5sum = models.CharField(max_length=35, blank=True, null=True)
-#    description = models.CharField(max_length=255, blank=True, null=True)
-#    comments = models.CharField(max_length=255, blank=True, null=True)
-#    tag = models.CharField(max_length=255, blank=True, null=True)
-#    liquibase = models.CharField(max_length=20, blank=True, null=True)
-#    contexts = models.CharField(max_length=255, blank=True, null=True)
-#    labels = models.CharField(max_length=255, blank=True, null=True)
+    class Meta:
+        managed = False
+        db_table = 'attributes'
+
+class Calendars(models.Model):
+    name = models.CharField(max_length=128)
+    attributes = models.CharField(max_length=4000)
+    data = models.BinaryField()
+
+    class Meta:
+        managed = False
+        db_table = 'calendars'
+
+class Commands(models.Model):
+    description = models.CharField(max_length=4000)
+    type = models.CharField(max_length=128)
+    textchannel = models.BooleanField()
+    attributes = models.CharField(max_length=4000)
+
+    class Meta:
+        managed = False
+        db_table = 'commands'
+
+# class Databasechangelog(models.Model):
+#     id = models.CharField(max_length=255)
+#     author = models.CharField(max_length=255)
+#     filename = models.CharField(max_length=255)
+#     dateexecuted = models.DateTimeField()
+#     orderexecuted = models.IntegerField()
+#     exectype = models.CharField(max_length=10)
+#     md5sum = models.CharField(max_length=35, blank=True, null=True)
+#     description = models.CharField(max_length=255, blank=True, null=True)
+#     comments = models.CharField(max_length=255, blank=True, null=True)
+#     tag = models.CharField(max_length=255, blank=True, null=True)
+#     liquibase = models.CharField(max_length=20, blank=True, null=True)
+#     contexts = models.CharField(max_length=255, blank=True, null=True)
+#     labels = models.CharField(max_length=255, blank=True, null=True)
+#     deployment_id = models.CharField(max_length=10, blank=True, null=True)
 #
-#    class Meta:
-#        managed = False
-#        db_table = 'databasechangelog'
-#
+#     class Meta:
+#         managed = False
+#         db_table = 'databasechangelog'
 
 class Databasechangeloglock(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -42,67 +70,227 @@ class Databasechangeloglock(models.Model):
         db_table = 'databasechangeloglock'
 
 
+class DeviceAttribute(models.Model):
+    deviceid = models.ForeignKey('Devices', models.DO_NOTHING, db_column='deviceid')
+    attributeid = models.ForeignKey(Attributes, models.DO_NOTHING, db_column='attributeid')
+
+    class Meta:
+        managed = False
+        db_table = 'device_attribute'
+
+
+class DeviceCommand(models.Model):
+    deviceid = models.ForeignKey('Devices', models.DO_NOTHING, db_column='deviceid')
+    commandid = models.ForeignKey(Commands, models.DO_NOTHING, db_column='commandid')
+
+    class Meta:
+        managed = False
+        db_table = 'device_command'
+
+
+class DeviceDriver(models.Model):
+    deviceid = models.ForeignKey('Devices', models.DO_NOTHING, db_column='deviceid')
+    driverid = models.ForeignKey('Drivers', models.DO_NOTHING, db_column='driverid')
+
+    class Meta:
+        managed = False
+        db_table = 'device_driver'
+
+
+class DeviceGeofence(models.Model):
+    deviceid = models.ForeignKey('Devices', models.DO_NOTHING, db_column='deviceid')
+    geofenceid = models.ForeignKey('Geofences', models.DO_NOTHING, db_column='geofenceid')
+
+    class Meta:
+        managed = False
+        db_table = 'device_geofence'
+
+
+class DeviceMaintenance(models.Model):
+    deviceid = models.ForeignKey('Devices', models.DO_NOTHING, db_column='deviceid')
+    maintenanceid = models.ForeignKey('Maintenances', models.DO_NOTHING, db_column='maintenanceid')
+
+    class Meta:
+        managed = False
+        db_table = 'device_maintenance'
+
+
+class DeviceNotification(models.Model):
+    deviceid = models.ForeignKey('Devices', models.DO_NOTHING, db_column='deviceid')
+    notificationid = models.ForeignKey('Notifications', models.DO_NOTHING, db_column='notificationid')
+
+    class Meta:
+        managed = False
+        db_table = 'device_notification'
+
+
 class Devices(models.Model):
     name = models.CharField(max_length=128)
-    uniqueid = models.CharField(db_column='uniqueId', unique=True, max_length=128)  # Field name made lowercase.
-    status = models.CharField(max_length=128, blank=True, null=True)
-    lastupdate = models.DateTimeField(db_column='lastUpdate', blank=True, null=True)  # Field name made lowercase.
-    positionid = models.IntegerField(db_column='positionId', blank=True, null=True)  # Field name made lowercase.
+    uniqueid = models.CharField(unique=True, max_length=128)
+    lastupdate = models.DateTimeField(blank=True, null=True)
+    positionid = models.IntegerField(blank=True, null=True)
+    groupid = models.ForeignKey('Groups', models.DO_NOTHING, db_column='groupid', blank=True, null=True)
+    attributes = models.CharField(max_length=4000, blank=True, null=True)
+    phone = models.CharField(max_length=128, blank=True, null=True)
+    model = models.CharField(max_length=128, blank=True, null=True)
+    contact = models.CharField(max_length=512, blank=True, null=True)
+    category = models.CharField(max_length=128, blank=True, null=True)
+    disabled = models.NullBooleanField()
 
     class Meta:
         managed = False
         db_table = 'devices'
-    def __unicode__(self):
-        return u"%s %s %s" % (self.id, self.name, self.uniqueid)
 
 
-#class Layer(models.Model):
-#    topology = models.ForeignKey('Topology', models.DO_NOTHING)
-#    layer_id = models.IntegerField()
-#    schema_name = models.CharField(max_length=-1)
-#    table_name = models.CharField(max_length=-1)
-#    feature_column = models.CharField(max_length=-1)
-#    feature_type = models.IntegerField()
-#    level = models.IntegerField()
-#    child_id = models.IntegerField(blank=True, null=True)
-#
-#    class Meta:
-#        managed = False
-#        db_table = 'layer'
-#        unique_together = (('topology', 'layer_id'), ('schema_name', 'table_name', 'feature_column'),)
-
-
-class Positions(models.Model):
-#    protocol = models.CharField(max_length=128, blank=True, null=True)
-    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceId')  # Field name made lowercase.
-#    servertime = models.DateTimeField(db_column='serverTime')  # Field name made lowercase.
-#    devicetime = models.DateTimeField(db_column='deviceTime')  # Field name made lowercase.
-    fixtime = models.DateTimeField(db_column='fixTime')  # Field name made lowercase.
-    valid = models.BooleanField()
-    lat = models.FloatField()
-    lon = models.FloatField()
-#    altitude = models.FloatField()
-#    speed = models.FloatField()
-#    course = models.FloatField()
-    address = models.CharField(max_length=512, blank=True, null=True)
-    attributes = models.CharField(max_length=4096)
-    geom = models.PointField(db_column='punto', srid=4326, default='SRID=4326;POINT(0.0 0.0)')
-#    objects = models.GeoManager()
+class Drivers(models.Model):
+    name = models.CharField(max_length=128)
+    uniqueid = models.CharField(unique=True, max_length=128)
+    attributes = models.CharField(max_length=4000)
 
     class Meta:
         managed = False
-        db_table = 'pos'
+        db_table = 'drivers'
 
-    def __unicode__(self):
-        return u"%s %s %s %s" % (self.id, self.deviceid, self.lat, self.lon)
+class Events(models.Model):
+    type = models.CharField(max_length=128)
+    servertime = models.DateTimeField()
+    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceid', blank=True, null=True)
+    positionid = models.IntegerField(blank=True, null=True)
+    geofenceid = models.IntegerField(blank=True, null=True)
+    attributes = models.CharField(max_length=4000, blank=True, null=True)
+    maintenanceid = models.IntegerField(blank=True, null=True)
 
+    class Meta:
+        managed = False
+        db_table = 'events'
+
+
+class Geofences(models.Model):
+    name = models.CharField(max_length=128)
+    description = models.CharField(max_length=128, blank=True, null=True)
+    area = models.CharField(max_length=4096)
+    attributes = models.CharField(max_length=4000, blank=True, null=True)
+    calendarid = models.ForeignKey(Calendars, models.DO_NOTHING, db_column='calendarid', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'geofences'
+
+class GroupAttribute(models.Model):
+    groupid = models.ForeignKey('Groups', models.DO_NOTHING, db_column='groupid')
+    attributeid = models.ForeignKey(Attributes, models.DO_NOTHING, db_column='attributeid')
+
+    class Meta:
+        managed = False
+        db_table = 'group_attribute'
+
+class GroupCommand(models.Model):
+    groupid = models.ForeignKey('Groups', models.DO_NOTHING, db_column='groupid')
+    commandid = models.ForeignKey(Commands, models.DO_NOTHING, db_column='commandid')
+
+    class Meta:
+        managed = False
+        db_table = 'group_command'
+
+
+class GroupDriver(models.Model):
+    groupid = models.ForeignKey('Groups', models.DO_NOTHING, db_column='groupid')
+    driverid = models.ForeignKey(Drivers, models.DO_NOTHING, db_column='driverid')
+
+    class Meta:
+        managed = False
+        db_table = 'group_driver'
+
+
+class GroupGeofence(models.Model):
+    groupid = models.ForeignKey('Groups', models.DO_NOTHING, db_column='groupid')
+    geofenceid = models.ForeignKey(Geofences, models.DO_NOTHING, db_column='geofenceid')
+
+    class Meta:
+        managed = False
+        db_table = 'group_geofence'
+
+
+class GroupMaintenance(models.Model):
+    groupid = models.ForeignKey('Groups', models.DO_NOTHING, db_column='groupid')
+    maintenanceid = models.ForeignKey('Maintenances', models.DO_NOTHING, db_column='maintenanceid')
+
+    class Meta:
+        managed = False
+        db_table = 'group_maintenance'
+
+
+class GroupNotification(models.Model):
+    groupid = models.ForeignKey('Groups', models.DO_NOTHING, db_column='groupid')
+    notificationid = models.ForeignKey('Notifications', models.DO_NOTHING, db_column='notificationid')
+
+    class Meta:
+        managed = False
+        db_table = 'group_notification'
+
+class Groups(models.Model):
+    name = models.CharField(max_length=128)
+    groupid = models.ForeignKey('self', models.DO_NOTHING, db_column='groupid', blank=True, null=True)
+    attributes = models.CharField(max_length=4000, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'groups'
+
+
+class Maintenances(models.Model):
+    name = models.CharField(max_length=4000)
+    type = models.CharField(max_length=128)
+    start = models.FloatField()
+    period = models.FloatField()
+    attributes = models.CharField(max_length=4000)
+
+    class Meta:
+        managed = False
+        db_table = 'maintenances'
+
+
+class Notifications(models.Model):
+    type = models.CharField(max_length=128)
+    attributes = models.CharField(max_length=4000, blank=True, null=True)
+    web = models.NullBooleanField()
+    mail = models.NullBooleanField()
+    sms = models.NullBooleanField()
+    always = models.BooleanField()
+    calendarid = models.ForeignKey(Calendars, models.DO_NOTHING, db_column='calendarid', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'notifications'
+
+
+class Positions(models.Model):
+    protocol = models.CharField(max_length=128, blank=True, null=True)
+    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceid')
+    servertime = models.DateTimeField()
+    devicetime = models.DateTimeField()
+    fixtime = models.DateTimeField()
+    valid = models.BooleanField()
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    altitude = models.FloatField()
+    speed = models.FloatField()
+    course = models.FloatField()
+    address = models.CharField(max_length=512, blank=True, null=True)
+    attributes = models.CharField(max_length=4000, blank=True, null=True)
+    accuracy = models.FloatField()
+    network = models.CharField(max_length=4000, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'positions'
 
 class PositionsTraccar(models.Model):
     protocol = models.CharField(max_length=128, blank=True, null=True)
-    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceId')  # Field name made lowercase.
-    servertime = models.DateTimeField(db_column='serverTime')  # Field name made lowercase.
-    devicetime = models.DateTimeField(db_column='deviceTime')  # Field name made lowercase.
-    fixtime = models.DateTimeField(db_column='fixTime')  # Field name made lowercase.
+    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceid')  # Field name made lowercase.
+    servertime = models.DateTimeField(db_column='servertime')  # Field name made lowercase.
+    devicetime = models.DateTimeField(db_column='devicetime')  # Field name made lowercase.
+    fixtime = models.DateTimeField(db_column='fixtime')  # Field name made lowercase.
     valid = models.BooleanField()
     latitude = models.FloatField()
     longitude = models.FloatField()
@@ -119,91 +307,157 @@ class PositionsTraccar(models.Model):
     def __unicode__(self):
         return u"%s %s %s %s" % (self.id, self.deviceid, self.latitude, self.longitude)
 
-
-#class Positions(models.Model):
-#    protocol = models.CharField(max_length=128, blank=True, null=True)
-#    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceId')  # Field name made lowercase.
-#    servertime = models.DateTimeField(db_column='serverTime')  # Field name made lowercase.
-#    devicetime = models.DateTimeField(db_column='deviceTime')  # Field name made lowercase.
-#    fixtime = models.DateTimeField(db_column='fixTime')  # Field name made lowercase.
-#    valid = models.BooleanField()
-#    latitude = models.FloatField()
-#    longitude = models.FloatField()
-#    altitude = models.FloatField()
-#    speed = models.FloatField()
-#    course = models.FloatField()
-#    address = models.CharField(max_length=512, blank=True, null=True)
-#    attributes = models.CharField(max_length=4096)
-#    point = models.PointField(srid=4326, default='SRID=4326;POINT(0.0 0.0)')
-##    objects = models.GeoManager()
-#
-#    class Meta:
-#        managed = True
-#        db_table = 'positions'
-#
-#    def save(self, *args, **kargs):
-#        self.point.x = self.longitude
-#        self.point.y = self.latitude
-#        super(Positions, self).save(*args,**kargs)
-#
-#    def __unicode__(self):
-#        return u"%s %s %s %s" % (self.id, self.deviceid, self.latitude, self.longitude)
-
-
-class Server(models.Model):
+class Servers(models.Model):
     registration = models.BooleanField()
     latitude = models.FloatField()
     longitude = models.FloatField()
     zoom = models.IntegerField()
     map = models.CharField(max_length=128, blank=True, null=True)
-    language = models.CharField(max_length=128, blank=True, null=True)
-    distanceunit = models.CharField(db_column='distanceUnit', max_length=128, blank=True, null=True)  # Field name made lowercase.
-    speedunit = models.CharField(db_column='speedUnit', max_length=128, blank=True, null=True)  # Field name made lowercase.
-    bingkey = models.CharField(db_column='bingKey', max_length=128, blank=True, null=True)  # Field name made lowercase.
-    mapurl = models.CharField(db_column='mapUrl', max_length=128, blank=True, null=True)  # Field name made lowercase.
+    bingkey = models.CharField(max_length=128, blank=True, null=True)
+    mapurl = models.CharField(max_length=512, blank=True, null=True)
     readonly = models.BooleanField()
+    twelvehourformat = models.BooleanField()
+    attributes = models.CharField(max_length=4000, blank=True, null=True)
+    forcesettings = models.BooleanField()
+    coordinateformat = models.CharField(max_length=128, blank=True, null=True)
+    devicereadonly = models.NullBooleanField()
+    limitcommands = models.NullBooleanField()
+    poilayer = models.CharField(max_length=512, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'server'
+        db_table = 'servers'
+
+class Statistics(models.Model):
+    capturetime = models.DateTimeField()
+    activeusers = models.IntegerField()
+    activedevices = models.IntegerField()
+    requests = models.IntegerField()
+    messagesreceived = models.IntegerField()
+    messagesstored = models.IntegerField()
+    attributes = models.CharField(max_length=4000)
+    mailsent = models.IntegerField()
+    smssent = models.IntegerField()
+    geocoderrequests = models.IntegerField()
+    geolocationrequests = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'statistics'
 
 
-#class Topology(models.Model):
-#    name = models.CharField(unique=True, max_length=-1)
-#    srid = models.IntegerField()
-#    precision = models.FloatField()
-#    hasz = models.BooleanField()
-#
-#    class Meta:
-#        managed = False
-#        db_table = 'topology'
-#
+class UserAttribute(models.Model):
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+    attributeid = models.ForeignKey(Attributes, models.DO_NOTHING, db_column='attributeid')
+
+    class Meta:
+        managed = False
+        db_table = 'user_attribute'
+
+
+class UserCalendar(models.Model):
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+    calendarid = models.ForeignKey(Calendars, models.DO_NOTHING, db_column='calendarid')
+
+    class Meta:
+        managed = False
+        db_table = 'user_calendar'
+
+
+class UserCommand(models.Model):
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+    commandid = models.ForeignKey(Commands, models.DO_NOTHING, db_column='commandid')
+
+    class Meta:
+        managed = False
+        db_table = 'user_command'
+
 
 class UserDevice(models.Model):
-    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userId')  # Field name made lowercase.
-    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceId')  # Field name made lowercase.
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+    deviceid = models.ForeignKey(Devices, models.DO_NOTHING, db_column='deviceid')
 
     class Meta:
         managed = False
         db_table = 'user_device'
 
+class UserDriver(models.Model):
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+    driverid = models.ForeignKey(Drivers, models.DO_NOTHING, db_column='driverid')
+
+    class Meta:
+        managed = False
+        db_table = 'user_driver'
+
+
+class UserGeofence(models.Model):
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+    geofenceid = models.ForeignKey(Geofences, models.DO_NOTHING, db_column='geofenceid')
+
+    class Meta:
+        managed = False
+        db_table = 'user_geofence'
+
+
+class UserGroup(models.Model):
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+    groupid = models.ForeignKey(Groups, models.DO_NOTHING, db_column='groupid')
+
+    class Meta:
+        managed = False
+        db_table = 'user_group'
+
+
+class UserMaintenance(models.Model):
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+    maintenanceid = models.ForeignKey(Maintenances, models.DO_NOTHING, db_column='maintenanceid')
+
+    class Meta:
+        managed = False
+        db_table = 'user_maintenance'
+
+
+class UserNotification(models.Model):
+    userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+    notificationid = models.ForeignKey(Notifications, models.DO_NOTHING, db_column='notificationid')
+
+    class Meta:
+        managed = False
+        db_table = 'user_notification'
+
+# class UserUser(models.Model):
+#     userid = models.ForeignKey('Users', models.DO_NOTHING, db_column='userid')
+#     manageduserid = models.ForeignKey('Users', models.DO_NOTHING, db_column='manageduserid')
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'user_user'
 
 class Users(models.Model):
     name = models.CharField(max_length=128)
     email = models.CharField(unique=True, max_length=128)
-    hashedpassword = models.CharField(db_column='hashedPassword', max_length=128)  # Field name made lowercase.
-    salt = models.CharField(max_length=128)
+    hashedpassword = models.CharField(max_length=128, blank=True, null=True)
+    salt = models.CharField(max_length=128, blank=True, null=True)
     readonly = models.BooleanField()
-    admin = models.BooleanField()
+    administrator = models.BooleanField()
     map = models.CharField(max_length=128, blank=True, null=True)
-    language = models.CharField(max_length=128, blank=True, null=True)
-    distanceunit = models.CharField(db_column='distanceUnit', max_length=128, blank=True, null=True)  # Field name made lowercase.
-    speedunit = models.CharField(db_column='speedUnit', max_length=128, blank=True, null=True)  # Field name made lowercase.
     latitude = models.FloatField()
     longitude = models.FloatField()
     zoom = models.IntegerField()
+    twelvehourformat = models.BooleanField()
+    attributes = models.CharField(max_length=4000, blank=True, null=True)
+    coordinateformat = models.CharField(max_length=128, blank=True, null=True)
+    disabled = models.NullBooleanField()
+    expirationtime = models.DateTimeField(blank=True, null=True)
+    devicelimit = models.IntegerField(blank=True, null=True)
+    token = models.CharField(max_length=128, blank=True, null=True)
+    userlimit = models.IntegerField(blank=True, null=True)
+    devicereadonly = models.NullBooleanField()
+    phone = models.CharField(max_length=128, blank=True, null=True)
+    limitcommands = models.NullBooleanField()
+    login = models.CharField(max_length=128, blank=True, null=True)
+    poilayer = models.CharField(max_length=512, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'users'
-

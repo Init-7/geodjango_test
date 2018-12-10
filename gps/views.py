@@ -19,16 +19,16 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.core.serializers.python import Serializer
 from datetime import timedelta
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django_twilio.decorators import twilio_view
-from twilio.twiml import Response
-from twilio.rest import TwilioRestClient
+# from django_twilio.decorators import twilio_view
+# from twilio.twiml import Response
+# from twilio.rest import TwilioRestClient
 from django.http import JsonResponse
 
 
 import sys
 
-TWILIO_ACCOUNT_SID = 'AC1375f097eacacb0b9fde83e17272e28f'
-TWILIO_AUTH_TOKEN = '224d6ca587c66e7bd0592b1b809affa4'
+#TWILIO_ACCOUNT_SID = 'AC1375f097eacacb0b9fde83e17272e28f'
+#TWILIO_AUTH_TOKEN = '224d6ca587c66e7bd0592b1b809affa4'
 
 
 class FlatJsonSerializer(Serializer):
@@ -306,7 +306,7 @@ def centro3(request):
                     t.last_z = z
                 else:
                     msg = "Pico pal que lee"
-                    sms_twilio_z(msg)
+                    #sms_twilio_z(msg)
 
                 contenidos.append({ 'nombre': t.primer_nombre+" "+t.apellidop+" "+t.apellidom,
                                     'geom': tp,
@@ -361,7 +361,7 @@ def trabajador(request, trabajador):
     tp = Point(punto.longitude, punto.latitude)
 
     if( t.salud.exists()):
-        salud = t.salud.last().nombre
+        salud = t.salud.last().detalle
     else:
         salud = "Sin Informacion"
 
@@ -792,38 +792,38 @@ def trabajador_z_riesgo(request, planta):
 #
 #    return r
 
-@twilio_view
-def sms_twilio(request):
+# @twilio_view
+# def sms_twilio(request):
 #    from_number = request.POST.get('from', '')
 #    from_number = request.values.get('From', None)
-    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    for m in client.messages.list():
-        if(m.to == '+56964590932'):
-            from_n = m.from_
-            break
-    from_number = from_n.replace("+56", "")
-    td = TrabajadorDevice.objects.get(fono_gps=from_number)
-    t = Trabajador.objects.filter(id=td.trabajador_id).last()
-    d = Devices.objects.filter(id=td.device_id).last()
-    p = PositionsTraccar.objects.get(id=d.positionid)
-    tp = Point(p.longitude, p.latitude)
-    if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
-        zona =Zona.objects.get(zona__bbcontains=tp).nombre
-    else:
-        zona = "Sin Informacion"
+# client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+#     for m in client.messages.list():
+#         if(m.to == '+56964590932'):
+#             from_n = m.from_
+#             break
+#     from_number = from_n.replace("+56", "")
+#     td = TrabajadorDevice.objects.get(fono_gps=from_number)
+#     t = Trabajador.objects.filter(id=td.trabajador_id).last()
+#     d = Devices.objects.filter(id=td.device_id).last()
+#     p = PositionsTraccar.objects.get(id=d.positionid)
+#     tp = Point(p.longitude, p.latitude)
+#     if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
+#         zona =Zona.objects.get(zona__bbcontains=tp).nombre
+#     else:
+# 	zona = "Sin Informacion"
 
 
-    msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
+#    msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
 #    m = client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
-    m2 = client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
+#    m2 = client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
 
-    return m
+#    return m
 
 #@twilio_view
-def sms_twilio_z(msg):
-    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+#def sms_twilio_z(msg):
+#    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 #    client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
-    client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
+#    client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
    
 #    return m
 

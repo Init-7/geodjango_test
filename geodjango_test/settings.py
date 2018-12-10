@@ -25,7 +25,7 @@ SECRET_KEY = 'hs*0gc=u()ty8s1&nayv0&ux8@ny0q2n8l@5omz@4ai1c5t%@_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['18.228.128.227', '172.31.7.147', 'staff.estchile.cl']
 
 
 # Application definition
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'qrcode',
     'corsheaders',
-    'django_twilio',
+#    'django_twilio',
 
 ]
 
@@ -93,10 +93,10 @@ DATABASES = {
 #    },
     'default':{
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'gps',
-        'HOST': '104.196.13.123',
+        'NAME': 'traccardata',
+        'HOST': 'localhost',
         'USER': 'postgres',
-        'PASSWORD': 'est.postgres',
+#        'PASSWORD': 'est.postgres',
         'PORT': '5432',
     },
 #    'default': {
@@ -146,10 +146,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
-STATIC_ROOT = '/home/jhonny/geodjango_test/est/static/'
+STATIC_ROOT = '/home/centos/project/workspace/staff_est/est/static/'
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/home/jhonny/geodjango_test/est/media/'
+MEDIA_ROOT = '/home/centos/project/workspace/staff_est/est/media/'
 MEDIA_URL = '/media/'
 
 #DATABASE_ROUTERS = ['gps.routers.GpsRouter']
@@ -195,5 +195,5 @@ CORS_EXPOSE_HEADERS = (
 
 #APPEND_SLASH = False
 
-TWILIO_ACCOUNT_SID = 'AC5ce1f3a7a20af5546b71a31fe9b8f928'
-TWILIO_AUTH_TOKEN = '95144415af96d1c9f7522eeda44967e5'
+# TWILIO_ACCOUNT_SID = 'AC5ce1f3a7a20af5546b71a31fe9b8f928'
+# TWILIO_AUTH_TOKEN = '95144415af96d1c9f7522eeda44967e5'

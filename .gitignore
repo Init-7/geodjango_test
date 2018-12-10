@@ -2,3 +2,7 @@
 *.py~
 gps/data
 est/data
+*.old
+est/media/avatar/*
+est/media/qr/*
+gps/migrations/*
