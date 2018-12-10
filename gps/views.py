@@ -307,7 +307,7 @@ def centro3(request):
                     t.last_z = z
                 else:
                     print '2'
-                    
+
                     msg = "Pico pal que lee"
                     sms_twilio_z(msg)
 
@@ -823,9 +823,9 @@ def sms_twilio(request):
 
 @twilio_view
 def sms_twilio_z(msg):
-    print 'sms_twilio_z'
-    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
-    client.messages.create(from_="+56950645387", to="+56956711890", body=msg)
+   print 'sms_twilio_z'
+   client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+   client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
+   client.messages.create(from_="+56950645387", to="+56956711890", body=msg)
 
    return m
