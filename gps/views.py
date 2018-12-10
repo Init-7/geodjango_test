@@ -20,7 +20,7 @@ from django.core.serializers.python import Serializer
 from datetime import timedelta
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django_twilio.decorators import twilio_view
-from twilio.twiml import Response
+from twilio import Response
 from twilio.rest import TwilioRestClient
 from django.http import JsonResponse
 
@@ -28,7 +28,6 @@ import sys
 
 TWILIO_ACCOUNT_SID = 'AC1375f097eacacb0b9fde83e17272e28f'
 TWILIO_AUTH_TOKEN = '224d6ca587c66e7bd0592b1b809affa4'
-
 
 class FlatJsonSerializer(Serializer):
     def get_dump_object(self, obj):
@@ -814,7 +813,7 @@ def sms_twilio(request):
 
 
     msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
-#    m = client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
+    # m = client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
     m2 = client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
 
     return m
