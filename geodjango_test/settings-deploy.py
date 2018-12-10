@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'qrcode',
     'corsheaders',
-#    'django_twilio',
+   'django_twilio',
 ]
 
 MIDDLEWARE_CLASSES = [
