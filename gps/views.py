@@ -21,7 +21,6 @@ from datetime import timedelta
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django_twilio.decorators import twilio_view
 # from twilio.twiml import Response
-from twilio.http import HttpResponse
 from twilio.rest import TwilioRestClient
 from django.http import JsonResponse
 
