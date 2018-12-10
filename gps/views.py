@@ -306,7 +306,8 @@ def centro3(request):
                     msg = "Pico pal que lee"
                     sms_twilio_z(msg)
 
-                contenidos.append({ 'nombre': t.primer_nombre+" "+t.apellidop+" "+t.apellidom,
+                contenidos.append({ 'nombre': t.apellidop+" "+t.apellidom,
+                                    # 'nombre': t.primer_nombre+" "+t.apellidop+" "+t.apellidom,
                                     'geom': tp,
                                     'fono': t.fono,
                                     'cargo': t.cargo,
@@ -780,7 +781,6 @@ def trabajador_z_riesgo(request, planta):
 #    return HttpResponse(data)
     return JsonResponse(contenidos)
 
-
 @twilio_view
 def sms_twilio(request):
    name = request.POST.get('from', '')
@@ -810,7 +810,6 @@ def sms_twilio(request):
         zona =Zona.objects.get(zona__bbcontains=tp).nombre
     else:
         zona = "Sin Informacion"
-
 
     msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
     # m = client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
