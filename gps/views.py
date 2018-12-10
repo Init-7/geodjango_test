@@ -299,15 +299,15 @@ def centro3(request):
             if(Zona.objects.filter(zona__bbcontains=tp).exists()):
                 z =Zona.objects.filter(zona__bbcontains=tp).last().nombre
                 if (z != t.last_z):
-                    msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
+                    # msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
+                    msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % ('NOMBRE', t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
                     sms_twilio_z(msg)
                     t.last_z = z
                 else:
                     msg = "Pico pal que lee"
                     sms_twilio_z(msg)
 
-                contenidos.append({ 'nombre': t.apellidop+" "+t.apellidom,
-                                    # 'nombre': t.primer_nombre+" "+t.apellidop+" "+t.apellidom,
+                contenidos.append({ 'nombre': t.primer_nombre+" "+t.apellidop+" "+t.apellidom,
                                     'geom': tp,
                                     'fono': t.fono,
                                     'cargo': t.cargo,
