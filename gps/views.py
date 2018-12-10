@@ -833,4 +833,6 @@ def sms_twilio_z(msg):
    client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
    client.messages.create(from_="+56950645387", to="+56956711890", body=msg)
 
+   print 'tres'
+
    return m
