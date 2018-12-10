@@ -60,7 +60,7 @@ class FlatJsonSerializer(Serializer):
 #        data = self._current
 #        if not self.selected_fields or 'id' in self.selected_fields:
 #            data['id'] = obj.i
-#        data['name'] = obj.nombre 
+#        data['name'] = obj.nombre
 #        data['lat']=obj.lat
 #        data['lon']=obj.lon
 #        data['apellidop']=obj.apellidop
@@ -142,7 +142,7 @@ class FlatJsonSerializer(Serializer):
 #    def end_object( self, obj ):
 #        self._current['id'] = obj._get_pk_val()
 #        self.objects.append( self._current )
-#    
+#
 #
 #
 #def last_five(request):
@@ -174,7 +174,7 @@ def infoplantas(request):
 
 
 def planta(request, planta):
-#Posiciones registradas dentro de una determinada planta    
+#Posiciones registradas dentro de una determinada planta
     pl = Planta.objects.get(nombre = planta)
 #    s = FlatJsonSerializer()
     contenidos = []
@@ -196,7 +196,7 @@ def planta(request, planta):
     return HttpResponse(data)#, content_type='application/json')
 
 def centro(request, planta, centro):
-    
+
     tcn = Trabajador.objects.filter(centroNegocios__codigo = centro)
 #    s = FlatJsonSerializer()
     contenidos = []
@@ -206,12 +206,12 @@ def centro(request, planta, centro):
 #        t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
             dev = Devices.objects.get(id=tr.gps_id) #Dispositivo correspondiente al trabajador
             punto = Positions.objects.get(id = dev.positionid)
-        auxiliar=Posicionestrabajador()    
-        auxiliar.lat=punto.lat    
+        auxiliar=Posicionestrabajador()
+        auxiliar.lat=punto.lat
         auxiliar.lon=punto.lon
         auxiliar.address=punto.address
-        auxiliar.fixtime=punto.fixtime    
-    
+        auxiliar.fixtime=punto.fixtime
+
         auxiliar.nombre=tr.primer_nombre
         auxiliar.apellidop=tr.apellidop
         auxiliar.apellidom=tr.apellidom
@@ -242,14 +242,14 @@ def centro2(request, planta, centro):
             punto = Positions.objects.get(id = dev.positionid)
         auxiliar=Alertatrabajador()
         #auxiliar.geom='SRID=4326;POINT()'
-        #auxiliar.lat=punto.lat    
+        #auxiliar.lat=punto.lat
         #auxiliar.lon=punto.lon
         #auxiliar.address=punto.address
         #auxiliar.fixtime=punto.fixtime
         auxiliar.nombre=tr.primer_nombre+" "+tr.apellidop
         auxiliar.id=tr.id
         auxiliar.i=i
-        if(tr.tipo_contacto):        
+        if(tr.tipo_contacto):
             auxiliar.tipo_contacto=tr.tipo_contacto
         else:
             auxiliar.tipo_contacto="Sin Información"
@@ -271,11 +271,11 @@ def centro2(request, planta, centro):
         #auxiliar.estudios=t.estudios
         #auxiliar.rut=tr.rut
         auxiliar.nivel_riesgo=tr.nivel_riesgo
-        if(tr.fono):        
+        if(tr.fono):
             auxiliar.fono=tr.fono
         else:
             auxiliar.fono="Sin Información"
-        if(tr.cargo):        
+        if(tr.cargo):
             auxiliar.cargo=tr.cargo
         else:
             auxiliar.cargo="Sin Información"
@@ -302,11 +302,11 @@ def centro3(request):
                 z =Zona.objects.filter(zona__bbcontains=tp).last().nombre
                 if (z != t.last_z):
                     msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.cloud1.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
-                    #sms_twilio_z(msg)
+                    sms_twilio_z(msg)
                     t.last_z = z
                 else:
                     msg = "Pico pal que lee"
-                    #sms_twilio_z(msg)
+                    sms_twilio_z(msg)
 
                 contenidos.append({ 'nombre': t.primer_nombre+" "+t.apellidop+" "+t.apellidom,
                                     'geom': tp,
@@ -349,9 +349,9 @@ def centro3(request):
 
 
 def trabajador(request, trabajador):
-#Ultima posicion de un trabajador    
+#Ultima posicion de un trabajador
     contenidos = []
-#    s = FlatJsonSerializer() 
+#    s = FlatJsonSerializer()
 
     t = Trabajador.objects.get(estid=trabajador) #Trabajadores con el id solicitado
     td = TrabajadorDevice.objects.get(trabajador=t.id)
@@ -414,20 +414,20 @@ def trabajador(request, trabajador):
                       )
 
 #    contenidos.append(auxiliar)
-#    data = s.serialize(contenidos)    
+#    data = s.serialize(contenidos)
     data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=False, with_modelname=False)
     return HttpResponse(data)#, content_type='application/json')
 
 def tiempoplanta(request, planta, fechainicio, fechafin):
 #Posiciones registradas en una determinada planta, durante un rango de tiempo (fecha)
-#    s = FlatJsonSerializer()    
+#    s = FlatJsonSerializer()
     pl = Planta.objects.get(nombre = planta)
 
     posiciones = Positions.objects.filter(fixtime__range=[fechainicio,fechafin])
     contenidos = []
     for p in posiciones:
         if(pl.geom.contains(p.geom)):
-            contenidos.append(p)            
+            contenidos.append(p)
 #    data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 #    return HttpResponse(data)
@@ -436,13 +436,13 @@ def tiempoplanta(request, planta, fechainicio, fechafin):
 def tiempoplantaconhoras(request, planta, fechainicio, fechafin):
 #Posiciones registradas en una determinada planta, durante un rango de tiempo (fecha,hora)
     s = FlatJsonSerializer()
-    pl = Planta.objects.get(nombre = planta)    
-    
+    pl = Planta.objects.get(nombre = planta)
+
     posiciones = Positions.objects.filter(fixtime__range=[fechainicio,fechafin])
     contenidos = []
     for p in posiciones:
         if(pl.geom.contains(p.geom)):
-            contenidos.append(p)        
+            contenidos.append(p)
     data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
     return HttpResponse(data)
@@ -453,14 +453,14 @@ def lugarestrabajador(request, trabajador,planta, fechainicio, fechafin):
     pl = Planta.objects.get(nombre = planta)
     fechai = datetime.strptime(fechainicio, '%Y-%m-%d')
     fechaf = datetime.strptime(fechafin, '%Y-%m-%d')
-    
+
     t = Trabajador.objects.get(id=trabajador) #Trabajadores con el id solicitado
     dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
     posiciones = Positions.objects.filter(fixtime__range=[fechai,fechaf],deviceid=dev)
     contenidos = []
     for p in posiciones:
         if(pl.geom.contains(p.geom)):
-            contenidos.append(p)                        
+            contenidos.append(p)
     data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
     return HttpResponse(data)
@@ -476,7 +476,7 @@ def trabajadoresplanta(request, nombreplanta):
         el=Listatrabajadores()
         el.id=t.estid
         el.nombre=t.primer_nombre+" "+t.apellidop+" "+t.apellidom
-        contenidos.append(el)                    
+        contenidos.append(el)
     data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
     return HttpResponse(data)
@@ -523,7 +523,7 @@ def listacentronegocios(request, planta):
             el=Listacn()
             el.id=c.codigo
             el.nombre=c.nombre
-            contenidos.append(el)                
+            contenidos.append(el)
     data = s.serialize(contenidos)
     #data = dos.append(el)
     #GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
@@ -596,21 +596,21 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
     rango=None
     aux1=None
     aux2=None
-    aux3=timedelta(microseconds=0)            
-    
+    aux3=timedelta(microseconds=0)
+
     for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
-        
+
         contenidozona=[]
 #        tiempozona=Tiempozona(None,None,None,None,None,None,None,None)
-#        tiempozona.dif=timedelta(microseconds=0)    
-        for p in posiciones: #Para cada una de las posiciones            
+#        tiempozona.dif=timedelta(microseconds=0)
+        for p in posiciones: #Para cada una de las posiciones
             if((p.fixtime>=fechai)&(p.fixtime<=fechaf) & (p.valid)):
-                
+
                 if(z.zona.contains(Point(p.latitude, p.longitude))): #Si la posicion se encuentra en una zona
                     #contenidozona.append(p) # Creo lista con elementos de una zona, para luego buscar el ultimo y primer registro
                     if not(rango):
 
-                        rango=Rangozona(None,None,None)            
+                        rango=Rangozona(None,None,None)
 
                         rango.zona=z
                         rango.fin=p.fixtime
@@ -630,26 +630,26 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
                                 #contenidos.append(rango)
                         else:
                             if(rango):
-                                    
-        
+
+
                                 rango.aux= aux2 - aux1
                                 aux3 =aux3 + aux2 - aux1
-        
+
                                 #contenidos.append(tiempozona)
                                 rango=None
                                 #total=timedelta(microseconds=0)
                                 aux1=None
-                                aux2=None    
-        
+                                aux2=None
+
 
         tiempozona=Tiempozona(None,None,None,None,None,None,None,None)
         tiempozona.nombre=z.nombre
         tiempozona.id=str(aux3)
 
-        contenidos.append(tiempozona)    
-        aux3=timedelta(microseconds=0)            
-                
-        #if(contenidozona):        
+        contenidos.append(tiempozona)
+        aux3=timedelta(microseconds=0)
+
+        #if(contenidozona):
             #pr=contenidozona[0].fixtime
             #ul=contenidozona[-1].fixtime
             #tiempozona=ul-pr
@@ -658,9 +658,9 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
             #obj.horas=abs(tiempozona.seconds/3600)
             #obj.horas=abs((len(contenidozona)*30)/3600)
             #obj.minutos=abs((tiempozona.seconds - abs(tiempozona.seconds/3600)*3600)/60)
-            
+
             #obj.minutos=abs((len(contenidozona)*30 - abs(len(contenidozona)*30/3600)*3600)/60)
-            #obj.dias=abs(tiempozona.days)            
+            #obj.dias=abs(tiempozona.days)
             #obj.primero=pr
             #obj.ultimo=ul
             #contenidos.append(obj)
@@ -675,12 +675,12 @@ def datosinforme(request,cnegocios, trabajador,planta, fechainicio, fechafin):
     #    pr=posicioneszona[i].first().fixtime
     #    ul=posicioneszona[i].last().fixtime
     #    dif=pr-ul
-    #    contenidos.append(dif)    
-            
+    #    contenidos.append(dif)
+
     #primero= posiciones.first().fixtime
     #ultimo= posiciones.last().fixtime
     #total=ultimo-primero
-    
+
     #dias=diferencia.days
     #horas=diferencia.
 
@@ -697,17 +697,17 @@ def riesgotrabajador(request, planta, nro):
     trabs=Trabajador.objects.filter(empresa=empresa)
     tr = trabs.order_by('-nivel_riesgo')[:nro]
     contenidos = []
-    
+
     for t in tr:
         dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
         punto = Positions.objects.get(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
-        if(punto):              
+        if(punto):
             if(pl.geom.contains(punto.geom)):
                 auxiliar=Posicionestrabajador()
-                auxiliar.lat=punto.lat    
+                auxiliar.lat=punto.lat
                 auxiliar.lon=punto.lon
                 auxiliar.address=punto.address
-                auxiliar.fixtime=punto.fixtime    
+                auxiliar.fixtime=punto.fixtime
                 auxiliar.fono=t.fono
                 auxiliar.nombre=t.primer_nombre
                 auxiliar.apellidop=t.apellidop
@@ -719,8 +719,8 @@ def riesgotrabajador(request, planta, nro):
                 auxiliar.direccion=t.direccion
                 #auxiliar.centroNegocios=t.centroNegocios
                 #auxiliar.gps=t.gps
-                contenidos.append(auxiliar)                                    
-    
+                contenidos.append(auxiliar)
+
 #    data = s.serialize(contenidos)
     #data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=True, with_modelname=False)
 #    return HttpResponse(data)
@@ -758,7 +758,7 @@ def sms(request, trabajador):
     })
 
 def trabajador_z_riesgo(request, planta):
-#    s = FlatJsonSerializer()    
+#    s = FlatJsonSerializer()
     pl = Planta.objects.get(nombre = planta)
     zonas = Zona.objects.filter(planta__nombre=planta)
     empresa= Empresa.objects.get(planta=pl)
@@ -768,10 +768,10 @@ def trabajador_z_riesgo(request, planta):
     for i, z in enumerate(zonas): #Para cada una de las zonas en una planta
         for t in tr:
             if(Devices.objects.filter(id=t.gps_id)):
-                dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador            
+                dev = Devices.objects.get(id=t.gps_id) #Dispositivo correspondiente al trabajador
                 punto = Positions.objects.get(id = dev.positionid) #Grupo de puntos relacionados a un trabajador
 
-                if(punto.valid):                
+                if(punto.valid):
                     if(z.zona.contains(punto.geom)):
                         auxiliar=testzona()
                         auxiliar.nombre=t.primer_nombre+" "+t.apellidop
@@ -782,48 +782,47 @@ def trabajador_z_riesgo(request, planta):
 #    return HttpResponse(data)
     return JsonResponse(contenidos)
 
- 
-#@twilio_view
-#def sms_twilio(request):
-#    name = request.POST.get('from', '')
-#    msg = 'Se ha recibido un mensaje SOS dirijase a http://cloud1.estchile.cl/sms/%s/ para ver las alertas' % (name)
-#    r = Response()
-#    r.message(msg)
-#
-#    return r
 
-# @twilio_view
-# def sms_twilio(request):
-#    from_number = request.POST.get('from', '')
-#    from_number = request.values.get('From', None)
-# client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-#     for m in client.messages.list():
-#         if(m.to == '+56964590932'):
-#             from_n = m.from_
-#             break
-#     from_number = from_n.replace("+56", "")
-#     td = TrabajadorDevice.objects.get(fono_gps=from_number)
-#     t = Trabajador.objects.filter(id=td.trabajador_id).last()
-#     d = Devices.objects.filter(id=td.device_id).last()
-#     p = PositionsTraccar.objects.get(id=d.positionid)
-#     tp = Point(p.longitude, p.latitude)
-#     if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
-#         zona =Zona.objects.get(zona__bbcontains=tp).nombre
-#     else:
-# 	zona = "Sin Informacion"
+@twilio_view
+def sms_twilio(request):
+   name = request.POST.get('from', '')
+   msg = 'Se ha recibido un mensaje SOS dirijase a http://cloud1.estchile.cl/sms/%s/ para ver las alertas' % (name)
+   r = Response()
+   r.message(msg)
+
+   return r
+
+@twilio_view
+def sms_twilio(request):
+   from_number = request.POST.get('from', '')
+   from_number = request.values.get('From', None)
+client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    for m in client.messages.list():
+        if(m.to == '+56964590932'):
+            from_n = m.from_
+            break
+    from_number = from_n.replace("+56", "")
+    td = TrabajadorDevice.objects.get(fono_gps=from_number)
+    t = Trabajador.objects.filter(id=td.trabajador_id).last()
+    d = Devices.objects.filter(id=td.device_id).last()
+    p = PositionsTraccar.objects.get(id=d.positionid)
+    tp = Point(p.longitude, p.latitude)
+    if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
+        zona =Zona.objects.get(zona__bbcontains=tp).nombre
+    else:
+	zona = "Sin Informacion"
 
 
-#    msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
-#    m = client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
-#    m2 = client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
+   msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
+   m = client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
+   m2 = client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
 
-#    return m
+   return m
 
-#@twilio_view
-#def sms_twilio_z(msg):
-#    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-#    client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
-#    client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
-   
-#    return m
+@twilio_view
+def sms_twilio_z(msg):
+   client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+   client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
+   client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
 
+   return m
