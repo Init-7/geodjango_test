@@ -799,7 +799,7 @@ def sms_twilio(request):
 
 @twilio_view
 def sms_twilio(request):
-    print(request)
+    print('sms_twilio')
 #    from_number = request.POST.get('from', '')
 #    from_number = request.values.get('From', None)
     client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
