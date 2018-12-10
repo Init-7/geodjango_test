@@ -301,7 +301,7 @@ def centro3(request):
             if(Zona.objects.filter(zona__bbcontains=tp).exists()):
                 z =Zona.objects.filter(zona__bbcontains=tp).last().nombre
                 if (z != t.last_z):
-                    msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.cloud1.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
+                    msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
                     sms_twilio_z(msg)
                     t.last_z = z
                 else:
@@ -786,7 +786,7 @@ def trabajador_z_riesgo(request, planta):
 @twilio_view
 def sms_twilio(request):
    name = request.POST.get('from', '')
-   msg = 'Se ha recibido un mensaje SOS dirijase a http://cloud1.estchile.cl/sms/%s/ para ver las alertas' % (name)
+   msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas' % (name)
    r = Response()
    r.message(msg)
 
@@ -798,10 +798,10 @@ def sms_twilio(request):
    from_number = request.values.get('From', None)
    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
    for m in client.messages.list():
-        if(m.to == '+56964590932'):
+        if(m.to == '+56956711890'):
             from_n = m.from_
             break
-    from_number = from_n.replace("+56", "")
+    from_number = from_n.replace("+56", "226660685")
     td = TrabajadorDevice.objects.get(fono_gps=from_number)
     t = Trabajador.objects.filter(id=td.trabajador_id).last()
     d = Devices.objects.filter(id=td.device_id).last()
@@ -813,16 +813,16 @@ def sms_twilio(request):
 	zona = "Sin Informacion"
 
 
-   msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
-   m = client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
-   m2 = client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
+   msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://staff.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
+   m = client.messages.create(from_="+56956711890", to="+56226660685", body=msg)
+   m2 = client.messages.create(from_="+56956711890", to="+56950645387", body=msg)
 
    return m
 
 @twilio_view
 def sms_twilio_z(msg):
    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-   client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
-   client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
+   client.messages.create(from_="+56956711890", to="+56226660685", body=msg)
+   client.messages.create(from_="+56956711890", to="+56950645387", body=msg)
 
    return m

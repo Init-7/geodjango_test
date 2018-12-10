@@ -26,7 +26,7 @@ require([
 
     var out2 = [];//Cadena para concatenar la informacion de los trabajadores en riesgo
 
-    var defaultUrl ="http://cloud1.estchile.cl"; //URL con la que se va a trabajar
+    var defaultUrl ="http://staff.estchile.cl"; //URL con la que se va a trabajar
     //var defaultUrl = "localhost:8000";//local
     
 

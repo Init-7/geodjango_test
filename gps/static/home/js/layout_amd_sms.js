@@ -41,7 +41,7 @@ require([
 
     var etiquetas = []; 
 
-    var defaultUrl ="http://cloud1.estchile.cl";
+    var defaultUrl ="http://staff.estchile.cl";
     //var defaultUrl = "localhost:8000";//local
     var defaultUrlGeoServer ="http://104.196.40.15:8080";
     var urlRealTime;
