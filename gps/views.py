@@ -794,33 +794,31 @@ def sms_twilio(request):
 
 @twilio_view
 def sms_twilio(request):
-   from_number = request.POST.get('from', '')
-   from_number = request.values.get('From', None)
-   client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-
-   for m in client.messages.list():
+#    from_number = request.POST.get('from', '')
+#    from_number = request.values.get('From', None)
+    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    for m in client.messages.list():
         if(m.to == '+56956711890'):
             from_n = m.from_
             break
-
-    from_number = from_n.replace("+56", "226660685")
+    from_number = from_n.replace("+56", "")
 
     td = TrabajadorDevice.objects.get(fono_gps=from_number)
     t = Trabajador.objects.filter(id=td.trabajador_id).last()
     d = Devices.objects.filter(id=td.device_id).last()
     p = PositionsTraccar.objects.get(id=d.positionid)
     tp = Point(p.longitude, p.latitude)
-
     if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
         zona =Zona.objects.get(zona__bbcontains=tp).nombre
     else:
-	    zona = "Sin Informacion"
+        zona = "Sin Informacion"
 
-   msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://staff.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
-   m = client.messages.create(from_="+56956711890", to="+56226660685", body=msg)
-   m2 = client.messages.create(from_="+56956711890", to="+56950645387", body=msg)
 
-   return m
+    msg = 'SOS: Trabajador: %s %s Zona: %s. Supervisor: %s %s %s. Ingrese a http://cloud1.estchile.cl/gps/sms/%s/ para ver las alertas' % (t.primer_nombre, t.apellidop, zona, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, from_number)
+#    m = client.messages.create(from_="+56964590932", to="+56999478765", body=msg)
+    m2 = client.messages.create(from_="+56964590932", to="+56950645387", body=msg)
+
+    return m
 
 @twilio_view
 def sms_twilio_z(msg):
