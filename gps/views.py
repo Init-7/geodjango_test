@@ -27,8 +27,8 @@ from django.http import JsonResponse
 
 import sys
 
-#TWILIO_ACCOUNT_SID = 'AC1375f097eacacb0b9fde83e17272e28f'
-#TWILIO_AUTH_TOKEN = '224d6ca587c66e7bd0592b1b809affa4'
+TWILIO_ACCOUNT_SID = 'AC1375f097eacacb0b9fde83e17272e28f'
+TWILIO_AUTH_TOKEN = '224d6ca587c66e7bd0592b1b809affa4'
 
 
 class FlatJsonSerializer(Serializer):
