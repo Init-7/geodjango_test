@@ -31,5 +31,4 @@ urlpatterns = [
 #    url(r'^smst/$', views.sms_twilio),
     url(r'^zona/(?P<planta>[\w]+)/$', views.zonaplanta),
     url(r'^zonas/$',views.zonas),
-
 ]
