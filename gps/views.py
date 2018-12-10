@@ -21,7 +21,7 @@ from datetime import timedelta
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django_twilio.decorators import twilio_view
 # from twilio.twiml import Response
-from twilio.rest import TwilioRestClient
+from twilio.rest import Client
 from django.http import JsonResponse
 
 import sys
@@ -304,7 +304,7 @@ def centro3(request):
                     msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, 'NAME', 'LASTNAME', '010101', 'gp02')
 
                     print('1')
-                    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+                    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
                     print('2')
                     client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
                     print('3')
@@ -809,7 +809,7 @@ def sms_twilio(request):
     print('sms_twilio')
 #    from_number = request.POST.get('from', '')
 #    from_number = request.values.get('From', None)
-    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
     for m in client.messages.list():
         if(m.to == '+56956711890'):
             from_n = m.from_
@@ -835,7 +835,7 @@ def sms_twilio(request):
 @twilio_view
 def sms_twilio_z(msg):
    print(str(TWILIO_ACCOUNT_SID))
-   client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+   client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
    client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
    client.messages.create(from_="+56950645387", to="+56956711890", body=msg)
 
