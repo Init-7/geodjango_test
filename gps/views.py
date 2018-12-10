@@ -797,7 +797,7 @@ def sms_twilio(request):
    from_number = request.POST.get('from', '')
    from_number = request.values.get('From', None)
    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    for m in client.messages.list():
+   for m in client.messages.list():
         if(m.to == '+56964590932'):
             from_n = m.from_
             break
