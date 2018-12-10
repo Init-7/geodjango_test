@@ -2,8 +2,8 @@
 from twilio.rest import Client
 
 # Find these values at https://twilio.com/user/account
-account_sid = "AC5b3dfb6450dc6c859c8a55db5e5a680b"
-auth_token = "43387aea03f99110c909f27b8c6ee1bb"
+account_sid = "AC73d35e68b6b938c2a53290e610682d33"
+auth_token = "1db8318032ece98e0f64610af655a837"
 client = Client(account_sid, auth_token)
 
 message = client.messages.create(to="+56964590925", from_="+56988949343", body="Hello there!")
