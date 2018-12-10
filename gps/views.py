@@ -826,8 +826,8 @@ def sms_twilio(request):
     return m
 
 @twilio_view
-def sms_twilio_z(msg = ''):
-   print(TWILIO_ACCOUNT_SID)
+def sms_twilio_z():
+   print(str(TWILIO_ACCOUNT_SID))
    client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
    client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
    client.messages.create(from_="+56950645387", to="+56956711890", body=msg)
