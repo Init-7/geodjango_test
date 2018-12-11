@@ -109,18 +109,14 @@ require([
 
     //var marker = L.marker(coord.CENTRAL).bindPopup("<p><b>Nombre: </b>"+nombre+" "+apellidop+"<br><b>Cargo:</b>"+cargo+"<br><b>Teléfono: </b>"+nro+ "</p>").addTo(map);
     //var marker = L.marker(coord.CENTRAL);
-    var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>"+
-                nombre+" "+apellidop+" "+apellidom +"</br><b>Cargo : </b>"+
-                cargo+
-                "</br><b>Fono : </b>"+
-                "<a href='tel:"+nro+"'>"+nro+"</a>"+
-                "</br><b>Fono Emergencia2: </b>"+
-                "<a href='tel:"+fono_s+"'>"+fono_s+"</a>"+
-                "</br><b>Contacto : </b>"+
-                supervisor+" "+supervisorp+
-                "</br><b>Fecha/hora : </b>"+
-                "<br>CV:"+cv+"</br>"+
-                hora+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+foto+"></div>";
+    var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'>"+
+                "<b>Nombre : </b>"+nombre+" "+apellidop+" "+apellidom +"</br>"+
+                "<b>Cargo : </b>"+cargo+
+                "</br><b>Fono : </b>"+"<a href='tel:"+nro+"'>"+nro+"</a>"+
+                "</br><b>Fono Emergencia: </b>"+"<a href='tel:"+fono_s+"'>"+fono_s+"</a>"+
+                "</br><b>Contacto : </b>"+supervisor+" "+supervisorp+
+                "</br><b>Fecha/hora : </b>"+hora+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+foto+"></div>"+
+                "<br>CV: "+cv+" </br>";
 
     function popUpEdificios(f,l){
         var out = [];
