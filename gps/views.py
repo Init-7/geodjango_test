@@ -318,11 +318,19 @@ def centro3(request):
                     print('nexmo')
                     nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
 
-                    nexmoClient.send_message({
+                    response = nexmoClient.send_message({
                         'from': 'Qualitat',
                         'to': '56966967432',
                         'text': 'Mari mari Nexmo',
                     })
+
+                    response = response['messages'][0]
+
+                    if response['status'] == '0':
+                        print 'Sent message', response['message-id']
+                        print 'Remaining balance is', response['remaining-balance']
+                    else:
+                        print 'Error:', response['error-text']
                     print('ok!')
 
                     t.last_z = z
