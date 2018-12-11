@@ -115,8 +115,10 @@ require([
                 "</br><b>Fono : </b>"+"<a href='tel:"+nro+"'>"+nro+"</a>"+
                 "</br><b>Fono Emergencia: </b>"+"<a href='tel:"+fono_s+"'>"+fono_s+"</a>"+
                 "</br><b>Contacto : </b>"+supervisor+" "+supervisorp+
-                "</br><b>Fecha/hora : </b>"+hora+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+foto+"></div>"+
-                "<br>CV: "+cv+" </br>";
+                "</br><b>Fecha/hora : </b>"+hora+"</br>"+
+                "<br><strong>CV:</strong> "+cv+" </br>"+
+                "</div><img id='imgTrabajadorCard' src="+defaultUrl+foto+"></div>";
+
 
     function popUpEdificios(f,l){
         var out = [];
