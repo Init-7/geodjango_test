@@ -93,6 +93,7 @@ DATABASES = {
 #    },
     'default':{
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        # 'NAME': 'traccardata',
         'NAME': 'traccardata',
         'HOST': 'localhost',
         'USER': 'postgres',
