@@ -315,23 +315,16 @@ def centro3(request):
                     # hasta aqui se ejecuta
                     # sms_twilio_z(msg)
 
-                    print('nexmo')
-                    nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
 
-                    response = nexmoClient.send_message({
-                        'from': 'Qualitat',
-                        'to': '56966967432',
-                        'text': 'Mari mari Nexmo',
-                    })
+                    nameFrom = 'Qualitat'
+                    numberTo = '56966967432'
 
-                    response = response['messages'][0]
+                    sms = send_NexmoSMS(nameFrom, numberTo, msg)
 
-                    if response['status'] == '0':
-                        print 'Sent message', response['message-id']
-                        print 'Remaining balance is', response['remaining-balance']
-                    else:
-                        print 'Error:', response['error-text']
-                    print('ok!')
+                    # if sms:
+                    #     Ok
+                    # else:
+                    #     No Ok
 
                     t.last_z = z
                 else:
@@ -858,3 +851,23 @@ def sms_twilio_z(msg):
    client.messages.create(from_="+56950645387", to="2323232323", body=msg)
 
    return m
+
+def send_NexmoSMS(nameFrom, numberTo, msg)
+    nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
+
+    nexmoResponse = nexmoClient.send_message({
+        'from': nameFrom,
+        'to': numberTo,
+        'text': msg,
+    })
+
+    nexmoResponse = nexmoResponse['messages'][0]
+
+    if nexmoResponse['status'] == '0':
+        print 'Sent message', nexmoResponse['message-id']
+        print 'Remaining balance is', nexmoResponse['remaining-balance']
+
+        return True
+
+    print 'Error:', response['error-text']
+    return False
