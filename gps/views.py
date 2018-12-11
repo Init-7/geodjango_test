@@ -308,7 +308,7 @@ def centro3(request):
                     print('2')
                     client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
                     print('3')
-                    client.messages.create(from_="+56950645387", to="+56956711890", body=msg)
+                    client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
 
                     # hasta aqui se ejecuta
                     # sms_twilio_z(msg)
