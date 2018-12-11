@@ -347,7 +347,7 @@ def centro3(request):
                                     'estid': t.estid,
                                     'supervisor': t.supervisor.primer_nombre+" "+t.supervisor.apellidop,
                                     'super_fono': t.supervisor.fono,
-                                    'cv': 'cv2,
+                                    'cv': 'cv2',
                                     'fixtime': p.fixtime,
                                   }
                                 )
