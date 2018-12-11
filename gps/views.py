@@ -319,7 +319,7 @@ def centro3(request):
                     nameFrom = 'Qualitat'
                     numberTo = '56966967432'
 
-                    sms = send_NexmoSMS(nameFrom, numberTo, msg)
+                    sms = sendNexmoSMS(nameFrom, numberTo, msg)
 
                     # if sms:
                     #     Ok
@@ -852,22 +852,22 @@ def sms_twilio_z(msg):
 
    return m
 
-def send_NexmoSMS(nameFrom, numberTo, msg)
-    nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
+def sendNexmoSMS(nameFrom, numberTo, msg)
+   nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
 
-    nexmoResponse = nexmoClient.send_message({
-        'from': nameFrom,
-        'to': numberTo,
-        'text': msg,
-    })
+   nexmoResponse = nexmoClient.send_message({
+      'from': nameFrom,
+      'to': numberTo,
+      'text': msg,
+   })
 
-    nexmoResponse = nexmoResponse['messages'][0]
+   nexmoResponse = nexmoResponse['messages'][0]
 
-    if nexmoResponse['status'] == '0':
-        print 'Sent message', nexmoResponse['message-id']
-        print 'Remaining balance is', nexmoResponse['remaining-balance']
+   if nexmoResponse['status'] == '0':
+      print 'Sent message', nexmoResponse['message-id']
+      print 'Remaining balance is', nexmoResponse['remaining-balance']
 
-        return True
+      return True
 
-    print 'Error:', response['error-text']
-    return False
+   print 'Error:', response['error-text']
+   return False
