@@ -305,8 +305,8 @@ def centro3(request):
                 z =Zona.objects.filter(zona__bbcontains=tp).last().nombre
 
                 if (z != t.last_z):
-                    # msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
-                    msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, 'NAME', 'LASTNAME', '010101', 'gp02')
+                    msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
+                    # msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, 'NAME', 'LASTNAME', '010101', 'gp02')
 
                     # client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
                     # client.messages.create(from_="0101010101", to="2323232323", body=msg)
@@ -319,7 +319,8 @@ def centro3(request):
                     nameFrom = 'Qualitat'
                     numberTo = '56966967432'
 
-                    sms = sendNexmoSMS(nameFrom, numberTo, msg)
+                    # sms = sendNexmoSMS(nameFrom, numberTo, msg)
+                    print(msg)
 
                     # if sms:
                     #     Ok
