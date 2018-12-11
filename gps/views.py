@@ -318,7 +318,7 @@ def centro3(request):
                     print('nexmo')
                     nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
 
-                    client.send_message({
+                    nexmoClient.send_message({
                         'from': 'Acme Inc',
                         'to': 'hello world',
                         'text': 'A text message sent using the Nexmo SMS API',
