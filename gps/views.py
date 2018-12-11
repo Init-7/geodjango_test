@@ -852,7 +852,7 @@ def sms_twilio_z(msg):
 
    return m
 
-def sendNexmoSMS(nameFrom, numberTo, msg)
+def sendNexmoSMS(nameFrom, numberTo, msg):
    nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
 
    nexmoResponse = nexmoClient.send_message({
@@ -866,7 +866,6 @@ def sendNexmoSMS(nameFrom, numberTo, msg)
    if nexmoResponse['status'] == '0':
       print 'Sent message', nexmoResponse['message-id']
       print 'Remaining balance is', nexmoResponse['remaining-balance']
-
       return True
 
    print 'Error:', response['error-text']
