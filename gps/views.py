@@ -306,9 +306,9 @@ def centro3(request):
                     print('1')
                     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
                     print('2')
-                    client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
+                    client.messages.create(from_="whatsapp+56226660685", to="whatsapp+56956711890", body=msg)
                     print('3')
-                    client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
+                    client.messages.create(from_="whatsapp+56226660685", to="whatsapp+56956711890", body=msg)
 
                     # hasta aqui se ejecuta
                     # sms_twilio_z(msg)
