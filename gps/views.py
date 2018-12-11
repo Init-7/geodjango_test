@@ -314,7 +314,6 @@ def centro3(request):
                     # hasta aqui se ejecuta
                     # sms_twilio_z(msg)
 
-
                     nameFrom = 'Qualitat'
                     numberTo = '56966967432'
 
@@ -346,7 +345,7 @@ def centro3(request):
                                     'estid': t.estid,
                                     'supervisor': t.supervisor.primer_nombre+" "+t.supervisor.apellidop,
                                     'super_fono': t.supervisor.fono,
-                                    'cv': 'cv2',
+                                    # 'cv': 'cv2',
                                     'fixtime': p.fixtime,
                                   }
                                 )
@@ -364,7 +363,7 @@ def centro3(request):
                                     'estid': t.estid,
                                     'supervisor': t.supervisor.primer_nombre+" "+t.supervisor.apellidop,
                                     'super_fono': t.supervisor.fono,
-                                    'cv': 'cv1',
+                                    # 'cv': 'cv1',
                                     'fixtime': p.fixtime,
                                   }
                                 )
@@ -810,11 +809,11 @@ def sms_nexo(request):
     return True
 
 # @twilio_view
-# def sms_twilio(request):
-#    name = request.POST.get('from', '')
-#    msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas' % (name)
-#    r = Response()
-#    r.message(msg)
+def sms_twilio(request):
+   name = request.POST.get('from', '')
+   msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
+   r = Response()
+   r.message(msg)
 #
 #    return r
 #
