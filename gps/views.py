@@ -319,10 +319,11 @@ def centro3(request):
                     nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
 
                     nexmoClient.send_message({
-                        'from': 'Acme Inc',
-                        'to': 'hello world',
+                        'from': 'Qualitat',
+                        'to': '56956711890',
                         'text': 'A text message sent using the Nexmo SMS API',
                     })
+                    print('ok!')
 
                     t.last_z = z
                 else:
