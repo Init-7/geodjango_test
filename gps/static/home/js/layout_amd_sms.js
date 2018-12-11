@@ -33,6 +33,7 @@ require([
     var supervisor=document.getElementById("superv").value;
     var supervisorp=document.getElementById("supervp").value;
     var nivel_riesgo=document.getElementById("nivel_riesgo").value;
+    var cv = document.getElementById("cv").value
     var foto=document.getElementById("foto").value;
     var hora=document.getElementById("hora").value;
 
@@ -113,11 +114,12 @@ require([
                 cargo+
                 "</br><b>Fono : </b>"+
                 "<a href='tel:"+nro+"'>"+nro+"</a>"+
-                "</br><b>Fono Emergencia2 : </b>"+
+                "</br><b>Fono Emergencia2: </b>"+
                 "<a href='tel:"+fono_s+"'>"+fono_s+"</a>"+
                 "</br><b>Contacto : </b>"+
                 supervisor+" "+supervisorp+
                 "</br><b>Fecha/hora : </b>"+
+                "<br>CV:</br>"+cv+
                 hora+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+foto+"></div>";
 
     function popUpEdificios(f,l){

@@ -347,6 +347,7 @@ def centro3(request):
                                     'estid': t.estid,
                                     'supervisor': t.supervisor.primer_nombre+" "+t.supervisor.apellidop,
                                     'super_fono': t.supervisor.fono,
+                                    'cv': 'cv2,
                                     'fixtime': p.fixtime,
                                   }
                                 )
@@ -364,15 +365,13 @@ def centro3(request):
                                     'estid': t.estid,
                                     'supervisor': t.supervisor.primer_nombre+" "+t.supervisor.apellidop,
                                     'super_fono': t.supervisor.fono,
+                                    'cv': 'cv1',
                                     'fixtime': p.fixtime,
                                   }
                                 )
 
-
     data = GeoJSONSerializer().serialize(contenidos, use_natural_keys=False, with_modelname=False)
     return HttpResponse(data)#, content_type='application/json')
-
-
 
 def trabajador(request, trabajador):
 #Ultima posicion de un trabajador

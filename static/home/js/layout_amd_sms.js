@@ -102,7 +102,7 @@ require([
                 cargo+
                 "</br><b>Fono : </b>"+
                 "<a href='tel:"+nro+"'>"+nro+"</a>"+
-                "</br><b>Fono Emergencia4: </b>"+
+                "</br><b>Fono Emergencia : </b>"+
                 "<a href='tel:"+fonoem+"'>"+fonoem+"</a>"+
                 "</br><b>Contacto : </b>"+
                 nombre+ "</div>";//+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+f.properties["foto"]+"></div>";
