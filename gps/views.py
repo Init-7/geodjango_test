@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
 from django.shortcuts import render
 
+#Nexmo
+
 from django.core import serializers
 from djgeojson.serializers import Serializer as GeoJSONSerializer
 #from geojson import Point
