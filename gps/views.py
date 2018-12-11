@@ -303,15 +303,12 @@ def centro3(request):
                     # msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, t.supervisor.primer_nombre, t.supervisor.apellidop, t.supervisor.fono, td.fono_gps)
                     msg = "AVISO: Trabajador %s %s Ingreso a zona: %s Nivel riesgo: %s Supervisor: %s %s %s. Monitorear en: http://www.staff.estchile.cl/gps/sms/%s" % (t.primer_nombre, t.apellidop, z, t.nivel_riesgo, 'NAME', 'LASTNAME', '010101', 'gp02')
 
-                    print('1')
-                    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-                    print('2')
-                    client.messages.create(from_="whatsapp+56226660685", to="whatsapp+56956711890", body=msg)
-                    print('3')
-                    client.messages.create(from_="whatsapp+56226660685", to="whatsapp+56956711890", body=msg)
+                    # client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+                    # client.messages.create(from_="0101010101", to="2323232323", body=msg)
+                    # client.messages.create(from_="0101010101", to="2323232323", body=msg)
 
                     # hasta aqui se ejecuta
-                    # sms_twilio_z(msg)
+                    sms_twilio_z(msg)
 
                     print '1'
                     t.last_z = z
@@ -811,7 +808,7 @@ def sms_twilio(request):
 #    from_number = request.values.get('From', None)
     client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
     for m in client.messages.list():
-        if(m.to == '+56956711890'):
+        if(m.to == '2323232323'):
             from_n = m.from_
             break
     from_number = from_n.replace("+56", "")
@@ -834,11 +831,8 @@ def sms_twilio(request):
 
 @twilio_view
 def sms_twilio_z(msg):
-   print(str(TWILIO_ACCOUNT_SID))
    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-   client.messages.create(from_="+56226660685", to="+56956711890", body=msg)
-   client.messages.create(from_="+56950645387", to="+56956711890", body=msg)
-
-   print 'tres'
+   client.messages.create(from_="0101010101", to="2323232323", body=msg)
+   client.messages.create(from_="+56950645387", to="2323232323", body=msg)
 
    return m
