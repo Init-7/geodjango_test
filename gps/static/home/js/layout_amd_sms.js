@@ -33,7 +33,7 @@ require([
     var supervisor=document.getElementById("superv").value;
     var supervisorp=document.getElementById("supervp").value;
     var nivel_riesgo=document.getElementById("nivel_riesgo").value;
-    var cv = document.getElementById("cv").value
+    var cv = document.getElementById("cv").value;
     var foto=document.getElementById("foto").value;
     var hora=document.getElementById("hora").value;
 
