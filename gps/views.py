@@ -28,7 +28,7 @@ import nexmo
 
 import sys
 
-NEXMO_API_KEY = '6a5a882b (Master)'
+NEXMO_API_KEY = '6a5a882b'
 NEXMO_API_SECRET = 'ox9iJpitmXvSOKac'
 
 TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
@@ -320,7 +320,7 @@ def centro3(request):
 
                     nexmoClient.send_message({
                         'from': 'Qualitat',
-                        'to': '+56956711890',
+                        'to': '56966967432',
                         'text': 'A text message sent using the Nexmo SMS API',
                     })
                     print('ok!')
