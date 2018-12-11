@@ -34,4 +34,3 @@ def card(request, trabajador):
     }
 
     return render(request,'cv/card.html', context)
-

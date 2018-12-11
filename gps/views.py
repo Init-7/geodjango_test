@@ -174,8 +174,6 @@ def infoplantas(request):
 #    return HttpResponse(data, content_type='application/json')
     return JsonResponse(contenidos,safe=False)
 
-
-
 def planta(request, planta):
 #Posiciones registradas dentro de una determinada planta
     pl = Planta.objects.get(nombre = planta)
@@ -805,8 +803,20 @@ def trabajador_z_riesgo(request, planta):
 #    return HttpResponse(data)
     return JsonResponse(contenidos)
 
+# def sms_nexo(request):
+#     return True
+
+# @app.route('/webhooks/inbound-sms', methods=['GET', 'POST'])
 def sms_nexo(request):
-    return True
+   if request.is_json:
+      pprint(request.get_json())
+      print('=== :) ===')
+   else:
+      data = dict(request.form) or dict(request.args)
+      pprint(data)
+      print('=== :( ===')
+
+   return ('', 204)
 
 # @twilio_view
 def sms_twilio(request):
