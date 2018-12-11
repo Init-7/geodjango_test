@@ -28,7 +28,7 @@
 		<script type="text/javascript" src="{% static 'home/dist/leaflet.label.js' %}"></script>
 
 		<script src="{% static 'home/js/leaflet-heat.js' %}"></script>
-		
+
 		<script src="{% static 'home/js/pruneCluster/PruneCluster.js' %}"></script>
 		<script src="{% static 'home/js/leaflet-realtime.js' %}"></script>
 		<script src="{% static 'home/js/spin.js' %}"></script>
@@ -51,12 +51,13 @@
 			<input style="display: none"  id="nro" name="nro" value={{ fono }}>
 			<input style="display: none"  id="cargo" name="cargo" value={{ cargo }}>
 			<input style="display: none"  id="nivel_riesgo" name="nivel_riesgo" value={{ nivel_riesgo }}>
-			<input style="display: none"  id="foto" name="foto" value={{ foto }}>			
+			<input style="display: none"  id="foto" name="foto" value={{ foto }}>
 			<input style="display: none"  id="fono_s" name="fono_s" value={{ fono_super }}>
-			<input style="display: none"  id="superv" name="superv" value={{ supervisor }}>			
-			<input style="display: none"  id="supervp" name="supervp" value={{ supervisorp }}>				
-			<input style="display: none" id="hora" value={{ hora.day}}-{{ hora.month}}-{{ hora.year }}/{{ hora.hour}}:{{ hora.minute}}>			
-	
+			<input style="display: none"  id="superv" name="superv" value={{ supervisor }}>
+			<input style="display: none"  id="supervp" name="supervp" value={{ supervisorp }}>
+			<input style="display: none"  id="cv" name="cv" value={{ cv }}>
+			<input style="display: none" id="hora" value={{ hora.day}}-{{ hora.month}}-{{ hora.year }}/{{ hora.hour}}:{{ hora.minute}}>
+
 		<div id="mainWindow" data-dojo-type="dijit/layout/BorderContainer" data-dojo-props="design:'sidebar', gutters:false" style="width: 100%; height: 100%;">
 			<!--MAP-->
 			<div id="map" class="roundedCorners shadow" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'">
@@ -71,11 +72,11 @@
 					</a>
 				</div>
 				<div id="divALERTAS"> <!--span id="aviso">ALERTA!!.</span>--> </div>
-				<img id="logoMap" src="{% static 'home/images/estchile.png' %}" style="max-height: 75px;">				
-			</div>			
+				<img id="logoMap" src="{% static 'home/images/estchile.png' %}" style="max-height: 75px;">
+			</div>
 			<input  id="backButton" type="button" value="Volver" onClick="location.href='http://staff.estchile.cl/gps/'" />
-			
-			<!--FIN PANEL DERECHO-->			
+
+			<!--FIN PANEL DERECHO-->
 		</div>
 	</body>
 </html>
