@@ -320,7 +320,7 @@ def centro3(request):
 
                     nexmoClient.send_message({
                         'from': 'Qualitat',
-                        'to': '56956711890',
+                        'to': '+56956711890',
                         'text': 'A text message sent using the Nexmo SMS API',
                     })
                     print('ok!')
