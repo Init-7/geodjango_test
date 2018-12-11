@@ -1,8 +1,6 @@
 # -*- encoding: utf-8 -*-
 from django.shortcuts import render
 
-#Nexmo
-
 from django.core import serializers
 from djgeojson.serializers import Serializer as GeoJSONSerializer
 #from geojson import Point
@@ -26,7 +24,12 @@ from django_twilio.decorators import twilio_view
 from twilio.rest import Client
 from django.http import JsonResponse
 
+import nexmo
+
 import sys
+
+NEXMO_API_KEY = '6a5a882b (Master)'
+NEXMO_API_SECRET = 'ox9iJpitmXvSOKac'
 
 TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
 TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'
@@ -310,9 +313,17 @@ def centro3(request):
                     # client.messages.create(from_="0101010101", to="2323232323", body=msg)
 
                     # hasta aqui se ejecuta
-                    sms_twilio_z(msg)
+                    # sms_twilio_z(msg)
 
-                    print '1'
+                    print('nexmo')
+                    nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
+
+                    client.send_message({
+                        'from': 'Acme Inc',
+                        'to': 'hello world',
+                        'text': 'A text message sent using the Nexmo SMS API',
+                    })
+
                     t.last_z = z
                 else:
                     print '2'
