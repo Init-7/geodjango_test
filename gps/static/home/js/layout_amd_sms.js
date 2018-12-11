@@ -116,7 +116,7 @@ require([
                 "</br><b>Fono Emergencia: </b>"+"<a href='tel:"+fono_s+"'>"+fono_s+"</a>"+
                 "</br><b>Contacto : </b>"+supervisor+" "+supervisorp+
                 "</br><b>Fecha/hora : </b>"+hora+"</br>"+
-                "<br><strong>CV:</strong> "+cv+" </br>"+
+                "<strong>CV:</strong> "+cv+" </br>"+
                 "</div><img id='imgTrabajadorCard' src="+defaultUrl+foto+"></div>";
 
 
