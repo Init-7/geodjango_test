@@ -119,7 +119,7 @@ require([
                 "</br><b>Contacto : </b>"+
                 supervisor+" "+supervisorp+
                 "</br><b>Fecha/hora : </b>"+
-                "<br>CV:</br>"+cv+
+                "<br>CV:"+cv+"</br>"+
                 hora+"</br></div><img id='imgTrabajadorCard' src="+defaultUrl+foto+"></div>";
 
     function popUpEdificios(f,l){
