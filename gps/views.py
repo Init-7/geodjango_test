@@ -316,6 +316,7 @@ def centro3(request):
                     params = dict()
                     params['dst_number']=56711890
                     params['sms_content']='Hola Mundo!'
+                    print params
                     CONNECTUS_ACCOUNT_SID = '9e01f41122384f5ea9192ade9d1c1c0c'
                     CONNECTUS_AUTH_TOKEN = '4b3a1549e63f4d67827e11039f4e877a'
 
