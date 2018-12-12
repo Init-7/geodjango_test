@@ -812,20 +812,20 @@ def trabajador_z_riesgo(request, planta):
 
 @csrf_exempt
 def sms_connectus(request):
-    if request.method == "POST":
-        print 'POST'
-    else:
-        'ka'
+    # if request.method == "POST":
+    #     print 'POST'
+    # else:
+    #     'ka'
 
     print request
     # name = request.POST.get('from', '')
     # msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
-    msg = 'def sms_connectus'
+    # msg = 'def sms_connectus'
     # r = Response()
     # r.message(msg)
-    print msg
+    # print msg
 
-    # return HttpResponse('pong')
+    return HttpResponse('pong')
 
    # if request.is_json:
    #    pprint(request.get_json())
