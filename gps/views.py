@@ -26,16 +26,15 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 import sys
 
+import requests
+
 # TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
 # TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'
 
-# import plivo
-#
-# PLIVO_AUTH_ID = 'MAODK4NJLHNGYWYMEXMT'
-# PLIVO_AUTH_TOKEN = 'ODQzMmViOGFhOGEzOTFiZjRkMWNjZjUyODc5N2Nm'
+import plivo
 
-import time
-from sinchsms import SinchSMS
+PLIVO_AUTH_ID = 'MAODK4NJLHNGYWYMEXMT'
+PLIVO_AUTH_TOKEN = 'ODQzMmViOGFhOGEzOTFiZjRkMWNjZjUyODc5N2Nm'
 
 class FlatJsonSerializer(Serializer):
     def get_dump_object(self, obj):
@@ -318,36 +317,18 @@ def centro3(request):
                     nameFrom = 'Qualitat'
                     numberTo = '+56966967432'
 
-                    # phlo_uuid = 'https://phlorunner.plivo.com/v1/account/MAODK4NJLHNGYWYMEXMT/phlo/6d0b8a6e-bca1-4551-a841-e9feb3941992'
-                    # phlo_client = plivo.phlo.RestClient(auth_id=PLIVO_AUTH_ID, auth_token=PLIVO_AUTH_TOKEN)
-                    # phlo = phlo_client.phlo.get(phlo_uuid)
-                    # phlo.run()
+                    url='https://api.connectus.cl/api_v1/send_sms'
+                    params = dict()
+                    params['dst_number']=56711890
+                    params['sms_content']='Hola Mundo!'
+                    CONNECTUS_ACCOUNT_SID = '9e01f41122384f5ea9192ade9d1c1c0c'
+                    CONNECTUS_AUTH_TOKEN = '4b3a1549e63f4d67827e11039f4e877a'
 
-                    # clientPlivo = plivo.RestClient(auth_id=PLIVO_AUTH_ID, auth_token=PLIVO_AUTH_TOKEN)
-                    #
-                    # sms = clientPlivo.messages.create(
-                    #     src='+56956711890',
-                    #     dst=numberTo,
-                    #     text='Hello, world!'
-                    # )
+                    response = requests.post(url, params = params, auth=(CONNECTUS_ACCOUNT_SID,CONNECTUS_ACCOUNT_SID))
 
-                    number = '+46000000001'
-                    message = 'Hello from Sinch!'
+                    print response
 
-                    client = SinchSMS('2da38df1-a471-410d-b8c1-311fd69c1d1b', 'QVmcIFLh3Uerq+SPnX+qjQ==')
-
-                    print("Sending '%s' to %s" % (message, number))
-                    response = client.send_message(number, message)
-                    message_id = response['messageId']
-
-                    response = client.check_status(message_id)
-                    while response['status'] != 'Successful':
-                        print(response['status'])
-                        time.sleep(1)
-                        response = client.check_status(message_id)
-                    print(response['status'])
-
-                    print(msg)
+                    # print(msg)
 
                     # if sms:
                     #     Ok
