@@ -31,11 +31,6 @@ import requests
 # TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
 # TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'
 
-import plivo
-
-PLIVO_AUTH_ID = 'MAODK4NJLHNGYWYMEXMT'
-PLIVO_AUTH_TOKEN = 'ODQzMmViOGFhOGEzOTFiZjRkMWNjZjUyODc5N2Nm'
-
 class FlatJsonSerializer(Serializer):
     def get_dump_object(self, obj):
         data = self._current
