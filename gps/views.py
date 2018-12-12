@@ -823,7 +823,7 @@ def sms_connectus(request):
     # r.message(msg)
     print msg
 
-    return HttpResponse('pong')
+    # return HttpResponse('pong')
 
    # if request.is_json:
    #    pprint(request.get_json())
