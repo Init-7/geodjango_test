@@ -816,7 +816,7 @@ def sms_connectus(request):
     # r = Response()
     # r.message(msg)
 
-    return True
+    return HttpResponse('pong')
 
    # if request.is_json:
    #    pprint(request.get_json())
