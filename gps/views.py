@@ -808,7 +808,7 @@ def trabajador_z_riesgo(request, planta):
 # def sms_nexo(request):
 #     return True
 
-# @app.route('/webhooks/inbound-sms', methods=['GET', 'POST'])
+# @app.route('/gps/smst', methods=['GET', 'POST'])
 def sms_connectus(request):
     if request.method == "POST":
         print 'POST'
