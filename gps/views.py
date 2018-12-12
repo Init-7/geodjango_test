@@ -817,7 +817,7 @@ def sms_connectus(request):
     # else:
     #     'ka'
 
-    print request
+    print request.POST
     # name = request.POST.get('from', '')
     # msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
     # msg = 'def sms_connectus'
