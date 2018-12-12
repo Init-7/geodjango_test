@@ -24,15 +24,10 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 # from twilio.rest import Client
 # from django.http import JsonResponse
 
-import nexmo
-
 import sys
 
-NEXMO_API_KEY = '6a5a882b'
-NEXMO_API_SECRET = 'ox9iJpitmXvSOKac'
-
-TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
-TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'
+# TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
+# TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'
 
 class FlatJsonSerializer(Serializer):
     def get_dump_object(self, obj):
@@ -315,7 +310,6 @@ def centro3(request):
                     nameFrom = 'Qualitat'
                     numberTo = '56966967432'
 
-                    # sms = sendNexmoSMS(nameFrom, numberTo, msg)
                     print(msg)
 
                     # if sms:
@@ -862,22 +856,3 @@ def sms_twilio(request):
 #    client.messages.create(from_="+56950645387", to="2323232323", body=msg)
 #
 #    return m
-
-def sendNexmoSMS(nameFrom, numberTo, msg):
-   nexmoClient = nexmo.Client(key=NEXMO_API_KEY, secret=NEXMO_API_SECRET)
-
-   nexmoResponse = nexmoClient.send_message({
-      'from': nameFrom,
-      'to': numberTo,
-      'text': msg,
-   })
-
-   nexmoResponse = nexmoResponse['messages'][0]
-
-   if nexmoResponse['status'] == '0':
-      # print 'Sent message', nexmoResponse['message-id']
-      # print 'Remaining balance is', nexmoResponse['remaining-balance']
-      return True
-
-   # print 'Error:', response['error-text']
-   return False
