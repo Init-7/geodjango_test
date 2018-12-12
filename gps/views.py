@@ -28,6 +28,10 @@ import sys
 
 import requests
 
+CONNETCTUS_URL ='https://api.connectus.cl/api_v1/send_sms'
+CONNECTUS_ACCOUNT_SID = '9e01f41122384f5ea9192ade9d1c1c0c'
+CONNECTUS_AUTH_TOKEN = 'dce7dc65c4bc4d8e829f5a438d54d447'
+
 # TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
 # TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'
 
@@ -309,29 +313,10 @@ def centro3(request):
                     # hasta aqui se ejecuta
                     # sms_twilio_z(msg)
 
-                    nameFrom = 'Qualitat'
+                    # nameFrom = 'Qualitat'
                     numberTo = '+56966967432'
 
-                    # url='https://api.connectus.cl/api_v1/send_sms'
-
-                    # CONNETCTUS_URL ='https://api.connectus.cl/api_v1/send_sms'
-                    CONNECTUS_ACCOUNT_SID = '9e01f41122384f5ea9192ade9d1c1c0c'
-                    CONNECTUS_AUTH_TOKEN = '4ba4d39de3c14a8099c4b5cf0a1cab19'
-                    #
-                    # params = dict()
-                    # params['dst_number']=5685567407
-                    # params['sms_content']='Hola Mundo!'
-                    #
-                    # response = requests.post(CONNETCTUS_URL, params = params, auth=(CONNECTUS_ACCOUNT_SID,CONNECTUS_ACCOUNT_SID))
-
-                    # import requests
-                    url = 'https://api.connectus.cl/api_v1/send_sms'
-                    params = dict()
-                    params['dst_number']=56956711890
-                    params['sms_content']='Hola Mundo!'
-                    response = requests.post(url, params=params, auth=(CONNECTUS_ACCOUNT_SID, CONNECTUS_AUTH_TOKEN))
-
-                    print response
+                    sms = sendSMS(msg, numberTo)
 
                     # print(msg)
 
@@ -879,3 +864,14 @@ def sms_twilio(request):
 #    client.messages.create(from_="+56950645387", to="2323232323", body=msg)
 #
 #    return m
+
+def sendSMS(msg, numberTo):
+    params = dict()
+    params['dst_number'] = numberTo
+    params['sms_content'] = msg
+    response = requests.post(CONNETCTUS_URL, params=params, auth=(CONNECTUS_ACCOUNT_SID, CONNECTUS_AUTH_TOKEN))
+
+    if response:
+        pass
+
+    return True
