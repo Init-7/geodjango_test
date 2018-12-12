@@ -24,6 +24,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 # from twilio.rest import Client
 # from django.http import JsonResponse
 
+# from django.views.decorators.csrf import csrf_exempt
+
 import sys
 
 import requests
@@ -808,7 +810,7 @@ def trabajador_z_riesgo(request, planta):
 # def sms_nexo(request):
 #     return True
 
-# @app.route('/gps/smst', methods=['GET', 'POST'])
+@app.route('/gps/smst', methods=['GET', 'POST'])
 def sms_connectus(request):
     if request.method == "POST":
         print 'POST'
