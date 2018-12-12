@@ -813,10 +813,10 @@ def sms_connectus(request):
     # name = request.POST.get('from', '')
     # msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
     msg = 'def sms_connectus'
-    r = Response()
-    r.message(msg)
+    # r = Response()
+    # r.message(msg)
 
-    return r
+    return True
 
    # if request.is_json:
    #    pprint(request.get_json())
