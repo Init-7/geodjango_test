@@ -312,15 +312,17 @@ def centro3(request):
                     nameFrom = 'Qualitat'
                     numberTo = '+56966967432'
 
-                    url='https://api.connectus.cl/api_v1/send_sms'
-                    params = dict()
-                    params['dst_number']=56711890
-                    params['sms_content']='Hola Mundo!'
-                    print params
+                    # url='https://api.connectus.cl/api_v1/send_sms'
+
+                    CONNETCTUS_URL ='https://api.connectus.cl/api_v1/send_sms'
                     CONNECTUS_ACCOUNT_SID = '9e01f41122384f5ea9192ade9d1c1c0c'
                     CONNECTUS_AUTH_TOKEN = '4ba4d39de3c14a8099c4b5cf0a1cab19'
 
-                    response = requests.post(url, params = params, auth=(CONNECTUS_ACCOUNT_SID,CONNECTUS_ACCOUNT_SID))
+                    params = dict()
+                    params['dst_number']=56711890
+                    params['sms_content']='Hola Mundo!'
+
+                    response = requests.post(CONNETCTUS_URL, params = params, auth=(CONNECTUS_ACCOUNT_SID,CONNECTUS_ACCOUNT_SID))
 
                     print response
 
