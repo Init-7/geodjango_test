@@ -29,10 +29,13 @@ import sys
 # TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
 # TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'
 
-import plivo
+# import plivo
+#
+# PLIVO_AUTH_ID = 'MAODK4NJLHNGYWYMEXMT'
+# PLIVO_AUTH_TOKEN = 'ODQzMmViOGFhOGEzOTFiZjRkMWNjZjUyODc5N2Nm'
 
-PLIVO_AUTH_ID = 'MAODK4NJLHNGYWYMEXMT'
-PLIVO_AUTH_TOKEN = 'ODQzMmViOGFhOGEzOTFiZjRkMWNjZjUyODc5N2Nm'
+import time
+from sinchsms import SinchSMS
 
 class FlatJsonSerializer(Serializer):
     def get_dump_object(self, obj):
@@ -320,13 +323,29 @@ def centro3(request):
                     # phlo = phlo_client.phlo.get(phlo_uuid)
                     # phlo.run()
 
-                    clientPlivo = plivo.RestClient(auth_id=PLIVO_AUTH_ID, auth_token=PLIVO_AUTH_TOKEN)
+                    # clientPlivo = plivo.RestClient(auth_id=PLIVO_AUTH_ID, auth_token=PLIVO_AUTH_TOKEN)
+                    #
+                    # sms = clientPlivo.messages.create(
+                    #     src='+56956711890',
+                    #     dst=numberTo,
+                    #     text='Hello, world!'
+                    # )
 
-                    sms = clientPlivo.messages.create(
-                        src='+56956711890',
-                        dst=numberTo,
-                        text='Hello, world!'
-                    )
+                    number = '+46000000001'
+                    message = 'Hello from Sinch!'
+
+                    client = SinchSMS('2da38df1-a471-410d-b8c1-311fd69c1d1b', 'QVmcIFLh3Uerq+SPnX+qjQ==')
+
+                    print("Sending '%s' to %s" % (message, number))
+                    response = client.send_message(number, message)
+                    message_id = response['messageId']
+
+                    response = client.check_status(message_id)
+                    while response['status'] != 'Successful':
+                        print(response['status'])
+                        time.sleep(1)
+                        response = client.check_status(message_id)
+                    print(response['status'])
 
                     print(msg)
 
