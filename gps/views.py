@@ -316,7 +316,7 @@ def centro3(request):
                     # nameFrom = 'Qualitat'
                     numberTo = '+56966967432'
 
-                    sms = sendSMS(msg, numberTo)
+                    # sms = sendSMS(msg, numberTo)
 
                     # print(msg)
 
@@ -809,23 +809,30 @@ def trabajador_z_riesgo(request, planta):
 #     return True
 
 # @app.route('/webhooks/inbound-sms', methods=['GET', 'POST'])
-def sms_nexo(request):
-   if request.is_json:
-      pprint(request.get_json())
-      print('=== :) ===')
-   else:
-      data = dict(request.form) or dict(request.args)
-      pprint(data)
-      print('=== :( ===')
+def sms_connectus(request):
+    name = request.POST.get('from', '')
+    msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
+    r = Response()
+    r.message(msg)
 
-   return ('', 204)
+    return r
+
+   # if request.is_json:
+   #    pprint(request.get_json())
+   #    print('=== :) ===')
+   # else:
+   #    data = dict(request.form) or dict(request.args)
+   #    pprint(data)
+   #    print('=== :( ===')
+   #
+   # return ('', 204)
 
 # @twilio_view
-def sms_twilio(request):
-   name = request.POST.get('from', '')
-   msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
-   r = Response()
-   r.message(msg)
+# def sms_twilio(request):
+#    name = request.POST.get('from', '')
+#    msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
+#    r = Response()
+#    r.message(msg)
 #
 #    return r
 #
@@ -871,7 +878,7 @@ def sendSMS(msg, numberTo):
     params['sms_content'] = msg
     response = requests.post(CONNETCTUS_URL, params=params, auth=(CONNECTUS_ACCOUNT_SID, CONNECTUS_AUTH_TOKEN))
 
-    if response:
-        pass
+    # if !response:
+    #     return False
 
     return True
