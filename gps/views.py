@@ -313,7 +313,7 @@ def centro3(request):
                     # sms_twilio_z(msg)
 
                     nameFrom = 'Qualitat'
-                    numberTo = '56966967432'
+                    numberTo = '+56966967432'
 
                     # phlo_uuid = 'https://phlorunner.plivo.com/v1/account/MAODK4NJLHNGYWYMEXMT/phlo/6d0b8a6e-bca1-4551-a841-e9feb3941992'
                     # phlo_client = plivo.phlo.RestClient(auth_id=PLIVO_AUTH_ID, auth_token=PLIVO_AUTH_TOKEN)
@@ -324,7 +324,7 @@ def centro3(request):
 
                     sms = clientPlivo.messages.create(
                         src=numberTo,
-                        dst='56956711890',
+                        dst='+56956711890',
                         text='Hello, world!'
                     )
 
