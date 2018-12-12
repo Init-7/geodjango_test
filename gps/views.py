@@ -29,6 +29,11 @@ import sys
 # TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
 # TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'
 
+import plivo
+
+PLIVO_AUTH_ID = 'MAODK4NJLHNGYWYMEXMT'
+PLIVO_AUTH_TOKEN = 'ODQzMmViOGFhOGEzOTFiZjRkMWNjZjUyODc5N2Nm'
+
 class FlatJsonSerializer(Serializer):
     def get_dump_object(self, obj):
         data = self._current
@@ -309,6 +314,21 @@ def centro3(request):
 
                     nameFrom = 'Qualitat'
                     numberTo = '56966967432'
+
+                    # phlo_uuid = 'https://phlorunner.plivo.com/v1/account/MAODK4NJLHNGYWYMEXMT/phlo/6d0b8a6e-bca1-4551-a841-e9feb3941992'
+                    # phlo_client = plivo.phlo.RestClient(auth_id=PLIVO_AUTH_ID, auth_token=PLIVO_AUTH_TOKEN)
+                    # phlo = phlo_client.phlo.get(phlo_uuid)
+                    # phlo.run()
+
+                    clientPlivo = plivo.RestClient(auth_id=PLIVO_AUTH_ID, auth_token=PLIVO_AUTH_TOKEN)
+
+                    message_created = client.messages.create(
+                        src=nameFrom
+                        dst='56956711890',
+                        text='Hello, world!'
+                    )
+
+                    
 
                     print(msg)
 
