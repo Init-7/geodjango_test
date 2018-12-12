@@ -812,10 +812,7 @@ def trabajador_z_riesgo(request, planta):
 
 @csrf_exempt
 def sms_connectus(request):
-    # if request.method == "POST":
-    #     print 'POST'
-    # else:
-    #     'ka'
+    print 'Method: '+request.method
 
     print '===0==='
     print request.POST
