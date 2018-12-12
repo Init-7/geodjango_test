@@ -318,7 +318,7 @@ def centro3(request):
                     params['sms_content']='Hola Mundo!'
                     print params
                     CONNECTUS_ACCOUNT_SID = '9e01f41122384f5ea9192ade9d1c1c0c'
-                    CONNECTUS_AUTH_TOKEN = '4b3a1549e63f4d67827e11039f4e877a'
+                    CONNECTUS_AUTH_TOKEN = '4ba4d39de3c14a8099c4b5cf0a1cab19'
 
                     response = requests.post(url, params = params, auth=(CONNECTUS_ACCOUNT_SID,CONNECTUS_ACCOUNT_SID))
 
