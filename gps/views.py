@@ -322,7 +322,7 @@ def centro3(request):
 
                     clientPlivo = plivo.RestClient(auth_id=PLIVO_AUTH_ID, auth_token=PLIVO_AUTH_TOKEN)
 
-                    message_created = client.messages.create(
+                    sms = clientPlivo.messages.create(
                         src=numberTo,
                         dst='56956711890',
                         text='Hello, world!'
