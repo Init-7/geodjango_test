@@ -817,6 +817,12 @@ def sms_connectus(request):
     print '===0==='
     print request.POST
     print '===0==='
+
+    msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/3/ para ver las alertas o a http://staff.estchile.cl/est/cv/3/ para ver su ficha'
+
+    numberTo = '56956711890'
+    sendSMS(msg, numberTo)
+
     # name = request.POST.get('from', '')
     # msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
     # msg = 'def sms_connectus'
@@ -824,7 +830,7 @@ def sms_connectus(request):
     # r.message(msg)
     # print msg
 
-    return HttpResponse('pong')
+    return HttpResponse(True)
 
    # if request.is_json:
    #    pprint(request.get_json())
