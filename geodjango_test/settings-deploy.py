@@ -25,7 +25,7 @@ SECRET_KEY = 'hs*0gc=u()ty8s1&nayv0&ux8@ny0q2n8l@5omz@4ai1c5t%@_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["18.228.128.227"]
+ALLOWED_HOSTS = ['18.228.128.227', '172.31.7.147', 'staff.estchile.cl']
 
 # Application definition
 
@@ -201,5 +201,5 @@ CORS_EXPOSE_HEADERS = (
 
 #APPEND_SLASH = False
 
-TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
-TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'
+# TWILIO_ACCOUNT_SID = 'AC73d35e68b6b938c2a53290e610682d33'
+# TWILIO_AUTH_TOKEN = '1db8318032ece98e0f64610af655a837'

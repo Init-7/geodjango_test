@@ -25,7 +25,7 @@ SECRET_KEY = 'hs*0gc=u()ty8s1&nayv0&ux8@ny0q2n8l@5omz@4ai1c5t%@_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["18.228.128.227"]
+ALLOWED_HOSTS = ['18.228.128.227', '172.31.7.147', 'staff.estchile.cl']
 
 # Application definition
 
