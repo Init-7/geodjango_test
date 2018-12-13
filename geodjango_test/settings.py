@@ -26,7 +26,7 @@ SECRET_KEY = 'hs*0gc=u()ty8s1&nayv0&ux8@ny0q2n8l@5omz@4ai1c5t%@_'
 DEBUG = True
 
 # ALLOWED_HOSTS = ['18.228.128.227', '172.31.7.147', 'staff.estchile.cl']
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '18.228.128.227', '172.31.7.147', 'staff.estchile.cl','[::1]']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '18.228.128.227', '172.31.7.147', 'www.staff.estchile.cl', 'staff.estchile.cl', '[::1]']
 
 # Application definition
 
