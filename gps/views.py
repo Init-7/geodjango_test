@@ -814,14 +814,10 @@ def trabajador_z_riesgo(request, planta):
 def sms_connectus(request):
     print 'Method: '+request.method
 
-    print '===0==='
-    # data = request.POST.get('id')
-    # print data
-    # print request.json()
-    # print json.loads(request.body)
+    print '======='
     data = json.loads(request.body)
     print data['src_number']
-    print '===0==='
+    print '======='
 
     # msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
 
