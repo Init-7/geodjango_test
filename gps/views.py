@@ -815,9 +815,7 @@ def sms_connectus(request):
     print 'Method: '+request.method
 
     print '===0==='
-    # print request.POST
-    # resp = requests.post(url=url, params=params)
-    data = request.POST[]
+    data = request.POST.get('id')
     print data
     print '===0==='
 
