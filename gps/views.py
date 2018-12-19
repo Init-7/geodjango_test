@@ -812,19 +812,35 @@ def trabajador_z_riesgo(request, planta):
 
 @csrf_exempt
 def sms_connectus(request):
-    print 'Method: '+request.method
+    # print 'Method: '+request.method
 
-    print '======='
+    # print '======='
     data = json.loads(request.body)
-    print data['src_number']
-    print '======='
+    # print data['id_sms']
+    # print data['dst_number']
+    from_number = data['src_number']
+    from_number = from_number.replace('+56', '')
+    # print data['src_provider']
+    # print data['sms_content']
+    # print '======='
+
+    td = TrabajadorDevice.objects.get(fono_gps=from_number)
+    t = Trabajador.objects.filter(id=td.trabajador_id).last()
+    d = Devices.objects.filter(id=td.device_id).last()
+    p = PositionsTraccar.objects.get(id=d.positionid)
+    tp = Point(p.longitude, p.latitude)
+    if(Zona.objects.filter(zona__bbcontains=Point(p.longitude, p.latitude)).exists()):
+        zona =Zona.objects.get(zona__bbcontains=tp).nombre
+    else:
+        zona = "Sin Informacion"
 
     # msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/%s/ para ver las alertas o a http://staff.estchile.cl/est/cv/%s/ para ver su ficha' % (name)
 
-    msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/3/ para ver las alertas o a http://staff.estchile.cl/est/cv/3/ para ver su ficha'
+    msg = 'Se ha recibido un mensaje SOS dirijase a http://staff.estchile.cl/sms/3/ para ver las alertas o a http://staff.estchile.cl/est/cv/3/ para ver su ficha.'
 
-    # numberTo = 'XXX'
-    # sendSMS(msg, numberTo)
+    # numberTo = '942144180'
+    numberTo=t.supervisor.fono
+    sendSMS(msg, numberTo)
 
     # name = request.POST.get('from', '')
 
