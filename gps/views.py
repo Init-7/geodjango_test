@@ -844,6 +844,8 @@ def sms_connectus(request):
 
     # name = request.POST.get('from', '')
 
+    sendSMS('help me!', from_number)
+
     return HttpResponse(True)
 
 # @twilio_view
