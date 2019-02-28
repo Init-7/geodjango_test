@@ -12,6 +12,14 @@ def curriculum(request, trabajador):
 
     return render(request,'cv/cv.html', context)
 
+def machine(request, trabajador):
+
+    trabajador = Trabajador.objects.get(estid=trabajador)
+
+    context = {'trabajador': trabajador}
+
+    return render(request,'cv/machine.html', context)
+
 #    return render(request, '../templates/curriculum/classic.html', {
 #        'resume': resume,
 #        'skills': resume.skills.order_by('category', '-weight'),
