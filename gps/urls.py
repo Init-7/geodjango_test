@@ -9,7 +9,7 @@ from .models import Positions
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='gps/index2.html'), name='home'),
-    url(r'^nuclear/$', TemplateView.as_view(template_name='gps/index42.html'), name='home'),
+    url(r'^nuclear/$', TemplateView.as_view(template_name='gps/nuclear/index42.html'), name='home'),
     url(r'^sms/(?P<trabajador>[\w]+)/$', views.sms, name='home'),
     # url(r'^sms/(?P<numero>[\w]+)/$', views.sms, name='home'),
     url(r'^testzonariesgo/(?P<planta>[\w]+)/$',views.trabajador_z_riesgo, name='planta'),
