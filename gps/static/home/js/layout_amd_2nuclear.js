@@ -450,7 +450,7 @@ require([
             tempIcon = hombre1;
         }
 
-        var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>Densímetro Nuclear #ID123</br><b>Modelo : </b>Troxler modelo 3230</br><b>Fono Emergencia: </b>993194369</br><b>Riesgo : </b>Alto</br><b>Fono Emergencia : </b>6003607777</br><b>Zona : </b>Almacenaje</br><b>Actualizado : </b>"+f.properties["fixtime"]+"</br><b>Nombre : </b><a href='http://staff.estchile.cl/est/machine/3/'>Url Información</a></br></div><img id='imgTrabajadorCard' src='https://img.wikicharlie.cl/thumb/9/9d/Densimetro_Nuclear_WikicharliE.jpg/300px-Densimetro_Nuclear_WikicharliE.jpg'></div>";
+        var leyenda= "<div id='wrapperCard'><img id='logoEstCard' src='/static/images/estchile.png' ><img id='imgQRCard' src='/static/images/estchile.png' ><div id='datosTrabajadorCard'><b>Nombre : </b>Densímetro Nuclear #ID123</br><b>Modelo : </b>Troxler modelo 3230</br><b>Fono Emergencia: </b>993194369</br><b>Riesgo : </b>Alto</br><b>Fono Emergencia : </b>6003607777</br><b>Zona : </b>Almacenaje</br><a href='http://staff.estchile.cl/est/machine/3/'>Url Información</a><b>Actualizado : </b>"+f.properties["fixtime"]+"</br></div><img id='imgTrabajadorCard' src='https://img.wikicharlie.cl/thumb/9/9d/Densimetro_Nuclear_WikicharliE.jpg/300px-Densimetro_Nuclear_WikicharliE.jpg'></div>";
         l.bindPopup(leyenda);
 
 
